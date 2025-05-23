@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.LoginController" spacing="10" alignment="CENTER" padding="20">
+
+    <Label text="Username"/>
+    <TextField fx:id="usernameField"/>
+
+    <Label text="Password"/>
+    <PasswordField fx:id="passwordField"/>
+
+    <Button text="Login" onAction="#handleLogin"/>
+    <Label fx:id="messageLabel" textFill="red"/>
+
+</VBox>
+
