@@ -7,40 +7,48 @@ import java.util.*;
 import com.example.diabedible.HashUtils;
 
 public class LoginController {
+    
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label messageLabel;
 
+    //Mappa delle coppie (username/password) caricate dal file
     private final Map<String, String> userMap = new HashMap<>();
 
+    //Inizializzazione controller
     @FXML
     public void initialize() {
-        loadUsersFromFile(); // messo in resources
+        loadUsersFromFile(); //Messo in resources
     }
 
     @FXML
     public void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String hashed = HashUtils.hashPassword(password);
+        String hashed = HashUtils.hashPassword(password);   //Calcolo hash
 
+        //Verifica se l'username esiste e se la password corrisponde
         if (userMap.containsKey(username) && userMap.get(username).equals(hashed)) {
-            messageLabel.setText("Accesso consentito.");
+            messageLabel.setText("Accesso consentito.");    //Login sì :)
         } else {
-            messageLabel.setText("Credenziali errate.");
+            messageLabel.setText("Credenziali errate.");    //Login no :(
         }
     }
 
+    //Carica le credenziali utenti dal file users.txt nella cartella resources
     private void loadUsersFromFile() {
         try {
+            //Legge tutte le righe del file users.txt
             List<String> lines = Files.readAllLines(Paths.get(Objects.requireNonNull(getClass().getResource("/com/example/diabedible/users.txt")).toURI()));
+            //Per ogni riga, divide la stringa in username e password
             for (String line : lines) {
                 String[] parts = line.split(":", 2);
                 if (parts.length == 2) {
-                    userMap.put(parts[0], parts[1]);
+                    userMap.put(parts[0], parts[1]);    //Inserisce nella mappa
                 }
             }
         } catch (Exception e) {
+            //In caso di errore nel caricamento del file, mostra errore
             messageLabel.setText("Errore file utenti");
         }
     }
