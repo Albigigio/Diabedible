@@ -16,7 +16,7 @@ import java.util.Map;
 public class LoginApp extends Application {
 
     //Mappa utenti
-    private Map<String, String> userMap = new HashMap<>();
+    private final Map<String, String> userMap = new HashMap<>();
 
     @Override
     public void start(Stage primaryStage) {

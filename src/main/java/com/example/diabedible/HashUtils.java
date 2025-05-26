@@ -1,9 +1,10 @@
 package com.example.diabedible;
 
 import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
 
 public class HashUtils {
-<<<<<<< Updated upstream
+// Updated upstream
     private HashUtils() {} //Costruttore privato per impedire istanziazione
 
     /**
@@ -12,21 +13,20 @@ public class HashUtils {
      * @return stringa hash
      */
 
-=======
->>>>>>> Stashed changes
+// Stashed changes
     public static String hashPassword(String password) {
         try {
             //Uso SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-<<<<<<< Updated upstream
+// Updated upstream
             
             //Calcolo hash con UTF-8
             byte[] hashed = md.digest(password.getBytes(StandardCharsets.UTF_8));
             
-            //Corstruttore stringa esadecimale
-=======
+            //Costruttore stringa esadecimale
+
             byte[] hash = md.digest(password.getBytes());
->>>>>>> Stashed changes
+// Stashed changes
             StringBuilder sb = new StringBuilder();
             for (byte b : hash) {
                 sb.append(String.format("%02x", b));
