@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.LoginController" spacing="10" alignment="CENTER" padding="20">
+
+    <TextField fx:id="userIdField" promptText="Enter ID (e.g., ID123, DR456)" />
+    <Button text="Login" onAction="#handleLogin" />
+
+</VBox>
+

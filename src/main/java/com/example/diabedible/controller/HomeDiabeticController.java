@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class patient extends Application {
+public class HomeDiabeticController extends Application {
 
     private final Map<LocalDate, Double> bloodSugarData = new HashMap<>();
     private final Map<LocalDate, Double> medicationData = new HashMap<>();

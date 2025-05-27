@@ -30,6 +30,15 @@ public class LoginController {
         //Verifica se l'username esiste e se la password corrisponde
         if (userMap.containsKey(username) && userMap.get(username).equals(hashed)) {
             messageLabel.setText("Accesso consentito.");    //Login sì :)
+            //Verifica se paziente, dottore o admin(?)
+            if (username.startsWith("ID")) {
+                Main.switchScene("home-diabetic.fxml", "Home Paziente");
+            } else if (username.startsWith("DR")) {
+                Main.switchScene("home-doctor.fxml", "Home Diabetologo");
+            } else {
+                // pagina admin o altri usi
+                Main.switchScene("admin-home.fxml", "Home Admin");
+            }
         } else {
             messageLabel.setText("Credenziali errate.");    //Login no :(
         }
