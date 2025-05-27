@@ -11,4 +11,8 @@ module com.example.diabedible {
 
     opens com.example.diabedible to javafx.fxml;
     exports com.example.diabedible;
+    exports com.example.diabedible.controller;
+    opens com.example.diabedible.controller to javafx.fxml;
+    exports com.example.diabedible.utils;
+    opens com.example.diabedible.utils to javafx.fxml;
 }

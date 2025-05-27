@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.diabedible.LoginController" spacing="10" alignment="CENTER" padding="20">
+      fx:controller="com.example.diabedible.controller.LoginController" spacing="10" alignment="CENTER" padding="20">
 
     <TextField fx:id="userIdField" promptText="Enter ID (e.g., ID123, DR456)" />
     <Button text="Login" onAction="#handleLogin" />

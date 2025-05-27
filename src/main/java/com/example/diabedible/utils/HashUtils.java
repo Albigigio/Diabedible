@@ -1,4 +1,4 @@
-package com.example.diabedible;
+package com.example.diabedible.utils;
 
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;

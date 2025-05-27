@@ -1,10 +1,11 @@
-package com.example.diabedible;
+package com.example.diabedible.controller;
 
+import com.example.diabedible.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.nio.file.*;
 import java.util.*;
-import com.example.diabedible.HashUtils;
+import com.example.diabedible.utils.HashUtils;
 
 public class LoginController {
     
