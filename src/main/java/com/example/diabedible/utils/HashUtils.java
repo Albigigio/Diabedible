@@ -4,7 +4,6 @@ import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 
 public class HashUtils {
-// Updated upstream
     private HashUtils() {} //Costruttore privato per impedire istanziazione
 
     /**
@@ -12,21 +11,13 @@ public class HashUtils {
      * @param password password da hashare
      * @return stringa hash
      */
-
-// Stashed changes
     public static String hashPassword(String password) {
         try {
             //Uso SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-// Updated upstream
-            
-            //Calcolo hash con UTF-8
-            byte[] hashed = md.digest(password.getBytes(StandardCharsets.UTF_8));
-            
-            //Costruttore stringa esadecimale
 
-            byte[] hash = md.digest(password.getBytes());
-// Stashed changes
+            //Calcolo hash con UTF-8
+            byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             for (byte b : hash) {
                 sb.append(String.format("%02x", b));

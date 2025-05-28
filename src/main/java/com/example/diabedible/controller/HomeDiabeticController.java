@@ -31,6 +31,7 @@ public class HomeDiabeticController {
     @FXML private TextField readingField;
     @FXML private DatePicker datePicker;
 
+    // Controller per la home del paziente diabetico
     private final Map<LocalDate, Double> bloodSugarData = new HashMap<>();
     private final Map<LocalDate, Double> activityData = new HashMap<>();
 

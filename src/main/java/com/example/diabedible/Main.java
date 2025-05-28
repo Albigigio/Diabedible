@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private static Stage mainStage;
-    private static final String RESOURCE_PATH = "/com/example/diabedible/views/";
+    private static final String RESOURCE_PATH = "/com/example/diabedible/Views/";
     private static final int DEFAULT_WIDTH = 1200;
     private static final int DEFAULT_HEIGHT = 800;
 
@@ -21,11 +21,11 @@ public class Main extends Application {
     }
 
     public static void switchToLoginScene() {
-        switchScene("auth/login-view.fxml", "Login", DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        switchScene("autenticazione/login-view.fxml", "Login", DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
     public static void switchToDiabeticDashboard() {
-        switchScene("diabetic/home-diabetic.fxml", "Diabetic Dashboard", DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        switchScene("diabetic/home-diabetic.fxml", "Dashboard Paziente", DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
     public static void switchScene(String fxmlFile, String title, int width, int height) {
