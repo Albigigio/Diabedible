@@ -3,6 +3,8 @@ package com.example.diabedible.controller;
 import com.example.diabedible.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.*;
 import com.example.diabedible.utils.HashUtils;
@@ -47,14 +49,15 @@ public class LoginController {
 
     //Carica le credenziali utenti dal file users.txt nella cartella resources
     private void loadUsersFromFile() {
-        try {
-            //Legge tutte le righe del file users.txt
-            List<String> lines = Files.readAllLines(Paths.get(Objects.requireNonNull(getClass().getResource("/com/example/diabedible/users.txt")).toURI()));
-            //Per ogni riga, divide la stringa in username e password
-            for (String line : lines) {
+        try (Scanner scanner = new Scanner(
+                new InputStreamReader(Objects.requireNonNull(
+                        getClass().getResourceAsStream("/com/example/diabedible/users.txt"))
+                ))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
                 String[] parts = line.split(":", 2);
                 if (parts.length == 2) {
-                    userMap.put(parts[0], parts[1]);    //Inserisce nella mappa
+                    userMap.put(parts[0], parts[1]);
                 }
             }
         } catch (Exception e) {
