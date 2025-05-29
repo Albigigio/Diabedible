@@ -26,6 +26,7 @@ public class LoginController {
         Image image = new Image(getClass().getResource("/com/example/diabedible/Views/autenticazione/DiabedibileLogo.png").toExternalForm());
         logoImage.setImage(image);
     }
+    // questo logo è diabolico, non puoi volerlo usare veramente
 
 
 
@@ -40,6 +41,7 @@ public class LoginController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             messageLabel.setText("Accesso consentito.");
+            messageLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
 
             // Switch scena in base al tipo di utente
             if (user.getUsername().startsWith("ID")) {
