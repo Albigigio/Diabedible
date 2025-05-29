@@ -26,14 +26,9 @@ public class LoginController {
         Image image = new Image(getClass().getResource("/com/example/diabedible/Views/autenticazione/DiabedibileLogo.png").toExternalForm());
         logoImage.setImage(image);
     }
-    // questo logo è diabolico, non puoi volerlo usare veramente
-
-
-
 
     @FXML
     public void handleLogin() {
-//        AccediButton.setStyle("-fx-background-color: #7849a4; -fx-text-fill: white;");    //Cambio colore alla pressione?
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -45,11 +40,11 @@ public class LoginController {
 
             // Switch scena in base al tipo di utente
             if (user.getUsername().startsWith("ID")) {
-                Main.switchScene("/com/example/diabedible/Views/diabetic/home-diabetic.fxml", "Home Paziente", 1200, 800);
+                Main.switchScene("diabetic/home-diabetic.fxml", "Home Paziente", 1200, 800);
             } else if (user.getUsername().startsWith("DR")) {
-                Main.switchScene("/com/example/diabedible/Views/doctor/home-doctor.fxml", "Home Diabetologo", 1200, 800);
+                Main.switchScene("doctor/home-doctor.fxml", "Home Diabetologo", 1200, 800);
             } else {
-                Main.switchScene("/com/example/diabedible/Views/Admin/home-admin.fxml", "Home Admin", 1200, 800);
+                Main.switchScene("Admin/home-admin.fxml", "Home Admin", 1200, 800);
             }
         } else {
             messageLabel.setText("Credenziali errate.");

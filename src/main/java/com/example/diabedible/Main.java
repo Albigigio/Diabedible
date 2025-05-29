@@ -30,7 +30,8 @@ public class Main extends Application {
 
     public static void switchScene(String fxmlFile, String title, int width, int height) {
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource(RESOURCE_PATH + fxmlFile));
+            String fullPath = RESOURCE_PATH + fxmlFile;
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(fullPath));
             Scene scene = new Scene(loader.load(), width, height);
 
             mainStage.setScene(scene);

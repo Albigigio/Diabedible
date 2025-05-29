@@ -6,7 +6,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.effect.ColorAdjust?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.diabedible.controller.HomeDiabeticController"
             stylesheets="@/com/example/diabedible/styles.css">
 
@@ -17,18 +20,23 @@
     </fx:define>
 
     <top>
-        <HBox id="topBar" fx:id="topBar" alignment="CENTER_LEFT" style="-fx-background-color: #2c3e50; -fx-background-radius: 10;">
+        <HBox fx:id="topBar" alignment="CENTER_LEFT" style="-fx-background-color: #2c3e50; -fx-background-radius: 10;">
             <padding>
                 <Insets top="10" right="20" bottom="20" left="20"/>
             </padding>
             <children>
-                <Text id="welcomeText" fx:id="welcomeText" text="Welcome back, John!" fill="WHITE"
-                      font="$welcomeFont"/>
+                <Text fx:id="welcomeText" text="Welcome back, John!" fill="WHITE" font="$welcomeFont"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button id="notificationBtn" style="-fx-background-color: transparent;">
+                <Button fx:id="notificationBtn" style="-fx-background-color: transparent;">
                     <graphic>
-                        <ImageView id="notificationIcon" fitHeight="30" fitWidth="30"
-                                   image="@/images/notification.png"/>
+                        <ImageView fx:id="notificationIcon" fitHeight="24" fitWidth="24" preserveRatio="true">
+                            <image>
+                                <Image url="/com/example/diabedible/Views/diabetic/notification.png" backgroundLoading="true"/>
+                            </image>
+                            <effect>
+                                <ColorAdjust brightness="0.0"/>
+                            </effect>
+                        </ImageView>
                     </graphic>
                 </Button>
             </children>
@@ -36,42 +44,42 @@
     </top>
 
     <left>
-        <VBox id="navigation" style="-fx-background-color: #34495e; -fx-background-radius: 10;"
-              prefWidth="200">
+        <VBox fx:id="navigation" style="-fx-background-color: #34495e; -fx-background-radius: 10;" prefWidth="200">
             <padding>
-                <Insets all="20"/>
+                <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
             <children>
-                <VBox id="profileBox" alignment="CENTER" spacing="5">
+                <VBox fx:id="profileBox" alignment="CENTER" spacing="5">
                     <children>
-                        <ImageView id="profileImage" fitHeight="80" fitWidth="80"
-                                   image="@/images/profile.png"/>
-                        <Text id="profileName" text="John Doe" fill="WHITE"/>
-                        <Text id="profileType" text="Type 2 Diabetes" fill="LIGHTGRAY"/>
+                        <ImageView fx:id="profileImage" fitHeight="80" fitWidth="80"
+                                   image="/com/example/diabedible/Views/diabetic/profile.jpg"/>
+                        <Text fx:id="profileName" text="John Doe" fill="WHITE"/>
+                        <Text fx:id="profileType" text="Type 2 Diabetes" fill="LIGHTGRAY"/>
                     </children>
                 </VBox>
                 <Separator/>
-                <Button id="dashboardBtn" styleClass="nav-button" text="Dashboard">
+                <Button fx:id="dashboardBtn" text="Dashboard" styleClass="nav-button">
                     <graphic>
-                        <ImageView fitHeight="20" fitWidth="20" image="@/images/home.png"/>
+                        <ImageView fitHeight="20" fitWidth="20"
+                                   image="/com/example/diabedible/Views/diabetic/home.png"/>
                     </graphic>
                 </Button>
-                <!-- se vogliamo addare altri bottoni di navigazione -->
                 <Separator/>
-                <Button id="logoutBtn" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"
-                        maxWidth="Infinity" text="Logout"/>
+                <Button fx:id="logoutBtn" text="Logout"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white;"
+                        maxWidth="Infinity"/>
             </children>
         </VBox>
     </left>
 
     <center>
-        <TabPane id="mainContent">
+        <TabPane fx:id="mainContent">
             <tabs>
-                <Tab id="bloodSugarTab" text="Blood Sugar" closable="false">
+                <Tab fx:id="bloodSugarTab" text="Blood Sugar" closable="false">
                     <content>
                         <VBox spacing="20" padding="20">
                             <Text text="Blood Sugar Monitoring" font="$titleFont"/>
-                            <LineChart id="bloodSugarChart">
+                            <LineChart fx:id="bloodSugarChart">
                                 <xAxis>
                                     <NumberAxis label="Days"/>
                                 </xAxis>
@@ -79,21 +87,24 @@
                                     <NumberAxis label="Blood Sugar (mg/dL)" lowerBound="50" upperBound="300" tickUnit="25"/>
                                 </yAxis>
                             </LineChart>
-                            <!-- se vogliamo addare altre stat -->
+                            <HBox spacing="10">
+                                <TextField fx:id="readingField" promptText="Inserisci valore glicemia"/>
+                                <DatePicker fx:id="datePicker"/>
+                                <Button text="Aggiungi" onAction="#handleAddReading"/>
+                            </HBox>
                         </VBox>
                     </content>
                 </Tab>
-                <!-- se vogliamo addare altre tab -->
             </tabs>
         </TabPane>
     </center>
 
     <right>
-        <VBox id="quickStats" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10;"
+        <VBox fx:id="quickStats" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10;"
               prefWidth="250" spacing="15" padding="20">
             <children>
                 <Text text="Quick Stats" font="$statsTitleFont"/>
-                <!-- altri box per possibili upgrade -->
+                <!-- altri box in futuro -->
             </children>
         </VBox>
     </right>
