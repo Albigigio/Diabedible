@@ -6,6 +6,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.diabedible.controller.LoginController" spacing="10" alignment="CENTER">
@@ -13,10 +14,12 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
           </padding>
 
-    <Label text="Diabedible - Accesso" style="-fx-font-size: 20; -fx-font-weight: bold;" />
-    <TextField fx:id="usernameField" promptText="Nome utente (es. ID123, DR456)" />
-    <PasswordField fx:id="passwordField" promptText="Password" />
-    <Button text="Accedi" onAction="#handleLogin" />
+
+    <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+    <Label text="Login" style="-fx-font-size: 15; -fx-text-fill: black; -fx-font-weight: bold;"/>
+    <TextField fx:id="usernameField" promptText="Nome utente (es. ID123, DR456)" maxWidth="400"/>
+    <PasswordField fx:id="passwordField" promptText="Password" maxWidth="400"/>
+    <Button text="Accedi" onAction="#handleLogin" style="-fx-background-color: #a449a3; -fx-text-fill: white;"/>
     <Label fx:id="messageLabel" style="-fx-text-fill: red;" />
 
 </VBox>
