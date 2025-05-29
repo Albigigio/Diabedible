@@ -43,11 +43,11 @@ public class LoginController {
 
             // Switch scena in base al tipo di utente
             if (user.getUsername().startsWith("ID")) {
-                Main.switchScene("Views/diabetic/home-diabetic.fxml", "Home Paziente", 1200, 800);
+                Main.switchScene("/com/example/diabedible/Views/diabetic/home-diabetic.fxml", "Home Paziente", 1200, 800);
             } else if (user.getUsername().startsWith("DR")) {
-                Main.switchScene("Views/doctor/home-doctor.fxml", "Home Diabetologo", 1200, 800);
+                Main.switchScene("/com/example/diabedible/Views/doctor/home-doctor.fxml", "Home Diabetologo", 1200, 800);
             } else {
-                Main.switchScene("Views/Admin/home-admin.fxml", "Home Admin", 1200, 800);
+                Main.switchScene("/com/example/diabedible/Views/Admin/home-admin.fxml", "Home Admin", 1200, 800);
             }
         } else {
             messageLabel.setText("Credenziali errate.");
