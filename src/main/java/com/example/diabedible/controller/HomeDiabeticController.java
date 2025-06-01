@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HomeDiabeticController {
@@ -27,62 +27,103 @@ public class HomeDiabeticController {
 
     @FXML private TabPane mainContent;
     @FXML private Tab bloodSugarTab;
-    @FXML private LineChart<Number, Number> bloodSugarChart;
+    @FXML private LineChart<String, Number> bloodSugarChart;
     @FXML private TextField readingField;
     @FXML private DatePicker datePicker;
+    @FXML private ComboBox<String> timeSlotComboBox;
 
-    // Controller per la home del paziente diabetico
-    private final Map<LocalDate, Double> bloodSugarData = new HashMap<>();
-    private final Map<LocalDate, Double> activityData = new HashMap<>();
+    // Mappa annidata
+    private final Map<LocalDate, Map<String, Double>> bloodSugarData = new LinkedHashMap<>();
+    private XYChart.Series<String, Number> bloodSugarSeries;
 
     @FXML
     public void initialize() {
         initializeSampleData();
         setupCharts();
-        setupEventHandlers();
+
+        // Imposta oggi di default
+        datePicker.setValue(LocalDate.now());
+
+        // Permette solo la selezione di oggi
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || !date.equals(today));
+            }
+        });
+
+        // Inizializza comboBox
+        timeSlotComboBox.getItems().addAll("Mattina", "Pomeriggio");
     }
 
     private void initializeSampleData() {
-        LocalDate today = LocalDate.now();
-        bloodSugarData.put(today.minusDays(6), 145.0);
-        bloodSugarData.put(today.minusDays(5), 132.0);
-        // altri dati?
-    }
-    // setup grafici
-    private void setupCharts() {
-        XYChart.Series<Number, Number> series = createChartSeries(bloodSugarData, "Blood Sugar");
-        bloodSugarChart.getData().add(series);
-    }
-
-    private XYChart.Series<Number, Number> createChartSeries(Map<LocalDate, Double> data, String name) {
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName(name);
-
-        int dayCount = 1;
-        for (Map.Entry<LocalDate, Double> entry : data.entrySet()) {
-            series.getData().add(new XYChart.Data<>(dayCount, entry.getValue()));
-            dayCount++;
+        LocalDate today = LocalDate.now().minusDays(6);
+        for (int i = 0; i < 5; i++) {
+            Map<String, Double> readings = new LinkedHashMap<>();
+            readings.put("Mattina", 100.0 + i * 5);
+            readings.put("Pomeriggio", 110.0 + i * 5);
+            bloodSugarData.put(today.plusDays(i), readings);
         }
-
-        return series;
     }
 
-    private void setupEventHandlers() {
-        // Example for add reading button
-        // Note: This should be wired in FXML using onAction="#handleAddReading"
+    private void setupCharts() {
+        bloodSugarSeries = new XYChart.Series<>();
+        bloodSugarSeries.setName("Zuccheri nel sangue");
+
+        updateChartSeries();
+        bloodSugarChart.getData().add(bloodSugarSeries);
+    }
+
+    private void updateChartSeries() {
+        bloodSugarSeries.getData().clear();
+
+        for (Map.Entry<LocalDate, Map<String, Double>> entry : bloodSugarData.entrySet()) {
+            LocalDate date = entry.getKey();
+            Map<String, Double> readings = entry.getValue();
+
+            readings.forEach((fascia, valore) -> {
+                String label = date.toString() + " (" + fascia + ")";
+                bloodSugarSeries.getData().add(new XYChart.Data<>(label, valore));
+            });
+        }
     }
 
     @FXML
     private void handleAddReading() {
         try {
+            LocalDate today = LocalDate.now();
+            LocalDate selectedDate = datePicker.getValue();
+
+            if (!selectedDate.equals(today)) {
+                showAlert("Puoi inserire rilevazioni solo per oggi.");
+                return;
+            }
+
+            String selectedSlot = timeSlotComboBox.getValue();
+            if (selectedSlot == null) {
+                showAlert("Seleziona una fascia oraria (Mattina o Pomeriggio).");
+                return;
+            }
+
+            bloodSugarData.putIfAbsent(today, new LinkedHashMap<>());
+            Map<String, Double> dailyReadings = bloodSugarData.get(today);
+
+            if (dailyReadings.containsKey(selectedSlot)) {
+                showAlert("Hai già inserito una rilevazione per la fascia " + selectedSlot + ".");
+                return;
+            }
+
             double reading = Double.parseDouble(readingField.getText());
-            LocalDate date = datePicker.getValue();
-            bloodSugarData.put(date, reading);
-            bloodSugarChart.getData().clear();
-            bloodSugarChart.getData().add(createChartSeries(bloodSugarData, "Zuccheri nel sangue"));
+            dailyReadings.put(selectedSlot, reading);
+
+            updateChartSeries();
+
             readingField.clear();
+            timeSlotComboBox.getSelectionModel().clearSelection();
         } catch (NumberFormatException ex) {
-            showAlert("Inserisci un valore valido per i livelli di zucchero.");
+            showAlert("Inserisci un valore numerico valido.");
         }
     }
 

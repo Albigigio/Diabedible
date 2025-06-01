@@ -7,6 +7,8 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.effect.ColorAdjust?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -55,17 +57,26 @@
                             <Text text="Blood Sugar Monitoring" font="$titleFont"/>
                             <LineChart fx:id="bloodSugarChart">
                                 <xAxis>
-                                    <NumberAxis label="Days"/>
+                                    <CategoryAxis label="Days"/>
                                 </xAxis>
                                 <yAxis>
                                     <NumberAxis label="Blood Sugar (mg/dL)" lowerBound="50.0" upperBound="300.0" tickUnit="25.0"/>
                                 </yAxis>
                             </LineChart>
-                            <HBox spacing="10.0">
+                            <HBox spacing="10.0" alignment="CENTER_LEFT">
                                 <TextField fx:id="readingField" promptText="Inserisci valore glicemia"/>
                                 <DatePicker fx:id="datePicker"/>
+                                <ComboBox fx:id="timeSlotComboBox" promptText="Seleziona fascia oraria">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="mattina"/>
+                                            <String fx:value="pomeriggio"/>
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
                                 <Button text="Aggiungi" onAction="#handleAddReading"/>
                             </HBox>
+
                         </VBox>
                     </content>
                 </Tab>
