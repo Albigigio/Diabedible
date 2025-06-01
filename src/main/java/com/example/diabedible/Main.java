@@ -48,6 +48,7 @@ public class Main extends Application {
 
             mainStage.setScene(scene);
             mainStage.setTitle("Diabedible - " + title);
+            mainStage.setMaximized(true);
 
             if (!mainStage.isShowing()) {
                 mainStage.show();
