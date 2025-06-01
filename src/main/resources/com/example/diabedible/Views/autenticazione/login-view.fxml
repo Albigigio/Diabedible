@@ -19,7 +19,7 @@
     <Label text="Login" style="-fx-font-size: 15; -fx-text-fill: black; -fx-font-weight: bold;"/>
     <TextField fx:id="usernameField" promptText="Nome utente (es. ID123, DR456)" maxWidth="400"/>
     <PasswordField fx:id="passwordField" promptText="Password" maxWidth="400"/>
-    <Button text="Accedi" onAction="#handleLogin" style="-fx-background-color: #a449a3; -fx-text-fill: white;"/>
+    <Button fx:id="AccediButton" text="Accedi" onAction="#handleLogin" style="-fx-background-color: #a449a3; -fx-text-fill: white;"/>
     <Label fx:id="messageLabel" style="-fx-text-fill: red;" />
 
 </VBox>

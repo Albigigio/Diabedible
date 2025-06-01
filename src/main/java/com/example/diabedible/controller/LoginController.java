@@ -3,6 +3,7 @@ package com.example.diabedible.controller;
 import com.example.diabedible.Main;
 import com.example.diabedible.model.User;
 import com.example.diabedible.service.LoginService;
+import com.example.diabedible.utils.FXMLPaths;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -37,17 +38,28 @@ public class LoginController {
             User user = userOpt.get();
             messageLabel.setText("Accesso consentito.");
             messageLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-
-            // Switch scena in base al tipo di utente
-            if (user.getUsername().startsWith("ID")) {
-                Main.switchScene("diabetic/home-diabetic.fxml", "Home Paziente", 1200, 800);
-            } else if (user.getUsername().startsWith("DR")) {
-                Main.switchScene("doctor/home-doctor.fxml", "Home Diabetologo", 1200, 800);
-            } else {
-                Main.switchScene("Admin/home-admin.fxml", "Home Admin", 1200, 800);
-            }
+            switchToUserHome(user);
         } else {
             messageLabel.setText("Credenziali errate.");
+            messageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
         }
+    }
+    // Metodi per cambiare la scena
+    private void switchToUserHome(User user) {
+        String fxmlPath;
+        String title;
+
+        if (user.getUsername().startsWith("ID")) {
+            fxmlPath = FXMLPaths.HOME_DIABETIC;
+            title = "Home Paziente";
+        } else if (user.getUsername().startsWith("DR")) {
+            fxmlPath = FXMLPaths.HOME_DOCTOR;
+            title = "Home Diabetologo";
+        } else {
+            fxmlPath = FXMLPaths.HOME_ADMIN;
+            title = "Home Admin";
+        }
+
+        Main.switchScene(fxmlPath, title, 1200, 800);
     }
 }
