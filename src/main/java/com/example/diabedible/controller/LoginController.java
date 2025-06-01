@@ -60,6 +60,6 @@ public class LoginController {
             title = "Home Admin";
         }
 
-        Main.switchScene(fxmlPath, title, 1200, 800);
+        Main.switchScene(fxmlPath, title, 1200, 800, true);
     }
 }

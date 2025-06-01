@@ -12,31 +12,33 @@ public class Main extends Application {
     private static final int DEFAULT_WIDTH = 1200;
     private static final int DEFAULT_HEIGHT = 800;
 
+
     @Override
     public void start(Stage primaryStage) {
         mainStage = primaryStage;
         mainStage.setMinWidth(800);
         mainStage.setMinHeight(600);
+
         switchToLoginScene();
     }
     // Metodi per cambiare la scena
     public static void switchToLoginScene() {
-        switchScene(FXMLPaths.LOGIN, "Login", DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        switchScene(FXMLPaths.LOGIN, "Login", DEFAULT_WIDTH, DEFAULT_HEIGHT, true);
     }
     // Metodi per cambiare la scena di dashboard
     public static void switchToDiabeticDashboard() {
-        switchScene(FXMLPaths.HOME_DIABETIC, "Dashboard Paziente", DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        switchScene(FXMLPaths.HOME_DIABETIC, "Dashboard Paziente", DEFAULT_WIDTH, DEFAULT_HEIGHT, true);
     }
 
     public static void switchToDoctorDashboard() {
-        switchScene(FXMLPaths.HOME_DOCTOR, "Dashboard Diabetologo", DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        switchScene(FXMLPaths.HOME_DOCTOR, "Dashboard Diabetologo", DEFAULT_WIDTH, DEFAULT_HEIGHT, true);
     }
 
     public static void switchToAdminDashboard() {
-        switchScene(FXMLPaths.HOME_ADMIN, "Dashboard Admin", DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        switchScene(FXMLPaths.HOME_ADMIN, "Dashboard Admin", DEFAULT_WIDTH, DEFAULT_HEIGHT, true);
     }
     // Metodi per cambiare la scena di un determinato fxml
-    public static void switchScene(String fxmlPath, String title, int width, int height) {
+    public static void switchScene(String fxmlPath, String title, int width, int height, boolean maximize) {
         if (mainStage == null) {
             System.err.println("Errore: mainStage non è stato inizializzato.");
             return;
@@ -48,7 +50,7 @@ public class Main extends Application {
 
             mainStage.setScene(scene);
             mainStage.setTitle("Diabedible - " + title);
-            mainStage.setMaximized(true);
+            mainStage.setMaximized(maximize);
 
             if (!mainStage.isShowing()) {
                 mainStage.show();
