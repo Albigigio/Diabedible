@@ -16,3 +16,19 @@
     -fx-alignment: center-left;
     -fx-max-width: infinity;
 }
+
+.chart-series-line.series0 {
+    -fx-stroke: green;
+}
+.chart-series-line.series1 {
+    -fx-stroke: blue;
+}
+.chart-series-line.series2 {
+    -fx-stroke: red;
+    -fx-stroke-dash-array: 4 4;
+}
+
+.chart-series-line.series3 {
+    -fx-stroke: orange;
+    -fx-stroke-dash-array: 4 4;
+}

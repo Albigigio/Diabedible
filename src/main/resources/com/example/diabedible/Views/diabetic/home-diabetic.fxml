@@ -57,7 +57,7 @@
                             <Text text="Blood Sugar Monitoring" font="$titleFont"/>
                             <LineChart fx:id="bloodSugarChart">
                                 <xAxis>
-                                    <CategoryAxis label="Days"/>
+                                    <CategoryAxis label="Giorni"/>
                                 </xAxis>
                                 <yAxis>
                                     <NumberAxis label="Blood Sugar (mg/dL)" lowerBound="50.0" upperBound="300.0" tickUnit="25.0"/>
@@ -66,17 +66,9 @@
                             <HBox spacing="10.0" alignment="CENTER_LEFT">
                                 <TextField fx:id="readingField" promptText="Inserisci valore glicemia"/>
                                 <DatePicker fx:id="datePicker"/>
-                                <ComboBox fx:id="timeSlotComboBox" promptText="Seleziona fascia oraria">
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="mattina"/>
-                                            <String fx:value="pomeriggio"/>
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
+                                <ComboBox fx:id="timeSlotComboBox" promptText="Seleziona fascia oraria"/>
                                 <Button text="Aggiungi" onAction="#handleAddReading"/>
                             </HBox>
-
                         </VBox>
                     </content>
                 </Tab>
@@ -85,13 +77,13 @@
     </center>
 
     <right>
-        <VBox fx:id="quickStats" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10;"
+        <VBox fx:id="Terapia" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10;"
               prefWidth="250.0" spacing="15.0">
             <padding>
                 <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
             </padding>
             <children>
-                <Text text="Quick Stats" font="$statsTitleFont"/>
+                <Text text="Terapia" font="$statsTitleFont"/>
             </children>
         </VBox>
     </right>
