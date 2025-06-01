@@ -25,7 +25,7 @@ public class Main extends Application {
     public static void switchToLoginScene() {
         switchScene(FXMLPaths.LOGIN, "Login", DEFAULT_WIDTH, DEFAULT_HEIGHT, true);
     }
-    // Metodi per cambiare la scena di dashboard
+    // Metodi per passare alla dashboard
     public static void switchToDiabeticDashboard() {
         switchScene(FXMLPaths.HOME_DIABETIC, "Dashboard Paziente", DEFAULT_WIDTH, DEFAULT_HEIGHT, true);
     }
