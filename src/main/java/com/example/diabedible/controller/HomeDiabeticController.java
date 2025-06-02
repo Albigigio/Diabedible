@@ -1,5 +1,7 @@
 package com.example.diabedible.controller;
 
+import com.example.diabedible.Main;
+import com.example.diabedible.utils.FXMLPaths;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -32,6 +34,7 @@ public class HomeDiabeticController {
     @FXML private TextField readingField;
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<String> timeSlotComboBox;
+    @FXML private Button logoutBtn;
 
     // variabili per la gestione dei dati di rilevazione glicemica
     private final Map<LocalDate, Map<String, Double>> bloodSugarData = new LinkedHashMap<>();
@@ -40,13 +43,14 @@ public class HomeDiabeticController {
     private final Map<LocalDate, Map<String, Integer>> modificationCountPerSlot = new HashMap<>();
     private XYChart.Series<String, Number> minThresholdSeries;
     private XYChart.Series<String, Number> maxThresholdSeries;
-    private XYChart.Series<String, Number> averageSeries;
+    private XYChart.Series<String, Number> averageSeries; // media da rivedere..
 
     private static final double MIN_THRESHOLD = 70.0;
     private static final double MAX_THRESHOLD = 180.0;
 
     @FXML
     public void initialize() {
+//        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // stili linee? wip, debbo andare
         initializeSampleData();
         setupCharts();
 
@@ -181,6 +185,15 @@ public class HomeDiabeticController {
 
         } catch (NumberFormatException ex) {
             showAlert("Inserisci un valore numerico valido.");
+        }
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            Main.switchToLoginScene();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 

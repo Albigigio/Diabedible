@@ -12,6 +12,6 @@
           </padding>
 
     <Label text="Dashboard Diabetologo" style="-fx-font-size: 24; -fx-font-weight: bold;" />
-    <Label text="Benvenuto nell'area riservata ai diabetologi" />
+    <Label text="Benvenuto nell'area riservata ai diabetologi, attualmente in costruzione" />
 
 </VBox>
