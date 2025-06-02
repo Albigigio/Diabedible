@@ -40,6 +40,7 @@
                 <Separator/>
                 <Button fx:id="logoutBtn" text="Logout"
                         style="-fx-background-color: #e74c3c; -fx-text-fill: white;"
+                        onAction="#handleLogout"
                         maxWidth="Infinity"/>
             </children>
         </VBox>
@@ -48,19 +49,19 @@
     <center>
         <TabPane fx:id="mainContent">
             <tabs>
-                <Tab fx:id="bloodSugarTab" text="Blood Sugar" closable="false">
+                <Tab fx:id="bloodSugarTab" text="Livello Glicemico" closable="false">
                     <content>
                         <VBox spacing="20.0">
                             <padding>
                                 <Insets topRightBottomLeft="20.0"/>
                             </padding>
-                            <Text text="Blood Sugar Monitoring" font="$titleFont"/>
+                            <Text text="Monitoraggio Livello Glicemico" font="$titleFont"/>
                             <LineChart fx:id="bloodSugarChart">
                                 <xAxis>
                                     <CategoryAxis label="Giorni"/>
                                 </xAxis>
                                 <yAxis>
-                                    <NumberAxis label="Blood Sugar (mg/dL)" lowerBound="50.0" upperBound="300.0" tickUnit="25.0"/>
+                                    <NumberAxis label="Livello Glicemico (mg/dL)" lowerBound="50.0" upperBound="300.0" tickUnit="25.0"/>
                                 </yAxis>
                             </LineChart>
                             <HBox spacing="10.0" alignment="CENTER_LEFT">
