@@ -1,9 +1,10 @@
 package com.example.diabedible.controller;
 
-import com.example.diabedible.Main;
+import com.example.diabedible.ViewManaged;
 import com.example.diabedible.model.User;
 import com.example.diabedible.service.LoginService;
 import com.example.diabedible.utils.FXMLPaths;
+import com.example.diabedible.utils.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -11,7 +12,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.Optional;
 
-public class LoginController {
+public class LoginController implements ViewManaged {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -19,11 +20,21 @@ public class LoginController {
     @FXML private ImageView logoImage;
     @FXML private Button AccediButton;
 
-    private final LoginService loginService = new LoginService();
+    private final LoginService loginService;
+    private ViewManager viewManager;
+
+    public LoginController(LoginService loginService, ViewManager viewManager) {
+        this.loginService = loginService;
+        this.viewManager = viewManager;
+    }
+
+    @Override
+    public void setViewManager(ViewManager viewManager) {
+        this.viewManager = viewManager;
+    }
 
     @FXML
     public void initialize() {
-        //Caricamento logo
         Image image = new Image(getClass().getResource("/com/example/diabedible/Views/autenticazione/DiabedibileLogo.png").toExternalForm());
         logoImage.setImage(image);
     }
@@ -44,7 +55,7 @@ public class LoginController {
             messageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
         }
     }
-    // Metodi per cambiare la scena
+
     private void switchToUserHome(User user) {
         String fxmlPath;
         String title;
@@ -52,14 +63,17 @@ public class LoginController {
         if (user.getUsername().startsWith("ID")) {
             fxmlPath = FXMLPaths.HOME_DIABETIC;
             title = "Home Paziente";
+            // Utilizziamo il metodo standard del ViewManager
+            // Ora il controller viene inizializzato automaticamente da FXML
+            viewManager.switchScene(fxmlPath, title, 1200, 800, true);
         } else if (user.getUsername().startsWith("DR")) {
             fxmlPath = FXMLPaths.HOME_DOCTOR;
             title = "Home Diabetologo";
+            viewManager.switchScene(fxmlPath, title, 1200, 800, true);
         } else {
             fxmlPath = FXMLPaths.HOME_ADMIN;
             title = "Home Admin";
+            viewManager.switchScene(fxmlPath, title, 1200, 800, true);
         }
-
-        Main.switchScene(fxmlPath, title, 1200, 800, true);
     }
 }

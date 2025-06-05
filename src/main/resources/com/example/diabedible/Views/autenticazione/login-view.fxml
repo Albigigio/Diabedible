@@ -8,8 +8,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.ImageView?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.diabedible.controller.LoginController" spacing="10" alignment="CENTER">
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.controller.LoginController"
+      spacing="10"
+      alignment="CENTER">
           <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
           </padding>

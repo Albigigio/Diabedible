@@ -1,7 +1,9 @@
 package com.example.diabedible.controller;
 
 import com.example.diabedible.Main;
+import com.example.diabedible.ViewManaged;
 import com.example.diabedible.utils.FXMLPaths;
+import com.example.diabedible.utils.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -16,7 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class HomeDiabeticController {
+public class HomeDiabeticController implements ViewManaged {
 
     @FXML private HBox topBar;
     @FXML private Text welcomeText;
@@ -36,6 +38,19 @@ public class HomeDiabeticController {
     @FXML private ComboBox<String> timeSlotComboBox;
     @FXML private Button logoutBtn;
 
+    //viewmanager
+    private ViewManager viewManager;
+
+    // Costruttore vuoto richiesto da FXML
+    public HomeDiabeticController() {
+        // Costruttore vuoto necessario per FXML
+    }
+
+    @Override
+    public void setViewManager(ViewManager viewManager) {
+        this.viewManager = viewManager;
+    }
+
     // variabili per la gestione dei dati di rilevazione glicemica
     private final Map<LocalDate, Map<String, Double>> bloodSugarData = new LinkedHashMap<>();
     private XYChart.Series<String, Number> morningSeries;
@@ -50,7 +65,8 @@ public class HomeDiabeticController {
 
     @FXML
     public void initialize() {
-//        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // stili linee? wip, debbo andare
+        // Nota: ViewManager sarà inizializzato dopo il caricamento del controller
+        // Inizializzare i componenti indipendenti dal ViewManager
         initializeSampleData();
         setupCharts();
 
@@ -190,10 +206,10 @@ public class HomeDiabeticController {
 
     @FXML
     private void handleLogout() {
-        try {
-            Main.switchToLoginScene();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        if (viewManager != null) {
+            viewManager.switchToLoginScene();
+        } else {
+            showAlert("Errore nel gestore delle viste. Impossibile effettuare il logout.");
         }
     }
 
