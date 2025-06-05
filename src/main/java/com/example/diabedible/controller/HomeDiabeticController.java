@@ -207,7 +207,7 @@ public class HomeDiabeticController implements ViewManaged {
     @FXML
     private void handleLogout() {
         if (viewManager != null) {
-            viewManager.switchToLoginScene();
+            viewManager.logout();
         } else {
             showAlert("Errore nel gestore delle viste. Impossibile effettuare il logout.");
         }

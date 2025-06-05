@@ -1,5 +1,6 @@
 package com.example.diabedible.controller;
 
+import com.example.diabedible.utils.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -28,6 +29,27 @@ public class HomeDoctorController {
     @FXML private TextField readingField;
     @FXML private DatePicker datePicker;
 
+    //view manager
+    private ViewManager viewManager;
+
     // Controller per la home del diabetologo
+    public HomeDoctorController() {
+        //yada yada
+    }
+
+
+
+
+
+    // Logout
+    @FXML
+    private void handleLogout() {
+        if (viewManager != null) {
+            viewManager.logout(); // Unico punto di uscita centralizzato
+        } else {
+            // Opzionale: puoi anche loggare o mostrare errore
+            System.err.println("ViewManager non inizializzato");
+        }
+    }
 
 }

@@ -10,7 +10,6 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.diabedible.controller.LoginController"
       spacing="10"
       alignment="CENTER">
           <padding>

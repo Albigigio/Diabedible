@@ -3,7 +3,6 @@ package com.example.diabedible.service;
 import com.example.diabedible.model.User;
 import com.example.diabedible.utils.HashUtils;
 
-import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 

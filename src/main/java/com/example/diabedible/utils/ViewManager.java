@@ -1,6 +1,8 @@
 package com.example.diabedible.utils;
 
 import com.example.diabedible.ViewManaged;
+import com.example.diabedible.controller.LoginController;
+import com.example.diabedible.service.LoginService;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -52,22 +54,6 @@ public class ViewManager {
         alert.showAndWait();
     }
 
-    public void switchToLoginScene() {
-        switchScene(FXMLPaths.LOGIN, "Login", 1200, 800, true);
-    }
-
-    public void switchToDiabeticDashboard() {
-        switchScene(FXMLPaths.HOME_DIABETIC, "Dashboard Paziente", 1200, 800, true);
-    }
-
-    public void switchToDoctorDashboard() {
-        switchScene(FXMLPaths.HOME_DOCTOR, "Dashboard Diabetologo", 1200, 800, true);
-    }
-
-    public void switchToAdminDashboard() {
-        switchScene(FXMLPaths.HOME_ADMIN, "Dashboard Admin", 1200, 800, true);
-    }
-
     public void switchSceneWithController(String fxmlPath, Object controller, String title, int width, int height, boolean maximize) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -93,7 +79,8 @@ public class ViewManager {
     }
 
     public void logout() {
-        switchToLoginScene();
+        LoginController loginController = new LoginController(new LoginService(), this);
+        switchSceneWithController(FXMLPaths.LOGIN, loginController, "Login", 1200, 800, true);
     }
 
     private void loadStylesheets(Scene scene) {
