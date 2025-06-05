@@ -4,6 +4,8 @@ import com.example.diabedible.Main;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.utils.FXMLPaths;
 import com.example.diabedible.utils.ViewManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -12,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.controlsfx.control.CheckListView;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -37,6 +40,7 @@ public class HomeDiabeticController implements ViewManaged {
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<String> timeSlotComboBox;
     @FXML private Button logoutBtn;
+    @FXML private VBox checklistContainer;
 
     //viewmanager
     private ViewManager viewManager;
@@ -82,7 +86,7 @@ public class HomeDiabeticController implements ViewManaged {
                 setDisable(empty || !date.equals(today));
             }
         });
-
+        initializeChecklist();
         // update slot di tempo disponibili
         updateAvailableTimeSlots();
     }
@@ -150,6 +154,16 @@ public class HomeDiabeticController implements ViewManaged {
             maxThresholdSeries.getData().add(new XYChart.Data<>(dateLabel, MAX_THRESHOLD));
         }
     }
+
+    @FXML
+    private void initializeChecklist() { // da lavorare
+        String[] items = {"Controlla glicemia", "Assumi farmaco", "Fai attività fisica"};
+        for (String item : items) {
+            CheckBox checkBox = new CheckBox(item);
+            checklistContainer.getChildren().add(checkBox);
+        }
+    }
+
 
     @FXML
     private void handleAddReading() {
