@@ -74,6 +74,9 @@ public class HomeDiabeticController implements ViewManaged {
         initializeSampleData();
         setupCharts();
 
+        // Testo di benvenuto
+        welcomeText.setText("Benvenuto, Paziente");
+
         // Imposta oggi di default
         datePicker.setValue(LocalDate.now());
 
