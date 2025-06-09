@@ -100,9 +100,11 @@ public class HomeDoctorController implements ViewManaged {
         if (viewManager != null) {
             viewManager.logout();
         } else {
-            showAlert("Errore nel gestore delle viste. Impossibile effettuare il logout.");
+            System.out.println("ViewManager non impostato!");
+            showAlert("Errore: impossibile effettuare il logout.");
         }
     }
+
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
