@@ -27,11 +27,9 @@ public class Main extends Application {
 
             Scene scene = new Scene(loader.load(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-            // Prova diversi percorsi per il CSS
+            // Load CSS
             String[] cssLocations = {
-                "/com/example/diabedible/styles.css",
-                "/css/styles.css",
-                "/styles.css"
+                "/com/example/diabedible/styles.css"
             };
 
             boolean cssLoaded = false;
