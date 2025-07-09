@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-          <padding>
+<?import javafx.scene.image.ImageView?>
+<VBox alignment="CENTER"
+      spacing="10"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      prefHeight="600"
+      fillWidth="true">
+    <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
-          </padding>
-
-
-    <ImageView fx:id="logoImage" fitWidth="600" preserveRatio="true" />
+    </padding>
+    
+    <!-- Spacer superiore -->
+    <Region VBox.vgrow="ALWAYS" />
+    
+    <!-- Logo -->
+    <ImageView fx:id="logoImage" fitHeight="150" fitWidth="200" preserveRatio="true" />
+    
+    <!-- Campi di input -->
     <TextField fx:id="usernameField" maxWidth="400" promptText="Nome utente (es. ID123, DR456)" />
     <PasswordField fx:id="passwordField" maxWidth="400" promptText="Password" />
-    <Button fx:id="accediButton" onAction="#handleLogin" styleClass="login-button">
-    <graphic>
-        <Text text="Accedi">
-            <font>
-                <Font name="Roboto" size="16.0" />
-            </font>
-        </Text>
-    </graphic>
-</Button>
-    <Label fx:id="messageLabel" style="-fx-text-fill: red;" />
+    <Label fx:id="messageLabel" />
+    <Button fx:id="AccediButton" onAction="#handleLogin" styleClass="login-button">
+        <graphic>
+            <Text text="Accedi">
+                <font>
+                    <Font name="Roboto" size="16.0" />
+                </font>
+            </Text>
+        </graphic>
+    </Button>
     
+    <!-- Spacer inferiore -->
+    <Region VBox.vgrow="ALWAYS" />
 </VBox>
