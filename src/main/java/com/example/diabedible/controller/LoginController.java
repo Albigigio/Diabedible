@@ -35,7 +35,7 @@ public class LoginController implements ViewManaged {
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResource("/com/example/diabedible/Views/autenticazione/DiabedibileLogo.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/com/example/diabedible/Views/autenticazione/Logo2.png").toExternalForm());
         logoImage.setImage(image);
     }
 
