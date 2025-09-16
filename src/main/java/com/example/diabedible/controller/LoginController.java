@@ -3,7 +3,7 @@ package com.example.diabedible.controller;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.model.Role;
 import com.example.diabedible.model.User;
-import com.example.diabedible.service.LoginService;
+import com.example.diabedible.service.AuthService;
 import com.example.diabedible.utils.FXMLPaths;
 import com.example.diabedible.utils.ViewManager;
 import javafx.fxml.FXML;
@@ -21,11 +21,11 @@ public class LoginController implements ViewManaged {
     @FXML private ImageView logoImage;
     @FXML private Button AccediButton;
 
-    private final LoginService loginService;
+    private final AuthService authService;
     private ViewManager viewManager;
 
-    public LoginController(LoginService loginService, ViewManager viewManager) {
-        this.loginService = loginService;
+    public LoginController(AuthService authService, ViewManager viewManager) {
+        this.authService = authService;
         this.viewManager = viewManager;
     }
 
@@ -45,7 +45,7 @@ public class LoginController implements ViewManaged {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        Optional<User> userOpt = loginService.login(username, password);
+        Optional<User> userOpt = authService.login(username, password);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             messageLabel.setText("Accesso consentito.");
