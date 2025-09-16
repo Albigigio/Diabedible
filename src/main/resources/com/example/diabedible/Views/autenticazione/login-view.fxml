@@ -14,15 +14,15 @@
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
-    
+
     <!-- Spacer superiore -->
     <Region VBox.vgrow="ALWAYS" />
-    
+
     <!-- Logo -->
     <ImageView fx:id="logoImage" fitHeight="150" fitWidth="200" preserveRatio="true" />
-    
+
     <!-- Campi di input -->
-    <TextField fx:id="usernameField" maxWidth="400" promptText="Nome utente (es. ID123, DR456)" />
+    <TextField fx:id="usernameField" maxWidth="400" promptText="Nome utente" />
     <PasswordField fx:id="passwordField" maxWidth="400" promptText="Password" />
     <Label fx:id="messageLabel" />
     <Button fx:id="AccediButton" onAction="#handleLogin" styleClass="login-button">
@@ -34,7 +34,7 @@
             </Text>
         </graphic>
     </Button>
-    
+
     <!-- Spacer inferiore -->
     <Region VBox.vgrow="ALWAYS" />
 </VBox>

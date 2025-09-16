@@ -8,8 +8,8 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 2. [x] Replace System.out/err prints with a logging framework (SLF4J + Logback) and define a basic logging policy.
 3. [x] Centralize application configuration (e.g., application.properties) and a Config class to read it.
 4. [x] Fix FXML path case mismatch: resource folder uses `Views/Admin` while `FXMLPaths` constant is `admin` – align naming consistently.
-5. [ ] Remove CSS loading duplication: choose only ViewManager or Main to load CSS, not both.
-6. [ ] Introduce a Role concept for users (ADMIN/DOCTOR/DIABETIC) instead of username prefixes to route to views.
+5. [x] Remove CSS loading duplication: choose only ViewManager or Main to load CSS, not both.
+6. [x] Introduce a Role concept for users (ADMIN/DOCTOR/DIABETIC) instead of username prefixes to route to views.
 7. [ ] Introduce a simple dependency injection approach (manual module or lightweight DI like Guice/Spring-lite) to construct controllers and services.
 8. [ ] Define service interfaces (e.g., AuthService) and decouple controllers from concrete implementations.
 9. [ ] Abstract persistence behind repository interfaces (e.g., UserRepository) instead of reading a flat users.txt file directly.

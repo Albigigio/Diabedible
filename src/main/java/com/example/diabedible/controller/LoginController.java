@@ -1,6 +1,7 @@
 package com.example.diabedible.controller;
 
 import com.example.diabedible.ViewManaged;
+import com.example.diabedible.model.Role;
 import com.example.diabedible.model.User;
 import com.example.diabedible.service.LoginService;
 import com.example.diabedible.utils.FXMLPaths;
@@ -60,20 +61,29 @@ public class LoginController implements ViewManaged {
         String fxmlPath;
         String title;
 
-        if (user.getUsername().startsWith("ID")) {
-            fxmlPath = FXMLPaths.HOME_DIABETIC;
-            title = "Home Paziente";
-            // Utilizziamo il metodo standard del ViewManager
-            // Ora il controller viene inizializzato automaticamente da FXML
-            viewManager.switchScene(fxmlPath, title, 1200, 800, true);
-        } else if (user.getUsername().startsWith("DR")) {
-            fxmlPath = FXMLPaths.HOME_DOCTOR;
-            title = "Home Diabetologo";
-            viewManager.switchScene(fxmlPath, title, 1200, 800, true);
-        } else {
-            fxmlPath = FXMLPaths.HOME_ADMIN;
-            title = "Home Admin";
-            viewManager.switchScene(fxmlPath, title, 1200, 800, true);
+        Role role = user.getRole();
+        switch (role) {
+            case DIABETIC -> {
+                fxmlPath = FXMLPaths.HOME_DIABETIC;
+                title = "Home Paziente";
+                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
+            }
+            case DOCTOR -> {
+                fxmlPath = FXMLPaths.HOME_DOCTOR;
+                title = "Home Diabetologo";
+                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
+            }
+            case ADMIN -> {
+                fxmlPath = FXMLPaths.HOME_ADMIN;
+                title = "Home Admin";
+                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
+            }
+            default -> {
+                // fallback sicuro
+                fxmlPath = FXMLPaths.HOME_DIABETIC;
+                title = "Home";
+                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
+            }
         }
     }
 }
