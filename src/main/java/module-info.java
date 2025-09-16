@@ -9,6 +9,9 @@ module com.example.diabedible {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
+    // Logging
+    requires org.slf4j;
+
     opens com.example.diabedible to javafx.fxml;
     exports com.example.diabedible;
     exports com.example.diabedible.controller;

@@ -2,17 +2,19 @@ package com.example.diabedible;
 
 import com.example.diabedible.controller.LoginController;
 import com.example.diabedible.service.LoginService;
+import com.example.diabedible.utils.Config;
 import com.example.diabedible.utils.FXMLPaths;
 import com.example.diabedible.utils.ViewManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main extends Application {
 
-    private static final int DEFAULT_WIDTH = 1200;
-    private static final int DEFAULT_HEIGHT = 800;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     @Override
     public void start(Stage primaryStage) {
@@ -25,37 +27,32 @@ public class Main extends Application {
             LoginController loginController = new LoginController(loginService, viewManager);
             loader.setController(loginController);
 
-            Scene scene = new Scene(loader.load(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            Scene scene = new Scene(loader.load(), Config.windowWidth(), Config.windowHeight());
 
-            // Load CSS
-            String[] cssLocations = {
-                "/com/example/diabedible/styles.css"
-            };
-
+            // Load CSS from centralized config
             boolean cssLoaded = false;
-
-            for (String location : cssLocations) {
+            for (String location : Config.cssPaths()) {
                 try {
                     if (getClass().getResource(location) != null) {
                         scene.getStylesheets().add(getClass().getResource(location).toExternalForm());
-                        System.out.println("CSS caricato da: " + location);
+                        LOGGER.info("CSS caricato da: {}", location);
                         cssLoaded = true;
                         break;
                     }
                 } catch (Exception e) {
-                    System.err.println("Errore nel caricamento del CSS da " + location + ": " + e.getMessage());
+                    LOGGER.warn("Errore nel caricamento del CSS da {}", location, e);
                 }
             }
 
             if (!cssLoaded) {
-                System.err.println("Impossibile caricare il CSS da nessuna posizione conosciuta");
+                LOGGER.warn("Impossibile caricare il CSS da nessuna posizione conosciuta");
             }
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Login");
+            primaryStage.setTitle(Config.loginTitle());
             primaryStage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Errore all'avvio dell'applicazione", e);
         }
     }
 

@@ -7,16 +7,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class ViewManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ViewManager.class);
     private final Stage primaryStage;
 
     public ViewManager(Stage stage) {
         this.primaryStage = stage;
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
+        stage.setMinWidth(Config.windowMinWidth());
+        stage.setMinHeight(Config.windowMinHeight());
     }
 
     public void switchScene(String fxmlPath, String title, int width, int height, boolean maximize) {
@@ -33,7 +36,7 @@ public class ViewManager {
             }
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Diabedible - " + title);
+            primaryStage.setTitle(Config.titlePrefix() + title);
             primaryStage.setMaximized(maximize);
 
             if (!primaryStage.isShowing()) {
@@ -41,8 +44,8 @@ public class ViewManager {
             }
 
         } catch (IOException e) {
+            LOGGER.error("Errore nel caricamento della vista: {}", fxmlPath, e);
             showErrorAlert("Errore nel caricamento della vista: " + fxmlPath, e);
-            e.printStackTrace();
         }
     }
 
@@ -65,7 +68,7 @@ public class ViewManager {
             loadStylesheets(scene);
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Diabedible - " + title);
+            primaryStage.setTitle(Config.titlePrefix() + title);
             primaryStage.setMaximized(maximize);
 
             if (!primaryStage.isShowing()) {
@@ -73,41 +76,33 @@ public class ViewManager {
             }
 
         } catch (IOException e) {
+            LOGGER.error("Errore nel caricamento della vista con controller personalizzato: {}", fxmlPath, e);
             showErrorAlert("Errore nel caricamento della vista con controller personalizzato: " + fxmlPath, e);
-            e.printStackTrace();
         }
     }
 
     public void logout() {
         LoginController loginController = new LoginController(new LoginService(), this);
-        switchSceneWithController(FXMLPaths.LOGIN, loginController, "Login", 1200, 800, true);
+        switchSceneWithController(FXMLPaths.LOGIN, loginController, Config.loginTitle(), Config.windowWidth(), Config.windowHeight(), Config.windowMaximized());
     }
 
     private void loadStylesheets(Scene scene) {
-        // Prova a caricare da diverse posizioni comuni
-        String[] cssLocations = {
-            "/com/example/diabedible/styles.css",
-            "/css/styles.css",
-            "/styles.css"
-        };
-
         boolean cssLoaded = false;
-
-        for (String location : cssLocations) {
+        for (String location : Config.cssPaths()) {
             try {
                 if (getClass().getResource(location) != null) {
                     scene.getStylesheets().add(getClass().getResource(location).toExternalForm());
-                    System.out.println("CSS caricato da: " + location);
+                    LOGGER.info("CSS caricato da: {}", location);
                     cssLoaded = true;
                     break;
                 }
             } catch (Exception e) {
-                System.err.println("Errore nel caricamento del CSS da " + location + ": " + e.getMessage());
+                LOGGER.warn("Errore nel caricamento del CSS da {}", location, e);
             }
         }
 
         if (!cssLoaded) {
-            System.err.println("Impossibile caricare il CSS da nessuna posizione conosciuta");
+            LOGGER.warn("Impossibile caricare il CSS da nessuna posizione conosciuta");
             // Applica stili base direttamente
             applyBasicStyles(scene);
         }

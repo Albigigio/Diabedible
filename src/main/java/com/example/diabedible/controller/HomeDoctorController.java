@@ -9,12 +9,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HomeDoctorController implements ViewManaged {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HomeDoctorController.class);
 
     @FXML private HBox topBar;
     @FXML private Text welcomeText;
@@ -100,7 +104,7 @@ public class HomeDoctorController implements ViewManaged {
         if (viewManager != null) {
             viewManager.logout();
         } else {
-            System.out.println("ViewManager non impostato!");
+            LOGGER.warn("ViewManager non impostato durante il logout");
             showAlert("Errore: impossibile effettuare il logout.");
         }
     }
