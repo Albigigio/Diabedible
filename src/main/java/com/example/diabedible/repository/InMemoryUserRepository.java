@@ -43,7 +43,9 @@ public class InMemoryUserRepository implements UserRepository {
                     String roleStr = parts[2].toUpperCase(Locale.ITALY).trim();
                     try {
                         Role role = Role.valueOf(roleStr);
-                        users.put(username, new StoredUser(username, hash, role));
+                        // Wrap legacy hash with a recognizable prefix for verification/migration
+                        String token = hash.startsWith("legacy-sha256$") ? hash : ("legacy-sha256$" + hash);
+                        users.put(username, new StoredUser(username, token, role));
                         imported++;
                     } catch (IllegalArgumentException iae) {
                         LOGGER.warn("Ruolo non valido '{}' per utente '{}'. Riga ignorata.", roleStr, username);

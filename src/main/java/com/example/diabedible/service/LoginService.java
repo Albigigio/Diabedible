@@ -19,17 +19,26 @@ public class LoginService implements AuthService {
 
     @Override
     public Optional<User> login(String username, String password) {
-        String hashedInput = HashUtils.hashPassword(password);
         LOGGER.debug("Tentativo login per username='{}'", username);
         return userRepository.findByUsername(username)
                 .filter(stored -> {
-                    boolean match = stored.passwordHash().equals(hashedInput);
+                    boolean match = HashUtils.verifyPassword(password, stored.passwordHash());
                     if (!match) {
-                        LOGGER.warn("Hash non corrispondente per username='{}'", username);
+                        LOGGER.warn("Credenziali non valide per username='{}'", username);
                     }
                     return match;
                 })
                 .map(stored -> {
+                    // Upgrade legacy hashes to PBKDF2 upon successful login
+                    if (HashUtils.needsUpgrade(stored.passwordHash())) {
+                        try {
+                            String newToken = HashUtils.createPasswordToken(password);
+                            userRepository.save(new UserRepository.StoredUser(stored.username(), newToken, stored.role()));
+                            LOGGER.info("Aggiornato hashing password a PBKDF2 per username='{}'", username);
+                        } catch (Exception e) {
+                            LOGGER.warn("Impossibile aggiornare l'hashing della password per username='{}'", username, e);
+                        }
+                    }
                     LOGGER.info("Login riuscito per username='{}'", username);
                     return new User(username, stored.role());
                 });
