@@ -19,28 +19,33 @@ public class LoginService implements AuthService {
 
     @Override
     public Optional<User> login(String username, String password) {
-        LOGGER.debug("Tentativo login per username='{}'", username);
-        return userRepository.findByUsername(username)
-                .filter(stored -> {
-                    boolean match = HashUtils.verifyPassword(password, stored.passwordHash());
-                    if (!match) {
-                        LOGGER.warn("Credenziali non valide per username='{}'", username);
-                    }
-                    return match;
-                })
-                .map(stored -> {
-                    // Upgrade legacy hashes to PBKDF2 upon successful login
-                    if (HashUtils.needsUpgrade(stored.passwordHash())) {
-                        try {
-                            String newToken = HashUtils.createPasswordToken(password);
-                            userRepository.save(new UserRepository.StoredUser(stored.username(), newToken, stored.role()));
-                            LOGGER.info("Aggiornato hashing password a PBKDF2 per username='{}'", username);
-                        } catch (Exception e) {
-                            LOGGER.warn("Impossibile aggiornare l'hashing della password per username='{}'", username, e);
+        LOGGER.debug("Tentativo login", org.slf4j.MarkerFactory.getMarker("AUTH"));
+        try {
+            return userRepository.findByUsername(username)
+                    .filter(stored -> {
+                        boolean match = HashUtils.verifyPassword(password, stored.passwordHash());
+                        if (!match) {
+                            LOGGER.warn("Credenziali non valide", org.slf4j.MarkerFactory.getMarker("AUTH"));
                         }
-                    }
-                    LOGGER.info("Login riuscito per username='{}'", username);
-                    return new User(username, stored.role());
-                });
+                        return match;
+                    })
+                    .map(stored -> {
+                        // Upgrade legacy hashes to PBKDF2 upon successful login
+                        if (HashUtils.needsUpgrade(stored.passwordHash())) {
+                            try {
+                                String newToken = HashUtils.createPasswordToken(password);
+                                userRepository.save(new UserRepository.StoredUser(stored.username(), newToken, stored.role()));
+                                LOGGER.info("Aggiornato hashing password a PBKDF2", org.slf4j.MarkerFactory.getMarker("AUTH"));
+                            } catch (Exception e) {
+                                LOGGER.warn("Impossibile aggiornare l'hashing della password", org.slf4j.MarkerFactory.getMarker("AUTH"), e);
+                            }
+                        }
+                        LOGGER.info("Login riuscito", org.slf4j.MarkerFactory.getMarker("AUTH"));
+                        return new User(username, stored.role());
+                    });
+        } catch (RuntimeException e) {
+            LOGGER.error("Errore inatteso durante il login", org.slf4j.MarkerFactory.getMarker("AUTH"), e);
+            throw new AuthenticationException("Errore durante l'autenticazione", e);
+        }
     }
 }

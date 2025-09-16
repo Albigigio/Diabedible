@@ -15,7 +15,7 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 9. [x] Abstract persistence behind repository interfaces (e.g., UserRepository) instead of reading a flat users.txt file directly.
 10. [x] Replace users.txt with a more secure storage (e.g., in-memory repo now, then H2/SQLite later) and provide data migration path.
 11. [x] Strengthen password hashing (use salted, iterated hashing via PBKDF2/BCrypt/Argon2) and store salt + hash.
-12. [ ] Remove debug prints from LoginService; add structured logs and meaningful exceptions.
+12. [x] Remove debug prints from LoginService; add structured logs and meaningful exceptions.
 13. [ ] Add validation utilities for user input (non-empty, min/max length, allowed chars) and apply in LoginController before calling service.
 14. [ ] Define a global error handling policy for UI (alerts) and service (exceptions) layers; centralize alert creation in a small UI helper.
 15. [ ] Ensure all controller actions run UI updates on the JavaFX Application Thread (Platform.runLater if needed for async ops).
