@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!-- Minimal Checkstyle configuration based on Google Java Style with a few relaxations.
+     You can tighten rules over time. -->
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+
+    <module name="TreeWalker">
+        <module name="OuterTypeFilename"/>
+        <module name="IllegalTokenText">
+            <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
+            <property name="format" value="(\\u00)|(\\x)"/>
+            <property name="message" value="Avoid using Unicode escapes or hex escapes."/>
+        </module>
+        <module name="AvoidStarImport"/>
+        <module name="UnusedImports"/>
+        <module name="RedundantImport"/>
+        <module name="ImportOrder">
+            <property name="option" value="top"/>
+            <property name="ordered" value="true"/>
+            <property name="separated" value="true"/>
+            <property name="sortStaticImportsAlphabetically" value="true"/>
+        </module>
+        <module name="LineLength">
+            <property name="max" value="120"/>
+            <property name="ignorePattern" value="^package|^import|a href|href|http|https"/>
+        </module>
+        <module name="NeedBraces"/>
+        <module name="WhitespaceAround"/>
+        <module name="WhitespaceAfter"/>
+        <module name="NoLineWrap"/>
+        <module name="EmptyBlock">
+            <property name="option" value="TEXT"/>
+        </module>
+        <module name="Indentation">
+            <property name="basicOffset" value="4"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="4"/>
+            <property name="throwsIndent" value="4"/>
+            <property name="lineWrappingIndentation" value="8"/>
+        </module>
+        <module name="ModifierOrder"/>
+        <module name="MethodParamPad"/>
+        <module name="ParenPad"/>
+        <module name="EmptyForInitializerPad"/>
+        <module name="EmptyForIteratorPad"/>
+        <module name="OneStatementPerLine"/>
+        <module name="ArrayTypeStyle"/>
+        <module name="FinalLocalVariable">
+            <property name="validateEnhancedForLoopVariable" value="true"/>
+        </module>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="ParameterName"/>
+        <module name="TypeName"/>
+        <module name="MethodName"/>
+        <module name="AvoidInlineConditionals"/>
+        <module name="EmptyStatement"/>
+    </module>
+</module>

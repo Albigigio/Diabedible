@@ -4,7 +4,7 @@ Date generated: 2025-09-16 09:40
 
 Note: Each task is actionable and ordered for incremental adoption. Check items off as you complete them.
 
-1. [ ] Establish coding standards and linters (Checkstyle/SpotBugs/EditorConfig) and add their configs to the repo.
+1. [x] Establish coding standards and linters (Checkstyle/SpotBugs/EditorConfig) and add their configs to the repo.
 2. [ ] Replace System.out/err prints with a logging framework (SLF4J + Logback) and define a basic logging policy.
 3. [ ] Centralize application configuration (e.g., application.properties) and a Config class to read it.
 4. [ ] Fix FXML path case mismatch: resource folder uses `Views/Admin` while `FXMLPaths` constant is `admin` – align naming consistently.
