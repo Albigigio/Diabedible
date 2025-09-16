@@ -2,7 +2,7 @@ package com.example.diabedible.utils;
 
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.controller.LoginController;
-import com.example.diabedible.service.LoginService;
+import com.example.diabedible.di.AppInjector;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,9 +15,11 @@ import java.io.IOException;
 public class ViewManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewManager.class);
     private final Stage primaryStage;
+    private final AppInjector injector;
 
-    public ViewManager(Stage stage) {
+    public ViewManager(Stage stage, AppInjector injector) {
         this.primaryStage = stage;
+        this.injector = injector;
         stage.setMinWidth(Config.windowMinWidth());
         stage.setMinHeight(Config.windowMinHeight());
     }
@@ -82,7 +84,7 @@ public class ViewManager {
     }
 
     public void logout() {
-        LoginController loginController = new LoginController(new LoginService(), this);
+        LoginController loginController = injector.createLoginController(this);
         switchSceneWithController(FXMLPaths.LOGIN, loginController, Config.loginTitle(), Config.windowWidth(), Config.windowHeight(), Config.windowMaximized());
     }
 

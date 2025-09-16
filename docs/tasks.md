@@ -10,7 +10,7 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 4. [x] Fix FXML path case mismatch: resource folder uses `Views/Admin` while `FXMLPaths` constant is `admin` – align naming consistently.
 5. [x] Remove CSS loading duplication: choose only ViewManager or Main to load CSS, not both.
 6. [x] Introduce a Role concept for users (ADMIN/DOCTOR/DIABETIC) instead of username prefixes to route to views.
-7. [ ] Introduce a simple dependency injection approach (manual module or lightweight DI like Guice/Spring-lite) to construct controllers and services.
+7. [x] Introduce a simple dependency injection approach (manual module or lightweight DI like Guice/Spring-lite) to construct controllers and services.
 8. [ ] Define service interfaces (e.g., AuthService) and decouple controllers from concrete implementations.
 9. [ ] Abstract persistence behind repository interfaces (e.g., UserRepository) instead of reading a flat users.txt file directly.
 10. [ ] Replace users.txt with a more secure storage (e.g., in-memory repo now, then H2/SQLite later) and provide data migration path.

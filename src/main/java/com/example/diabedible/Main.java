@@ -1,7 +1,7 @@
 package com.example.diabedible;
 
 import com.example.diabedible.controller.LoginController;
-import com.example.diabedible.service.LoginService;
+import com.example.diabedible.di.AppInjector;
 import com.example.diabedible.utils.Config;
 import com.example.diabedible.utils.FXMLPaths;
 import com.example.diabedible.utils.ViewManager;
@@ -16,12 +16,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ViewManager viewManager = new ViewManager(primaryStage);
-        LoginService loginService = new LoginService();
+        AppInjector injector = new AppInjector();
+        ViewManager viewManager = new ViewManager(primaryStage, injector);
 
         try {
             // Delegate initial scene creation and CSS loading to ViewManager
-            LoginController loginController = new LoginController(loginService, viewManager);
+            LoginController loginController = injector.createLoginController(viewManager);
             viewManager.switchSceneWithController(
                     FXMLPaths.LOGIN,
                     loginController,
