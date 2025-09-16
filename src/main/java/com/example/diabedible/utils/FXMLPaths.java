@@ -7,7 +7,7 @@ public class FXMLPaths {
     public static final String LOGIN = BASE_PATH + "autenticazione/login-view.fxml";
     public static final String HOME_DIABETIC = BASE_PATH + "diabetic/home-diabetic.fxml";
     public static final String HOME_DOCTOR = BASE_PATH + "doctor/home-doctor.fxml";
-    public static final String HOME_ADMIN = BASE_PATH + "admin/home-admin.fxml";
+    public static final String HOME_ADMIN = BASE_PATH + "Admin/home-admin.fxml";
 
     private FXMLPaths() {
         //costruttore privato per impedire istanziazione
