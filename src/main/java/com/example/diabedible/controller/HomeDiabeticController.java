@@ -3,6 +3,7 @@ package com.example.diabedible.controller;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.utils.AlertUtils;
 import com.example.diabedible.utils.ViewManager;
+import com.example.diabedible.viewmodel.HomeDiabeticViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -13,8 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HomeDiabeticController implements ViewManaged {
@@ -73,14 +73,12 @@ public class HomeDiabeticController implements ViewManaged {
         this.viewManager = viewManager;
     }
 
-    // Data structures for blood sugar readings
-    private final Map<LocalDate, Map<String, Double>> bloodSugarData = new LinkedHashMap<>();
+    // ViewModel encapsulating domain and business logic
+    private final HomeDiabeticViewModel viewModel = new HomeDiabeticViewModel();
     private XYChart.Series<String, Number> morningSeries;
     private XYChart.Series<String, Number> afternoonSeries;
-    private final Map<LocalDate, Map<String, Integer>> modificationCountPerSlot = new HashMap<>();
     private XYChart.Series<String, Number> minThresholdSeries;
     private XYChart.Series<String, Number> maxThresholdSeries;
-    private XYChart.Series<String, Number> averageSeries; // media da rivedere..
 
     @FXML
     public void initialize() {
@@ -110,26 +108,13 @@ public class HomeDiabeticController implements ViewManaged {
 
     private void updateAvailableTimeSlots() {
         timeSlotComboBox.getItems().clear();
-
         LocalDate today = LocalDate.now();
-        Map<String, Double> dailyReadings = bloodSugarData.getOrDefault(today, new HashMap<>());
-
-        if (!dailyReadings.containsKey(TIME_SLOT_MORNING)) {
-            timeSlotComboBox.getItems().add(TIME_SLOT_MORNING);
-        }
-        if (!dailyReadings.containsKey(TIME_SLOT_AFTERNOON)) {
-            timeSlotComboBox.getItems().add(TIME_SLOT_AFTERNOON);
-        }
+        List<String> slots = viewModel.availableSlotsFor(today);
+        timeSlotComboBox.getItems().addAll(slots);
     }
 
     private void initializeSampleData() {
-        LocalDate start = LocalDate.now().minusDays(6);
-        for (int i = 0; i < 5; i++) {
-            Map<String, Double> readings = new LinkedHashMap<>();
-            readings.put(TIME_SLOT_MORNING, 100.0 + i * 5);
-            readings.put(TIME_SLOT_AFTERNOON, 110.0 + i * 5);
-            bloodSugarData.put(start.plusDays(i), readings);
-        }
+        viewModel.initSampleData();
     }
 
     private void setupCharts() {
@@ -158,7 +143,7 @@ public class HomeDiabeticController implements ViewManaged {
         minThresholdSeries.getData().clear();
         maxThresholdSeries.getData().clear();
 
-        for (Map.Entry<LocalDate, Map<String, Double>> entry : bloodSugarData.entrySet()) {
+        for (Map.Entry<LocalDate, Map<String, Double>> entry : viewModel.asMapForChart().entrySet()) {
             String dateLabel = entry.getKey().toString();
             Map<String, Double> readings = entry.getValue();
 
@@ -183,54 +168,22 @@ public class HomeDiabeticController implements ViewManaged {
 
     @FXML
     private void handleAddReading() {
-        try {
-            LocalDate today = LocalDate.now();
-            LocalDate selectedDate = datePicker.getValue();
+        LocalDate selectedDate = datePicker.getValue();
+        String selectedSlot = timeSlotComboBox.getValue();
+        String readingText = readingField.getText();
 
-            if (!selectedDate.equals(today)) {
-                showAlert(ALERT_ONLY_TODAY);
-                return;
+        HomeDiabeticViewModel.AddResult result = viewModel.addOrModifyReading(selectedDate, selectedSlot, readingText);
+        switch (result) {
+            case REJECTED_NOT_TODAY -> showAlert(ALERT_ONLY_TODAY);
+            case REJECTED_SLOT_NULL -> showAlert(ALERT_SELECT_SLOT);
+            case REJECTED_INVALID_NUMBER -> showAlert(ALERT_INVALID_NUMBER);
+            case REJECTED_TOO_MANY_MODS -> showAlert(ALERT_ALREADY_MODIFIED_PREFIX + selectedSlot);
+            case ADDED, MODIFIED -> {
+                updateChartSeries();
+                readingField.clear();
+                timeSlotComboBox.getSelectionModel().clearSelection();
+                updateAvailableTimeSlots();
             }
-
-            String selectedSlot = timeSlotComboBox.getValue();
-            if (selectedSlot == null) {
-                showAlert(ALERT_SELECT_SLOT);
-                return;
-            }
-
-            double reading = Double.parseDouble(readingField.getText());
-
-            // Initialize daily map if needed
-            bloodSugarData.putIfAbsent(today, new LinkedHashMap<>());
-            Map<String, Double> dailyReadings = bloodSugarData.get(today);
-
-            boolean isModifying = dailyReadings.containsKey(selectedSlot);
-
-            // Init modification map for today
-            modificationCountPerSlot.putIfAbsent(today, new HashMap<>());
-            Map<String, Integer> slotModifications = modificationCountPerSlot.get(today);
-            int slotModificationCount = slotModifications.getOrDefault(selectedSlot, 0);
-
-            if (isModifying && slotModificationCount >= 1) {
-                showAlert(ALERT_ALREADY_MODIFIED_PREFIX + selectedSlot);
-                return;
-            }
-
-            // Save/modify reading
-            dailyReadings.put(selectedSlot, reading);
-
-            // If it is a modification, increment counter for the slot
-            if (isModifying) {
-                slotModifications.put(selectedSlot, slotModificationCount + 1);
-            }
-
-            updateChartSeries();
-            readingField.clear();
-            timeSlotComboBox.getSelectionModel().clearSelection();
-            updateAvailableTimeSlots();
-
-        } catch (NumberFormatException ex) {
-            showAlert(ALERT_INVALID_NUMBER);
         }
     }
 
