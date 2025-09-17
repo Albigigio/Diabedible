@@ -20,7 +20,7 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 14. [x] Define a global error handling policy for UI (alerts) and service (exceptions) layers; centralize alert creation in a small UI helper.
 15. [x] Ensure all controller actions run UI updates on the JavaFX Application Thread (Platform.runLater if needed for async ops).
 16. [x] Extract magic numbers/strings to constants (e.g., chart thresholds in HomeDiabeticController, labels, time slots).
-17. [ ] Introduce a domain model for readings (e.g., BloodSugarReading {LocalDate date, TimeSlot slot, double value}) and collections.
+17. [x] Introduce a domain model for readings (e.g., BloodSugarReading {LocalDate date, TimeSlot slot, double value}) and collections.
 18. [ ] Refactor HomeDiabeticController to use the domain model + a ViewModel (MVVM-like) to separate UI from logic.
 19. [ ] Add a TimeSlot enum (MORNING, AFTERNOON) with localized display names instead of raw strings ("Mattina", "Pomeriggio").
 20. [ ] Convert dummy/sample data generation into a dedicated DemoDataProvider that can be toggled by config.
