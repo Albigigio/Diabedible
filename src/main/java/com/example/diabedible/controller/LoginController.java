@@ -40,6 +40,14 @@ public class LoginController implements ViewManaged {
     public void initialize() {
         Image image = new Image(getClass().getResource("/com/example/diabedible/Views/autenticazione/Logo2.png").toExternalForm());
         logoImage.setImage(image);
+
+        // Demo hints for testers
+        if (usernameField != null) {
+            usernameField.setPromptText("Username demo: IDMario (o DRGiulia, Admin1)");
+        }
+        if (passwordField != null) {
+            passwordField.setPromptText("Password demo: 123456");
+        }
     }
 
     @FXML
