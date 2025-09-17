@@ -3,9 +3,9 @@ package com.example.diabedible.utils;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.controller.LoginController;
 import com.example.diabedible.di.AppInjector;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,67 +25,80 @@ public class ViewManager {
     }
 
     public void switchScene(String fxmlPath, String title, int width, int height, boolean maximize) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Scene scene = new Scene(loader.load(), width, height);
+        Runnable task = () -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+                Scene scene = new Scene(loader.load(), width, height);
 
-            // Carica i fogli di stile CSS da diverse posizioni
-            loadStylesheets(scene);
+                // Carica i fogli di stile CSS da diverse posizioni
+                loadStylesheets(scene);
 
-            Object controller = loader.getController();
-            if (controller instanceof ViewManaged) {
-                ((ViewManaged) controller).setViewManager(this);
+                Object controller = loader.getController();
+                if (controller instanceof ViewManaged) {
+                    ((ViewManaged) controller).setViewManager(this);
+                }
+
+                primaryStage.setScene(scene);
+                primaryStage.setTitle(Config.titlePrefix() + title);
+                primaryStage.setMaximized(maximize);
+
+                if (!primaryStage.isShowing()) {
+                    primaryStage.show();
+                }
+
+            } catch (IOException e) {
+                LOGGER.error("Errore nel caricamento della vista: {}", fxmlPath, e);
+                AlertUtils.exception("Errore dell'applicazione", "Si è verificato un errore", "Errore nel caricamento della vista: " + fxmlPath, e);
             }
-
-            primaryStage.setScene(scene);
-            primaryStage.setTitle(Config.titlePrefix() + title);
-            primaryStage.setMaximized(maximize);
-
-            if (!primaryStage.isShowing()) {
-                primaryStage.show();
-            }
-
-        } catch (IOException e) {
-            LOGGER.error("Errore nel caricamento della vista: {}", fxmlPath, e);
-            showErrorAlert("Errore nel caricamento della vista: " + fxmlPath, e);
+        };
+        if (Platform.isFxApplicationThread()) {
+            task.run();
+        } else {
+            Platform.runLater(task);
         }
     }
 
-    private void showErrorAlert(String message, Exception e) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Errore dell'applicazione");
-        alert.setHeaderText("Si è verificato un errore");
-        alert.setContentText(message + "\n\nDettagli: " + e.getMessage());
-        alert.showAndWait();
-    }
-
     public void switchSceneWithController(String fxmlPath, Object controller, String title, int width, int height, boolean maximize) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            loader.setController(controller);
+        Runnable task = () -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+                loader.setController(controller);
 
-            Scene scene = new Scene(loader.load(), width, height);
+                Scene scene = new Scene(loader.load(), width, height);
 
-            // Carica i fogli di stile CSS da diverse posizioni
-            loadStylesheets(scene);
+                // Carica i fogli di stile CSS da diverse posizioni
+                loadStylesheets(scene);
 
-            primaryStage.setScene(scene);
-            primaryStage.setTitle(Config.titlePrefix() + title);
-            primaryStage.setMaximized(maximize);
+                primaryStage.setScene(scene);
+                primaryStage.setTitle(Config.titlePrefix() + title);
+                primaryStage.setMaximized(maximize);
 
-            if (!primaryStage.isShowing()) {
-                primaryStage.show();
+                if (!primaryStage.isShowing()) {
+                    primaryStage.show();
+                }
+
+            } catch (IOException e) {
+                LOGGER.error("Errore nel caricamento della vista con controller personalizzato: {}", fxmlPath, e);
+                AlertUtils.exception("Errore dell'applicazione", "Si è verificato un errore", "Errore nel caricamento della vista con controller personalizzato: " + fxmlPath, e);
             }
-
-        } catch (IOException e) {
-            LOGGER.error("Errore nel caricamento della vista con controller personalizzato: {}", fxmlPath, e);
-            showErrorAlert("Errore nel caricamento della vista con controller personalizzato: " + fxmlPath, e);
+        };
+        if (Platform.isFxApplicationThread()) {
+            task.run();
+        } else {
+            Platform.runLater(task);
         }
     }
 
     public void logout() {
-        LoginController loginController = injector.createLoginController(this);
-        switchSceneWithController(FXMLPaths.LOGIN, loginController, Config.loginTitle(), Config.windowWidth(), Config.windowHeight(), Config.windowMaximized());
+        Runnable task = () -> {
+            LoginController loginController = injector.createLoginController(this);
+            switchSceneWithController(FXMLPaths.LOGIN, loginController, Config.loginTitle(), Config.windowWidth(), Config.windowHeight(), Config.windowMaximized());
+        };
+        if (Platform.isFxApplicationThread()) {
+            task.run();
+        } else {
+            Platform.runLater(task);
+        }
     }
 
     private void loadStylesheets(Scene scene) {

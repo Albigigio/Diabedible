@@ -2,6 +2,7 @@ package com.example.diabedible.controller;
 
 import com.example.diabedible.Main;
 import com.example.diabedible.ViewManaged;
+import com.example.diabedible.utils.AlertUtils;
 import com.example.diabedible.utils.FXMLPaths;
 import com.example.diabedible.utils.ViewManager;
 import javafx.collections.FXCollections;
@@ -231,10 +232,6 @@ public class HomeDiabeticController implements ViewManaged {
     }
 
     private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Attenzione");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertUtils.warning("Attenzione", null, message);
     }
 }

@@ -17,8 +17,8 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 11. [x] Strengthen password hashing (use salted, iterated hashing via PBKDF2/BCrypt/Argon2) and store salt + hash.
 12. [x] Remove debug prints from LoginService; add structured logs and meaningful exceptions.
 13. [x] Add validation utilities for user input (non-empty, min/max length, allowed chars) and apply in LoginController before calling service.
-14. [ ] Define a global error handling policy for UI (alerts) and service (exceptions) layers; centralize alert creation in a small UI helper.
-15. [ ] Ensure all controller actions run UI updates on the JavaFX Application Thread (Platform.runLater if needed for async ops).
+14. [x] Define a global error handling policy for UI (alerts) and service (exceptions) layers; centralize alert creation in a small UI helper.
+15. [x] Ensure all controller actions run UI updates on the JavaFX Application Thread (Platform.runLater if needed for async ops).
 16. [ ] Extract magic numbers/strings to constants (e.g., chart thresholds in HomeDiabeticController, labels, time slots).
 17. [ ] Introduce a domain model for readings (e.g., BloodSugarReading {LocalDate date, TimeSlot slot, double value}) and collections.
 18. [ ] Refactor HomeDiabeticController to use the domain model + a ViewModel (MVVM-like) to separate UI from logic.

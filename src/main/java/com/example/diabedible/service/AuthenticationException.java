@@ -5,7 +5,7 @@ package com.example.diabedible.service;
  * (e.g., hashing failure, repository malfunction). It is not used for
  * invalid credentials, which are represented by an empty Optional result.
  */
-public class AuthenticationException extends RuntimeException {
+public class AuthenticationException extends AppException {
     public AuthenticationException(String message) {
         super(message);
     }

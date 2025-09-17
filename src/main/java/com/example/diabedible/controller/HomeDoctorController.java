@@ -1,6 +1,7 @@
 package com.example.diabedible.controller;
 
 import com.example.diabedible.ViewManaged;
+import com.example.diabedible.utils.AlertUtils;
 import com.example.diabedible.utils.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -111,10 +112,6 @@ public class HomeDoctorController implements ViewManaged {
 
 
     private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Attenzione");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertUtils.warning("Attenzione", null, message);
     }
 }

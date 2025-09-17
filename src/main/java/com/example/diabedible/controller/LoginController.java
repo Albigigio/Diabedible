@@ -3,7 +3,9 @@ package com.example.diabedible.controller;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.model.Role;
 import com.example.diabedible.model.User;
+import com.example.diabedible.service.AppException;
 import com.example.diabedible.service.AuthService;
+import com.example.diabedible.utils.AlertUtils;
 import com.example.diabedible.utils.FXMLPaths;
 import com.example.diabedible.utils.ViewManager;
 import javafx.fxml.FXML;
@@ -57,15 +59,21 @@ public class LoginController implements ViewManaged {
             return;
         }
 
-        Optional<User> userOpt = authService.login(username, password);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            messageLabel.setText("Accesso consentito.");
-            messageLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-            switchToUserHome(user);
-        } else {
-            messageLabel.setText("Credenziali errate.");
-            messageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+        try {
+            Optional<User> userOpt = authService.login(username, password);
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                messageLabel.setText("Accesso consentito.");
+                messageLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                switchToUserHome(user);
+            } else {
+                messageLabel.setText("Credenziali errate.");
+                messageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            }
+        } catch (AppException ex) {
+            AlertUtils.error("Errore di autenticazione", "Impossibile completare il login", ex.getMessage());
+        } catch (RuntimeException ex) {
+            AlertUtils.exception("Errore dell'applicazione", "Si è verificato un errore", "Errore inatteso durante il login.", ex);
         }
     }
 
