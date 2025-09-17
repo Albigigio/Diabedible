@@ -22,9 +22,9 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 16. [x] Extract magic numbers/strings to constants (e.g., chart thresholds in HomeDiabeticController, labels, time slots).
 17. [x] Introduce a domain model for readings (e.g., BloodSugarReading {LocalDate date, TimeSlot slot, double value}) and collections.
 18. [x] Refactor HomeDiabeticController to use the domain model + a ViewModel (MVVM-like) to separate UI from logic.
-19. [ ] Add a TimeSlot enum (MORNING, AFTERNOON) with localized display names instead of raw strings ("Mattina", "Pomeriggio").
+19. [x] Add a TimeSlot enum (MORNING, AFTERNOON) with localized display names instead of raw strings ("Mattina", "Pomeriggio").
 20. [ ] Convert dummy/sample data generation into a dedicated DemoDataProvider that can be toggled by config.
-21. [ ] Normalize date handling and formatting via a DateTimeUtil with locale-specific patterns.
+21. [x] Normalize date handling and formatting via a DateTimeUtil with locale-specific patterns.
 22. [ ] Add i18n support (resource bundles) for UI text and messages; externalize Italian strings from controllers.
 23. [ ] Create a Navigation model: single source of truth for route names, FXML paths, window titles, and sizes.
 24. [ ] Make ViewManager responsible only for navigation; remove business logic (e.g., hard-wired logout LoginService creation) via DI.

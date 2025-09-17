@@ -2,6 +2,7 @@ package com.example.diabedible.viewmodel;
 
 import com.example.diabedible.model.reading.DailyReadings;
 import com.example.diabedible.model.reading.ReadingsCollection;
+import com.example.diabedible.model.reading.TimeSlot;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -12,9 +13,9 @@ import java.util.*;
  */
 public class HomeDiabeticViewModel {
 
-    // Keep using String labels for timeslots until TimeSlot enum is introduced (task 19)
-    public static final String TIME_SLOT_MORNING = "Mattina";
-    public static final String TIME_SLOT_AFTERNOON = "Pomeriggio";
+    // Time slot labels sourced from enum for localization support
+    public static final String TIME_SLOT_MORNING = TimeSlot.MORNING.displayName();
+    public static final String TIME_SLOT_AFTERNOON = TimeSlot.AFTERNOON.displayName();
 
     private static final double MIN_THRESHOLD = 70.0;
     private static final double MAX_THRESHOLD = 180.0;

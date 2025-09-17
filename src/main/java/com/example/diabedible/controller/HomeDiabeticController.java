@@ -2,6 +2,7 @@ package com.example.diabedible.controller;
 
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.utils.AlertUtils;
+import com.example.diabedible.utils.DateTimeUtil;
 import com.example.diabedible.utils.ViewManager;
 import com.example.diabedible.viewmodel.HomeDiabeticViewModel;
 import javafx.fxml.FXML;
@@ -144,7 +145,7 @@ public class HomeDiabeticController implements ViewManaged {
         maxThresholdSeries.getData().clear();
 
         for (Map.Entry<LocalDate, Map<String, Double>> entry : viewModel.asMapForChart().entrySet()) {
-            String dateLabel = entry.getKey().toString();
+            String dateLabel = DateTimeUtil.formatDate(entry.getKey());
             Map<String, Double> readings = entry.getValue();
 
             if (readings.containsKey(TIME_SLOT_MORNING)) {
