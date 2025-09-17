@@ -21,6 +21,14 @@ public class HomeDoctorController implements ViewManaged {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeDoctorController.class);
 
+    // Constants
+    private static final String WELCOME_TEXT = "Benvenuto, Dottore";
+    private static final String TIME_SLOT_MORNING = "Mattina";
+    private static final String TIME_SLOT_AFTERNOON = "Pomeriggio";
+    private static final String ALERT_TITLE_WARNING = "Attenzione";
+    private static final String ALERT_LOGOUT_ERROR = "Errore: impossibile effettuare il logout.";
+    private static final String[] CHECKLIST_ITEMS = {"Controlla glicemia", "Assumi farmaco", "Fai attività fisica"};
+
     @FXML private HBox topBar;
     @FXML private Text welcomeText;
     @FXML private VBox checklistContainer;
@@ -43,7 +51,7 @@ public class HomeDoctorController implements ViewManaged {
 
     @FXML
     public void initialize() {
-        welcomeText.setText("Benvenuto, Dottore");
+        welcomeText.setText(WELCOME_TEXT);
 
         // Dummy patient data
         loadDummyData();
@@ -58,8 +66,8 @@ public class HomeDoctorController implements ViewManaged {
         LocalDate today = LocalDate.now().minusDays(4);
         for (int i = 0; i < 4; i++) {
             Map<String, Double> readings = new LinkedHashMap<>();
-            readings.put("Mattina", 95.0 + i * 4);
-            readings.put("Pomeriggio", 105.0 + i * 3);
+            readings.put(TIME_SLOT_MORNING, 95.0 + i * 4);
+            readings.put(TIME_SLOT_AFTERNOON, 105.0 + i * 3);
             data.put(today.plusDays(i), readings);
         }
         patientsData.put("Mario Rossi", data);
@@ -71,19 +79,19 @@ public class HomeDoctorController implements ViewManaged {
         morningSeries.getData().clear();
         afternoonSeries.getData().clear();
 
-        morningSeries.setName("Mattina");
-        afternoonSeries.setName("Pomeriggio");
+        morningSeries.setName(TIME_SLOT_MORNING);
+        afternoonSeries.setName(TIME_SLOT_AFTERNOON);
 
         Map<LocalDate, Map<String, Double>> data = patientsData.get(patientName);
         if (data != null) {
             for (Map.Entry<LocalDate, Map<String, Double>> entry : data.entrySet()) {
                 String date = entry.getKey().toString();
                 Map<String, Double> values = entry.getValue();
-                if (values.containsKey("Mattina")) {
-                    morningSeries.getData().add(new XYChart.Data<>(date, values.get("Mattina")));
+                if (values.containsKey(TIME_SLOT_MORNING)) {
+                    morningSeries.getData().add(new XYChart.Data<>(date, values.get(TIME_SLOT_MORNING)));
                 }
-                if (values.containsKey("Pomeriggio")) {
-                    afternoonSeries.getData().add(new XYChart.Data<>(date, values.get("Pomeriggio")));
+                if (values.containsKey(TIME_SLOT_AFTERNOON)) {
+                    afternoonSeries.getData().add(new XYChart.Data<>(date, values.get(TIME_SLOT_AFTERNOON)));
                 }
             }
         }
@@ -92,8 +100,7 @@ public class HomeDoctorController implements ViewManaged {
 
         // Popola una checklist (fittizia)
         checklistContainer.getChildren().clear();
-        String[] tasks = {"Controlla glicemia", "Assumi farmaco", "Fai attività fisica"};
-        for (String task : tasks) {
+        for (String task : CHECKLIST_ITEMS) {
             CheckBox checkBox = new CheckBox(task);
             checkBox.setDisable(true); // solo lettura
             checklistContainer.getChildren().add(checkBox);
@@ -106,12 +113,12 @@ public class HomeDoctorController implements ViewManaged {
             viewManager.logout();
         } else {
             LOGGER.warn("ViewManager non impostato durante il logout");
-            showAlert("Errore: impossibile effettuare il logout.");
+            showAlert(ALERT_LOGOUT_ERROR);
         }
     }
 
 
     private void showAlert(String message) {
-        AlertUtils.warning("Attenzione", null, message);
+        AlertUtils.warning(ALERT_TITLE_WARNING, null, message);
     }
 }

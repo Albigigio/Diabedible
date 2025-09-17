@@ -1,12 +1,8 @@
 package com.example.diabedible.controller;
 
-import com.example.diabedible.Main;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.utils.AlertUtils;
-import com.example.diabedible.utils.FXMLPaths;
 import com.example.diabedible.utils.ViewManager;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -15,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.controlsfx.control.CheckListView;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -23,6 +18,30 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HomeDiabeticController implements ViewManaged {
+
+    // Constants for labels, thresholds, and time slots
+    private static final String WELCOME_TEXT = "Benvenuto, Paziente";
+    private static final String TIME_SLOT_MORNING = "Mattina";
+    private static final String TIME_SLOT_AFTERNOON = "Pomeriggio";
+    private static final String SERIES_MIN_THRESHOLD_LABEL = "Minima attenzione";
+    private static final String SERIES_MAX_THRESHOLD_LABEL = "Massima attenzione";
+
+    private static final String ALERT_TITLE_WARNING = "Attenzione";
+    private static final String ALERT_ONLY_TODAY = "Puoi inserire rilevazioni solo per oggi.";
+    private static final String ALERT_SELECT_SLOT = "Seleziona una fascia oraria (Mattina o Pomeriggio).";
+    private static final String ALERT_ALREADY_MODIFIED_PREFIX = "Hai già modificato la fascia oraria: ";
+    private static final String ALERT_INVALID_NUMBER = "Inserisci un valore numerico valido.";
+    private static final String ALERT_LOGOUT_ERROR = "Errore nel gestore delle viste. Impossibile effettuare il logout.";
+
+    private static final String[] CHECKLIST_ITEMS = {
+            "Controlla glicemia",
+            "Assumi farmaco",
+            "Fai attività fisica"
+    };
+
+    // Threshold values
+    private static final double MIN_THRESHOLD = 70.0;
+    private static final double MAX_THRESHOLD = 180.0;
 
     @FXML private HBox topBar;
     @FXML private Text welcomeText;
@@ -43,20 +62,18 @@ public class HomeDiabeticController implements ViewManaged {
     @FXML private Button logoutBtn;
     @FXML private VBox checklistContainer;
 
-    //viewmanager
+    // ViewManager reference
     private ViewManager viewManager;
 
-    // Costruttore vuoto richiesto da FXML
-    public HomeDiabeticController() {
-        // Costruttore vuoto necessario per FXML
-    }
+    // FXML requires a no-arg constructor
+    public HomeDiabeticController() { }
 
     @Override
     public void setViewManager(ViewManager viewManager) {
         this.viewManager = viewManager;
     }
 
-    // variabili per la gestione dei dati di rilevazione glicemica
+    // Data structures for blood sugar readings
     private final Map<LocalDate, Map<String, Double>> bloodSugarData = new LinkedHashMap<>();
     private XYChart.Series<String, Number> morningSeries;
     private XYChart.Series<String, Number> afternoonSeries;
@@ -65,23 +82,19 @@ public class HomeDiabeticController implements ViewManaged {
     private XYChart.Series<String, Number> maxThresholdSeries;
     private XYChart.Series<String, Number> averageSeries; // media da rivedere..
 
-    private static final double MIN_THRESHOLD = 70.0;
-    private static final double MAX_THRESHOLD = 180.0;
-
     @FXML
     public void initialize() {
-        // Nota: ViewManager sarà inizializzato dopo il caricamento del controller
-        // Inizializzare i componenti indipendenti dal ViewManager
+        // Initialize components that do not depend on ViewManager
         initializeSampleData();
         setupCharts();
 
-        // Testo di benvenuto
-        welcomeText.setText("Benvenuto, Paziente");
+        // Welcome text
+        welcomeText.setText(WELCOME_TEXT);
 
-        // Imposta oggi di default
+        // Default to today
         datePicker.setValue(LocalDate.now());
 
-        // Permette solo la selezione di oggi
+        // Allow selection of today only
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -91,48 +104,49 @@ public class HomeDiabeticController implements ViewManaged {
             }
         });
         initializeChecklist();
-        // update slot di tempo disponibili
+        // Update available time slots
         updateAvailableTimeSlots();
     }
+
     private void updateAvailableTimeSlots() {
         timeSlotComboBox.getItems().clear();
 
         LocalDate today = LocalDate.now();
         Map<String, Double> dailyReadings = bloodSugarData.getOrDefault(today, new HashMap<>());
 
-        if (!dailyReadings.containsKey("Mattina")) {
-            timeSlotComboBox.getItems().add("Mattina");
+        if (!dailyReadings.containsKey(TIME_SLOT_MORNING)) {
+            timeSlotComboBox.getItems().add(TIME_SLOT_MORNING);
         }
-        if (!dailyReadings.containsKey("Pomeriggio")) {
-            timeSlotComboBox.getItems().add("Pomeriggio");
+        if (!dailyReadings.containsKey(TIME_SLOT_AFTERNOON)) {
+            timeSlotComboBox.getItems().add(TIME_SLOT_AFTERNOON);
         }
     }
 
     private void initializeSampleData() {
-        LocalDate today = LocalDate.now().minusDays(6);
+        LocalDate start = LocalDate.now().minusDays(6);
         for (int i = 0; i < 5; i++) {
             Map<String, Double> readings = new LinkedHashMap<>();
-            readings.put("Mattina", 100.0 + i * 5);
-            readings.put("Pomeriggio", 110.0 + i * 5);
-            bloodSugarData.put(today.plusDays(i), readings);
+            readings.put(TIME_SLOT_MORNING, 100.0 + i * 5);
+            readings.put(TIME_SLOT_AFTERNOON, 110.0 + i * 5);
+            bloodSugarData.put(start.plusDays(i), readings);
         }
     }
 
     private void setupCharts() {
-        // serie di rilevazioni glicemiche
+        // Reading series
         morningSeries = new XYChart.Series<>();
-        morningSeries.setName("Mattina");
+        morningSeries.setName(TIME_SLOT_MORNING);
 
         afternoonSeries = new XYChart.Series<>();
-        afternoonSeries.setName("Pomeriggio");
-        // serie di threshold
+        afternoonSeries.setName(TIME_SLOT_AFTERNOON);
+        // Threshold series
         minThresholdSeries = new XYChart.Series<>();
-        minThresholdSeries.setName("Minima attenzione");
+        minThresholdSeries.setName(SERIES_MIN_THRESHOLD_LABEL);
 
         maxThresholdSeries = new XYChart.Series<>();
-        maxThresholdSeries.setName("Massima attenzione");
+        maxThresholdSeries.setName(SERIES_MAX_THRESHOLD_LABEL);
 
-        // aggiornamento serie di rilevazioni glicemiche
+        // Populate initial series
         updateChartSeries();
 
         bloodSugarChart.getData().addAll(morningSeries, afternoonSeries, minThresholdSeries, maxThresholdSeries);
@@ -145,14 +159,14 @@ public class HomeDiabeticController implements ViewManaged {
         maxThresholdSeries.getData().clear();
 
         for (Map.Entry<LocalDate, Map<String, Double>> entry : bloodSugarData.entrySet()) {
-            String dateLabel = entry.getKey().toString(); // ad es. "2025-06-01"
+            String dateLabel = entry.getKey().toString();
             Map<String, Double> readings = entry.getValue();
 
-            if (readings.containsKey("Mattina")) {
-                morningSeries.getData().add(new XYChart.Data<>(dateLabel, readings.get("Mattina")));
+            if (readings.containsKey(TIME_SLOT_MORNING)) {
+                morningSeries.getData().add(new XYChart.Data<>(dateLabel, readings.get(TIME_SLOT_MORNING)));
             }
-            if (readings.containsKey("Pomeriggio")) {
-                afternoonSeries.getData().add(new XYChart.Data<>(dateLabel, readings.get("Pomeriggio")));
+            if (readings.containsKey(TIME_SLOT_AFTERNOON)) {
+                afternoonSeries.getData().add(new XYChart.Data<>(dateLabel, readings.get(TIME_SLOT_AFTERNOON)));
             }
             minThresholdSeries.getData().add(new XYChart.Data<>(dateLabel, MIN_THRESHOLD));
             maxThresholdSeries.getData().add(new XYChart.Data<>(dateLabel, MAX_THRESHOLD));
@@ -161,13 +175,11 @@ public class HomeDiabeticController implements ViewManaged {
 
     @FXML
     private void initializeChecklist() { // da lavorare
-        String[] items = {"Controlla glicemia", "Assumi farmaco", "Fai attività fisica"};
-        for (String item : items) {
+        for (String item : CHECKLIST_ITEMS) {
             CheckBox checkBox = new CheckBox(item);
             checklistContainer.getChildren().add(checkBox);
         }
     }
-
 
     @FXML
     private void handleAddReading() {
@@ -176,38 +188,38 @@ public class HomeDiabeticController implements ViewManaged {
             LocalDate selectedDate = datePicker.getValue();
 
             if (!selectedDate.equals(today)) {
-                showAlert("Puoi inserire rilevazioni solo per oggi.");
+                showAlert(ALERT_ONLY_TODAY);
                 return;
             }
 
             String selectedSlot = timeSlotComboBox.getValue();
             if (selectedSlot == null) {
-                showAlert("Seleziona una fascia oraria (Mattina o Pomeriggio).");
+                showAlert(ALERT_SELECT_SLOT);
                 return;
             }
 
             double reading = Double.parseDouble(readingField.getText());
 
-            // Inizializza la mappa dei valori glicemici se necessario
+            // Initialize daily map if needed
             bloodSugarData.putIfAbsent(today, new LinkedHashMap<>());
             Map<String, Double> dailyReadings = bloodSugarData.get(today);
 
             boolean isModifying = dailyReadings.containsKey(selectedSlot);
 
-            // Inizializza la mappa di modifiche per oggi
+            // Init modification map for today
             modificationCountPerSlot.putIfAbsent(today, new HashMap<>());
             Map<String, Integer> slotModifications = modificationCountPerSlot.get(today);
             int slotModificationCount = slotModifications.getOrDefault(selectedSlot, 0);
 
             if (isModifying && slotModificationCount >= 1) {
-                showAlert("Hai già modificato la fascia oraria: " + selectedSlot);
+                showAlert(ALERT_ALREADY_MODIFIED_PREFIX + selectedSlot);
                 return;
             }
 
-            // Salva/modifica il dato
+            // Save/modify reading
             dailyReadings.put(selectedSlot, reading);
 
-            // Se è una modifica, aumenta il contatore della fascia
+            // If it is a modification, increment counter for the slot
             if (isModifying) {
                 slotModifications.put(selectedSlot, slotModificationCount + 1);
             }
@@ -218,7 +230,7 @@ public class HomeDiabeticController implements ViewManaged {
             updateAvailableTimeSlots();
 
         } catch (NumberFormatException ex) {
-            showAlert("Inserisci un valore numerico valido.");
+            showAlert(ALERT_INVALID_NUMBER);
         }
     }
 
@@ -227,11 +239,11 @@ public class HomeDiabeticController implements ViewManaged {
         if (viewManager != null) {
             viewManager.logout();
         } else {
-            showAlert("Errore nel gestore delle viste. Impossibile effettuare il logout.");
+            showAlert(ALERT_LOGOUT_ERROR);
         }
     }
 
     private void showAlert(String message) {
-        AlertUtils.warning("Attenzione", null, message);
+        AlertUtils.warning(ALERT_TITLE_WARNING, null, message);
     }
 }
