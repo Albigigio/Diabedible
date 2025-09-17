@@ -36,7 +36,7 @@ public final class InputValidator {
 
     public static boolean isValidPassword(String password) {
         return isNonEmpty(password)
-                && isLengthBetween(password, 8, 64)
+                && isLengthBetween(password, 6, 64)
                 && matchesAllowedChars(password, PASSWORD_ALLOWED);
     }
 }

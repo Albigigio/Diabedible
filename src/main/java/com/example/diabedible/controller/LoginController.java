@@ -62,7 +62,7 @@ public class LoginController implements ViewManaged {
             return;
         }
         if (!com.example.diabedible.utils.InputValidator.isValidPassword(password)) {
-            messageLabel.setText("Password non valida. Lunghezza 8-64 caratteri, soli caratteri ASCII stampabili.");
+            messageLabel.setText("Password non valida. Lunghezza 6-64 caratteri, soli caratteri ASCII stampabili.");
             messageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
             return;
         }
