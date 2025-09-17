@@ -45,6 +45,18 @@ public class LoginController implements ViewManaged {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        // Validate inputs before calling the service
+        if (!com.example.diabedible.utils.InputValidator.isValidUsername(username)) {
+            messageLabel.setText("Username non valido. Usa 3-30 caratteri: lettere, numeri, punto, trattino, underscore.");
+            messageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            return;
+        }
+        if (!com.example.diabedible.utils.InputValidator.isValidPassword(password)) {
+            messageLabel.setText("Password non valida. Lunghezza 8-64 caratteri, soli caratteri ASCII stampabili.");
+            messageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            return;
+        }
+
         Optional<User> userOpt = authService.login(username, password);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
