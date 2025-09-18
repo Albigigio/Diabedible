@@ -36,7 +36,7 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 30. [ ] Implement logout flow that clears session and returns to login reliably; remove duplicated safeguards in controllers.
 31. [ ] Add unit tests for LoginService (valid user, invalid user, corrupted file, empty file) using JUnit 5 and Mockito.
 32. [ ] Add unit tests for HashUtils (hash determinism, salt/BCrypt transition) or new PasswordHasher abstraction.
-33. [ ] Add unit tests for ViewManager navigation (using TestFX or mocked FXMLLoader factory) where feasible.
+33. [ ] Add unit tests for ViewManager navigation (using TestFX or mocked FXMLLoader factory) where possible.
 34. [ ] Add UI tests for login flow (valid/invalid) using TestFX.
 35. [ ] Add integration test for end-to-end login + navigation to role-specific home view (smoke test).
 36. [ ] Configure Maven Surefire/FailSafe plugins to run unit and integration tests properly.
