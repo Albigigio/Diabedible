@@ -29,13 +29,13 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 23. [x] Create a Navigation model: single source of truth for route names, FXML paths, window titles, and sizes.
 24. [x] Make ViewManager responsible only for navigation; remove business logic (e.g., hard-wired logout LoginService creation) via DI.
 25. [x] Add a ControllerFactory that injects dependencies into FXML controllers (via FXMLLoader.setControllerFactory).
-26. [ ] Add nullability annotations (e.g., JetBrains @NotNull/@Nullable) and enforce in code where appropriate.
+26. [x] Add nullability annotations (e.g., JetBrains @NotNull/@Nullable) and enforce in code where appropriate.
 27. [x] Ensure robust resource loading with clear fallbacks and logging when resources are missing.
-28. [ ] Expand the User model (id, username, role, displayName, optional metadata) and avoid relying on prefixes.
+28. [x] Expand the User model (id, username, role, displayName, optional metadata) and avoid relying on prefixes.
 29. [x] Create a session/context object (e.g., AppSession) to store the current user and shared state.
 30. [x] Implement logout flow that clears session and returns to login reliably; remove duplicated safeguards in controllers.
-31. [ ] Add unit tests for LoginService (valid user, invalid user, corrupted file, empty file) using JUnit 5 and Mockito.
-32. [ ] Add unit tests for HashUtils (hash determinism, salt/BCrypt transition) or new PasswordHasher abstraction.
+31. [x] Add unit tests for LoginService (valid user, invalid user, corrupted file, empty file) using JUnit 5 and Mockito.
+32. [x] Add unit tests for HashUtils (hash determinism, salt/BCrypt transition) or new PasswordHasher abstraction.
 33. [ ] Add unit tests for ViewManager navigation (using TestFX or mocked FXMLLoader factory) where possible.
 34. [ ] Add UI tests for login flow (valid/invalid) using TestFX.
 35. [ ] Add integration test for end-to-end login + navigation to role-specific home view (smoke test).

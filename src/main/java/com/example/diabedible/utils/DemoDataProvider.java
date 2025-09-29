@@ -24,17 +24,38 @@ public final class DemoDataProvider {
         String token = HashUtils.createPasswordToken(pwd);
         // Only add if missing
         repo.findByUsername("IDMario").orElseGet(() -> {
-            UserRepository.StoredUser u = new UserRepository.StoredUser("IDMario", token, Role.DIABETIC);
+            UserRepository.StoredUser u = new UserRepository.StoredUser(
+                    java.util.UUID.randomUUID().toString(),
+                    "IDMario",
+                    token,
+                    Role.DIABETIC,
+                    "Mario Rossi",
+                    null
+            );
             repo.save(u);
             return u;
         });
         repo.findByUsername("DRGiulia").orElseGet(() -> {
-            UserRepository.StoredUser u = new UserRepository.StoredUser("DRGiulia", token, Role.DOCTOR);
+            UserRepository.StoredUser u = new UserRepository.StoredUser(
+                    java.util.UUID.randomUUID().toString(),
+                    "DRGiulia",
+                    token,
+                    Role.DOCTOR,
+                    "Dott.ssa Giulia",
+                    null
+            );
             repo.save(u);
             return u;
         });
         repo.findByUsername("Admin1").orElseGet(() -> {
-            UserRepository.StoredUser u = new UserRepository.StoredUser("Admin1", token, Role.ADMIN);
+            UserRepository.StoredUser u = new UserRepository.StoredUser(
+                    java.util.UUID.randomUUID().toString(),
+                    "Admin1",
+                    token,
+                    Role.ADMIN,
+                    "Amministratore",
+                    null
+            );
             repo.save(u);
             return u;
         });
