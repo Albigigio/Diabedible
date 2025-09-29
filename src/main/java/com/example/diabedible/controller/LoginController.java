@@ -86,32 +86,10 @@ public class LoginController implements ViewManaged {
     }
 
     private void switchToUserHome(User user) {
-        String fxmlPath;
-        String title;
-
+        // set session
+        com.example.diabedible.utils.AppSession.setCurrentUser(user);
         Role role = user.getRole();
-        switch (role) {
-            case DIABETIC -> {
-                fxmlPath = FXMLPaths.HOME_DIABETIC;
-                title = "Home Paziente";
-                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
-            }
-            case DOCTOR -> {
-                fxmlPath = FXMLPaths.HOME_DOCTOR;
-                title = "Home Diabetologo";
-                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
-            }
-            case ADMIN -> {
-                fxmlPath = FXMLPaths.HOME_ADMIN;
-                title = "Home Admin";
-                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
-            }
-            default -> {
-                // fallback sicuro
-                fxmlPath = FXMLPaths.HOME_DIABETIC;
-                title = "Home";
-                viewManager.switchScene(fxmlPath, title, 1200, 800, true);
-            }
-        }
+        com.example.diabedible.utils.Navigation nav = com.example.diabedible.utils.Navigation.forRole(role);
+        viewManager.switchScene(nav.fxml, nav.title, nav.width, nav.height, nav.maximize);
     }
 }

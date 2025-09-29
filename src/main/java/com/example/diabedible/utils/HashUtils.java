@@ -49,7 +49,7 @@ public class HashUtils {
             String inputHex = sha256Hex(password);
             return constantTimeEqualsHex(legacyHex, inputHex);
         } else {
-            // For safety, treat bare hex (old format without prefix) as legacy too
+            // For safety, treat bare hex (old format without a prefix) as legacy too
             if (isLikelyHex(storedToken)) {
                 return constantTimeEqualsHex(storedToken, sha256Hex(password));
             }

@@ -81,6 +81,18 @@ public final class Config {
         return get("app.users.resource", "/com/example/diabedible/users.txt");
     }
 
+    public static boolean demoEnabled() {
+        return Boolean.parseBoolean(get("app.demo.enabled", "true"));
+    }
+
+    public static String i18nBundleBaseName() {
+        return get("app.i18n.bundle", "com.example.diabedible.i18n.messages");
+    }
+
+    public static String localeTag() {
+        return get("app.locale", "it-IT");
+    }
+
     private static int parseInt(String value, int def) {
         try {
             return Integer.parseInt(value.trim());

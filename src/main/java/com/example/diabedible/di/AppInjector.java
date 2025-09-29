@@ -19,6 +19,11 @@ public class AppInjector {
     // Singleton services
     private final AuthService authService = new LoginService(userRepository);
 
+    public AppInjector() {
+        // Optionally seed demo data
+        com.example.diabedible.utils.DemoDataProvider.seedUsers(userRepository);
+    }
+
     public UserRepository getUserRepository() {
         return userRepository;
     }

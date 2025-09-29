@@ -27,7 +27,24 @@ public class ViewManager {
     public void switchScene(String fxmlPath, String title, int width, int height, boolean maximize) {
         Runnable task = () -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+                var url = getClass().getResource(fxmlPath);
+                if (url == null) {
+                    LOGGER.error("FXML non trovato: {}", fxmlPath);
+                    AlertUtils.error("Risorsa mancante", "Vista non trovata", "Impossibile trovare la vista: " + fxmlPath);
+                    return;
+                }
+                FXMLLoader loader = new FXMLLoader(url);
+                // Controller factory: let injector handle known controllers, otherwise default
+                loader.setControllerFactory(type -> {
+                    try {
+                        // For now, no specific controllers via injector except LoginController created elsewhere
+                        return type.getDeclaredConstructor().newInstance();
+                    } catch (Exception ex) {
+                        LOGGER.error("Impossibile creare controller {}", type, ex);
+                        throw new RuntimeException(ex);
+                    }
+                });
+                // Pass resource bundle if available in future
                 Scene scene = new Scene(loader.load(), width, height);
 
                 // Carica i fogli di stile CSS da diverse posizioni
@@ -91,6 +108,8 @@ public class ViewManager {
 
     public void logout() {
         Runnable task = () -> {
+            // clear session
+            AppSession.clear();
             LoginController loginController = injector.createLoginController(this);
             switchSceneWithController(FXMLPaths.LOGIN, loginController, Config.loginTitle(), Config.windowWidth(), Config.windowHeight(), Config.windowMaximized());
         };

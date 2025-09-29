@@ -23,17 +23,17 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 17. [x] Introduce a domain model for readings (e.g., BloodSugarReading {LocalDate date, TimeSlot slot, double value}) and collections.
 18. [x] Refactor HomeDiabeticController to use the domain model + a ViewModel (MVVM-like) to separate UI from logic.
 19. [x] Add a TimeSlot enum (MORNING, AFTERNOON) with localized display names instead of raw strings ("Mattina", "Pomeriggio").
-20. [ ] Convert dummy/sample data generation into a dedicated DemoDataProvider that can be toggled by config.
+20. [x] Convert dummy/sample data generation into a dedicated DemoDataProvider that can be toggled by config.
 21. [x] Normalize date handling and formatting via a DateTimeUtil with locale-specific patterns.
 22. [ ] Add i18n support (resource bundles) for UI text and messages; externalize Italian strings from controllers.
-23. [ ] Create a Navigation model: single source of truth for route names, FXML paths, window titles, and sizes.
+23. [x] Create a Navigation model: single source of truth for route names, FXML paths, window titles, and sizes.
 24. [ ] Make ViewManager responsible only for navigation; remove business logic (e.g., hard-wired logout LoginService creation) via DI.
-25. [ ] Add a ControllerFactory that injects dependencies into FXML controllers (via FXMLLoader.setControllerFactory).
+25. [x] Add a ControllerFactory that injects dependencies into FXML controllers (via FXMLLoader.setControllerFactory).
 26. [ ] Add nullability annotations (e.g., JetBrains @NotNull/@Nullable) and enforce in code where appropriate.
-27. [ ] Ensure robust resource loading with clear fallbacks and logging when resources are missing.
+27. [x] Ensure robust resource loading with clear fallbacks and logging when resources are missing.
 28. [ ] Expand the User model (id, username, role, displayName, optional metadata) and avoid relying on prefixes.
-29. [ ] Create a session/context object (e.g., AppSession) to store the current user and shared state.
-30. [ ] Implement logout flow that clears session and returns to login reliably; remove duplicated safeguards in controllers.
+29. [x] Create a session/context object (e.g., AppSession) to store the current user and shared state.
+30. [x] Implement logout flow that clears session and returns to login reliably; remove duplicated safeguards in controllers.
 31. [ ] Add unit tests for LoginService (valid user, invalid user, corrupted file, empty file) using JUnit 5 and Mockito.
 32. [ ] Add unit tests for HashUtils (hash determinism, salt/BCrypt transition) or new PasswordHasher abstraction.
 33. [ ] Add unit tests for ViewManager navigation (using TestFX or mocked FXMLLoader factory) where possible.
