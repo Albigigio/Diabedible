@@ -8,6 +8,7 @@ module com.example.diabedible {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires org.jetbrains.annotations;
 
     // Logging
     requires org.slf4j;

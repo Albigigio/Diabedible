@@ -25,9 +25,9 @@ Note: Each task is actionable and ordered for incremental adoption. Check items 
 19. [x] Add a TimeSlot enum (MORNING, AFTERNOON) with localized display names instead of raw strings ("Mattina", "Pomeriggio").
 20. [x] Convert dummy/sample data generation into a dedicated DemoDataProvider that can be toggled by config.
 21. [x] Normalize date handling and formatting via a DateTimeUtil with locale-specific patterns.
-22. [ ] Add i18n support (resource bundles) for UI text and messages; externalize Italian strings from controllers.
+22. [x] Add i18n support (resource bundles) for UI text and messages; externalize Italian strings from controllers. (Basic wiring done: ResourceBundle loaded via Config/I18n, ViewManager passes bundle to FXMLLoader, window titles and common error dialogs localized.)
 23. [x] Create a Navigation model: single source of truth for route names, FXML paths, window titles, and sizes.
-24. [ ] Make ViewManager responsible only for navigation; remove business logic (e.g., hard-wired logout LoginService creation) via DI.
+24. [x] Make ViewManager responsible only for navigation; remove business logic (e.g., hard-wired logout LoginService creation) via DI.
 25. [x] Add a ControllerFactory that injects dependencies into FXML controllers (via FXMLLoader.setControllerFactory).
 26. [ ] Add nullability annotations (e.g., JetBrains @NotNull/@Nullable) and enforce in code where appropriate.
 27. [x] Ensure robust resource loading with clear fallbacks and logging when resources are missing.

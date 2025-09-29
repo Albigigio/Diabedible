@@ -2,6 +2,7 @@ package com.example.diabedible.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,15 +59,17 @@ public final class Config {
         return Boolean.parseBoolean(get("app.window.maximized", "true"));
     }
 
-    public static String titlePrefix() {
+    public static @NotNull String titlePrefix() {
         return get("app.title.prefix", "Diabedible - ");
     }
 
-    public static String loginTitle() {
-        return get("app.title.login", "Login");
+    public static @NotNull String loginTitle() {
+        // If app.title.login contains a key like "title.login", ViewManager will localize it.
+        // If it contains a literal like "Login", it will be used as-is.
+        return get("app.title.login", "title.login");
     }
 
-    public static List<String> cssPaths() {
+    public static @NotNull List<String> cssPaths() {
         String raw = get("app.css.paths", "/com/example/diabedible/styles.css");
         String[] split = raw.split(",");
         List<String> list = new ArrayList<>();
@@ -77,7 +80,7 @@ public final class Config {
         return list;
     }
 
-    public static String usersResourcePath() {
+    public static @NotNull String usersResourcePath() {
         return get("app.users.resource", "/com/example/diabedible/users.txt");
     }
 
@@ -85,11 +88,11 @@ public final class Config {
         return Boolean.parseBoolean(get("app.demo.enabled", "true"));
     }
 
-    public static String i18nBundleBaseName() {
+    public static @NotNull String i18nBundleBaseName() {
         return get("app.i18n.bundle", "com.example.diabedible.i18n.messages");
     }
 
-    public static String localeTag() {
+    public static @NotNull String localeTag() {
         return get("app.locale", "it-IT");
     }
 

@@ -191,7 +191,7 @@ public class HomeDiabeticController implements ViewManaged {
     @FXML
     private void handleLogout() {
         if (viewManager != null) {
-            viewManager.logout();
+            viewManager.getLogoutService().logout(viewManager);
         } else {
             showAlert(ALERT_LOGOUT_ERROR);
         }

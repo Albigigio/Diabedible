@@ -21,7 +21,12 @@ public class Main extends Application {
         // Global uncaught exception handler: log and show a friendly dialog
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             LOGGER.error("Uncaught exception on thread {}", t.getName(), e);
-            AlertUtils.exception("Errore dell'applicazione", "Si è verificato un errore non gestito", "Si è verificato un errore inatteso.", e);
+            AlertUtils.exception(
+                    com.example.diabedible.utils.I18n.tr("error.app", "Errore dell'applicazione"),
+                    com.example.diabedible.utils.I18n.tr("error.unhandled", "Si è verificato un errore non gestito"),
+                    com.example.diabedible.utils.I18n.tr("error.app.unexpected", "Si è verificato un errore inatteso."),
+                    e
+            );
         });
 
         AppInjector injector = new AppInjector();

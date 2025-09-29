@@ -1,14 +1,15 @@
 package com.example.diabedible.utils;
 
 import com.example.diabedible.ViewManaged;
-import com.example.diabedible.controller.LoginController;
 import com.example.diabedible.di.AppInjector;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -17,23 +18,28 @@ public class ViewManager {
     private final Stage primaryStage;
     private final AppInjector injector;
 
-    public ViewManager(Stage stage, AppInjector injector) {
+    public ViewManager(@NotNull Stage stage, @NotNull AppInjector injector) {
         this.primaryStage = stage;
         this.injector = injector;
         stage.setMinWidth(Config.windowMinWidth());
         stage.setMinHeight(Config.windowMinHeight());
     }
 
-    public void switchScene(String fxmlPath, String title, int width, int height, boolean maximize) {
+    public void switchScene(@NotNull String fxmlPath, @NotNull String title, int width, int height, boolean maximize) {
         Runnable task = () -> {
             try {
                 var url = getClass().getResource(fxmlPath);
                 if (url == null) {
                     LOGGER.error("FXML non trovato: {}", fxmlPath);
-                    AlertUtils.error("Risorsa mancante", "Vista non trovata", "Impossibile trovare la vista: " + fxmlPath);
+                    AlertUtils.error(
+                            I18n.tr("error.resource.missing.title", "Risorsa mancante"),
+                            I18n.tr("error.view.not.found", "Vista non trovata"),
+                            I18n.tr("error.view.missing.detail", "Impossibile trovare la vista: ") + fxmlPath
+                    );
                     return;
                 }
-                FXMLLoader loader = new FXMLLoader(url);
+                ResourceBundle bundle = I18n.bundle();
+                FXMLLoader loader = new FXMLLoader(url, bundle);
                 // Controller factory: let injector handle known controllers, otherwise default
                 loader.setControllerFactory(type -> {
                     try {
@@ -44,7 +50,6 @@ public class ViewManager {
                         throw new RuntimeException(ex);
                     }
                 });
-                // Pass resource bundle if available in future
                 Scene scene = new Scene(loader.load(), width, height);
 
                 // Carica i fogli di stile CSS da diverse posizioni
@@ -56,7 +61,9 @@ public class ViewManager {
                 }
 
                 primaryStage.setScene(scene);
-                primaryStage.setTitle(Config.titlePrefix() + title);
+                String appName = I18n.tr("app.name", Config.titlePrefix().replace(" - ", ""));
+                String resolvedTitle = I18n.tr(title, title);
+                primaryStage.setTitle(appName + " - " + resolvedTitle);
                 primaryStage.setMaximized(maximize);
 
                 if (!primaryStage.isShowing()) {
@@ -65,7 +72,12 @@ public class ViewManager {
 
             } catch (IOException e) {
                 LOGGER.error("Errore nel caricamento della vista: {}", fxmlPath, e);
-                AlertUtils.exception("Errore dell'applicazione", "Si è verificato un errore", "Errore nel caricamento della vista: " + fxmlPath, e);
+                AlertUtils.exception(
+                        I18n.tr("error.app", "Errore dell'applicazione"),
+                        I18n.tr("error.unhandled", "Si è verificato un errore"),
+                        I18n.tr("error.view.load", "Errore nel caricamento della vista: ") + fxmlPath,
+                        e
+                );
             }
         };
         if (Platform.isFxApplicationThread()) {
@@ -75,10 +87,11 @@ public class ViewManager {
         }
     }
 
-    public void switchSceneWithController(String fxmlPath, Object controller, String title, int width, int height, boolean maximize) {
+    public void switchSceneWithController(@NotNull String fxmlPath, @NotNull Object controller, @NotNull String title, int width, int height, boolean maximize) {
         Runnable task = () -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+                ResourceBundle bundle = I18n.bundle();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath), bundle);
                 loader.setController(controller);
 
                 Scene scene = new Scene(loader.load(), width, height);
@@ -87,7 +100,9 @@ public class ViewManager {
                 loadStylesheets(scene);
 
                 primaryStage.setScene(scene);
-                primaryStage.setTitle(Config.titlePrefix() + title);
+                String appName = I18n.tr("app.name", Config.titlePrefix().replace(" - ", ""));
+                String resolvedTitle = I18n.tr(title, title);
+                primaryStage.setTitle(appName + " - " + resolvedTitle);
                 primaryStage.setMaximized(maximize);
 
                 if (!primaryStage.isShowing()) {
@@ -96,7 +111,12 @@ public class ViewManager {
 
             } catch (IOException e) {
                 LOGGER.error("Errore nel caricamento della vista con controller personalizzato: {}", fxmlPath, e);
-                AlertUtils.exception("Errore dell'applicazione", "Si è verificato un errore", "Errore nel caricamento della vista con controller personalizzato: " + fxmlPath, e);
+                AlertUtils.exception(
+                        I18n.tr("error.app", "Errore dell'applicazione"),
+                        I18n.tr("error.unhandled", "Si è verificato un errore"),
+                        I18n.tr("error.view.load.custom", "Errore nel caricamento della vista con controller personalizzato: ") + fxmlPath,
+                        e
+                );
             }
         };
         if (Platform.isFxApplicationThread()) {
@@ -106,18 +126,11 @@ public class ViewManager {
         }
     }
 
-    public void logout() {
-        Runnable task = () -> {
-            // clear session
-            AppSession.clear();
-            LoginController loginController = injector.createLoginController(this);
-            switchSceneWithController(FXMLPaths.LOGIN, loginController, Config.loginTitle(), Config.windowWidth(), Config.windowHeight(), Config.windowMaximized());
-        };
-        if (Platform.isFxApplicationThread()) {
-            task.run();
-        } else {
-            Platform.runLater(task);
-        }
+    /**
+     * Expose DI-provided services when needed by controllers.
+     */
+    public com.example.diabedible.service.LogoutService getLogoutService() {
+        return injector.getLogoutService();
     }
 
     private void loadStylesheets(Scene scene) {

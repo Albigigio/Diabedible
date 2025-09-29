@@ -110,7 +110,7 @@ public class HomeDoctorController implements ViewManaged {
     @FXML
     private void handleLogout() {
         if (viewManager != null) {
-            viewManager.logout();
+            viewManager.getLogoutService().logout(viewManager);
         } else {
             LOGGER.warn("ViewManager non impostato durante il logout");
             showAlert(ALERT_LOGOUT_ERROR);

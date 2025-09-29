@@ -3,8 +3,7 @@ package com.example.diabedible.di;
 import com.example.diabedible.controller.LoginController;
 import com.example.diabedible.repository.InMemoryUserRepository;
 import com.example.diabedible.repository.UserRepository;
-import com.example.diabedible.service.AuthService;
-import com.example.diabedible.service.LoginService;
+import com.example.diabedible.service.*;
 import com.example.diabedible.utils.ViewManager;
 
 /**
@@ -18,6 +17,7 @@ public class AppInjector {
 
     // Singleton services
     private final AuthService authService = new LoginService(userRepository);
+    private final LogoutService logoutService = new DefaultLogoutService(this);
 
     public AppInjector() {
         // Optionally seed demo data
@@ -30,6 +30,10 @@ public class AppInjector {
 
     public AuthService getAuthService() {
         return authService;
+    }
+
+    public LogoutService getLogoutService() {
+        return logoutService;
     }
 
     // Controller factories
