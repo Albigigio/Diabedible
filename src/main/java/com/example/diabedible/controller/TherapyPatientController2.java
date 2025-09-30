@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
-public class TherapyPatientController2{
+public class TherapyPatientController2 {
 
     @FXML private VBox medicationContainer;
     private final TherapyService therapyService = AppInjector.getTherapyService();

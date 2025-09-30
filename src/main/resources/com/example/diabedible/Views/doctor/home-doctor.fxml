@@ -50,6 +50,12 @@
                       style="-fx-background-color: #e9e9e9; -fx-padding: 10; -fx-background-radius: 5;" />
             </VBox>
 
+            <!-- ✅ Sintomi registrati -->
+            <VBox spacing="10">
+                <Label text="Sintomi registrati:" style="-fx-font-weight: bold;" />
+                <ListView fx:id="symptomList" prefHeight="150"/>
+            </VBox>
+
         </VBox>
     </center>
 

@@ -7,6 +7,7 @@ import com.example.diabedible.di.AppInjector;
 import com.example.diabedible.model.Medication;
 import com.example.diabedible.model.Therapy;
 import com.example.diabedible.service.TherapyService;
+import com.example.diabedible.service.SymptomService;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -40,14 +41,16 @@ public class HomeDoctorController implements ViewManaged {
     @FXML private ComboBox<String> patientSelector;
     @FXML private LineChart<String, Number> bloodSugarChart;
     @FXML private Button logoutBtn;
-
-    // ✅ Nuova label per lo stato della terapia
     @FXML private Label statusLabel;
+
+    // ✅ Nuova lista sintomi
+    @FXML private ListView<String> symptomList;
 
     private ViewManager viewManager;
 
-    // Service per recuperare le terapie reali
+    // Services
     private final TherapyService therapyService = AppInjector.getTherapyService();
+    private final SymptomService symptomService = AppInjector.getSymptomService();
 
     // Simulazione di pazienti e dati glicemici
     private final Map<String, Map<LocalDate, Map<String, Double>>> patientsData = new LinkedHashMap<>();
@@ -69,6 +72,7 @@ public class HomeDoctorController implements ViewManaged {
 
         // Popola ComboBox con i pazienti
         patientSelector.getItems().addAll(patientsData.keySet());
+        // 👉 Quando cambio paziente, aggiorno anche i sintomi
         patientSelector.setOnAction(e -> loadPatientData(patientSelector.getValue()));
     }
 
@@ -86,6 +90,7 @@ public class HomeDoctorController implements ViewManaged {
     }
 
     private void loadPatientData(String patientName) {
+        // ✅ Grafico glicemia
         bloodSugarChart.getData().clear();
         morningSeries.getData().clear();
         afternoonSeries.getData().clear();
@@ -106,10 +111,9 @@ public class HomeDoctorController implements ViewManaged {
                 }
             }
         }
-
         bloodSugarChart.getData().addAll(morningSeries, afternoonSeries);
 
-        // Popola checklist fittizia
+        // ✅ Checklist fittizia
         checklistContainer.getChildren().clear();
         for (String task : CHECKLIST_ITEMS) {
             CheckBox checkBox = new CheckBox(task);
@@ -117,7 +121,7 @@ public class HomeDoctorController implements ViewManaged {
             checklistContainer.getChildren().add(checkBox);
         }
 
-        // ✅ Controllo stato terapia reale
+        // ✅ Stato terapia
         List<Therapy> therapies = therapyService.getPatientTherapies(patientName);
         boolean completed = !therapies.isEmpty() &&
                             therapies.stream()
@@ -129,6 +133,14 @@ public class HomeDoctorController implements ViewManaged {
         } else {
             statusLabel.setText("Terapia in corso");
         }
+
+        // ✅ Sintomi del paziente
+        symptomList.getItems().clear();
+        symptomService.listPatientSymptoms(patientName).forEach(symptom -> {
+            symptomList.getItems().add(
+                symptom.getDateTime() + " - " + symptom.getDescription()
+            );
+        });
     }
 
     @FXML
