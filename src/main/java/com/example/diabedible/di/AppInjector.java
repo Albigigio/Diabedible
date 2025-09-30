@@ -1,10 +1,18 @@
 package com.example.diabedible.di;
 
 import com.example.diabedible.controller.LoginController;
+import com.example.diabedible.repository.InMemorySymptomRepository;
 import com.example.diabedible.repository.InMemoryUserRepository;
+import com.example.diabedible.repository.SymptomRepository;
 import com.example.diabedible.repository.UserRepository;
 import com.example.diabedible.service.*;
+import com.example.diabedible.service.AuthService;
+import com.example.diabedible.service.LoginService;
+import com.example.diabedible.service.SymptomService;
 import com.example.diabedible.utils.ViewManager;
+import com.example.diabedible.repository.TherapyRepository;
+import com.example.diabedible.repository.InMemoryTherapyRepository;
+import com.example.diabedible.service.TherapyService;
 
 /**
  * A very small hand-rolled dependency injector for the application.
@@ -24,6 +32,14 @@ public class AppInjector {
         com.example.diabedible.utils.DemoDataProvider.seedUsers(userRepository);
     }
 
+   private static final SymptomRepository symptomRepository = new InMemorySymptomRepository();
+   private static final SymptomService symptomService = new SymptomService(symptomRepository);
+
+    private static final TherapyRepository therapyRepository = new InMemoryTherapyRepository();
+    
+    private static final TherapyService therapyService = new TherapyService(therapyRepository);
+
+
     public UserRepository getUserRepository() {
         return userRepository;
     }
@@ -40,4 +56,13 @@ public class AppInjector {
     public LoginController createLoginController(ViewManager viewManager) {
         return new LoginController(getAuthService(), viewManager);
     }
+
+    public static SymptomService getSymptomService() {
+    return symptomService;
+}
+
+    public static TherapyService getTherapyService() {
+    return therapyService;
+}
+
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.diabedible.controller.SymptomController"
+            prefWidth="400" prefHeight="300">
+
+    <children>
+        <!-- Uso di VBox per disporre gli elementi verticalmente con spaziatura -->
+        <VBox spacing="10" layoutX="20" layoutY="20" prefWidth="360">
+            <!-- Campo di testo per la descrizione del sintomo -->
+            <TextArea fx:id="descriptionField" promptText="Descrivi il sintomo..." />
+
+            <!-- Pulsante per salvare -->
+            <Button text="Salva" onAction="#onSaveClicked" />
+
+            <!-- Etichetta e lista per mostrare i sintomi registrati -->
+            <Label text="Sintomi registrati:" />
+            <ListView fx:id="symptomList" prefHeight="150"/>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -1,0 +1,6 @@
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.controller.TherapyPatientController"
+      spacing="10" prefWidth="400">
+    <Label text="La tua terapia"/>
+    <VBox fx:id="medicationContainer" spacing="8"/>
+</VBox>

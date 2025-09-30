@@ -3,6 +3,10 @@ package com.example.diabedible.controller;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.utils.AlertUtils;
 import com.example.diabedible.utils.ViewManager;
+import com.example.diabedible.di.AppInjector;
+import com.example.diabedible.model.Medication;
+import com.example.diabedible.model.Therapy;
+import com.example.diabedible.service.TherapyService;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -15,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HomeDoctorController implements ViewManaged {
@@ -36,9 +41,15 @@ public class HomeDoctorController implements ViewManaged {
     @FXML private LineChart<String, Number> bloodSugarChart;
     @FXML private Button logoutBtn;
 
+    // ✅ Nuova label per lo stato della terapia
+    @FXML private Label statusLabel;
+
     private ViewManager viewManager;
 
-    // Simulazione di pazienti e dati (in futuro dovrai prenderli da un file o database)
+    // Service per recuperare le terapie reali
+    private final TherapyService therapyService = AppInjector.getTherapyService();
+
+    // Simulazione di pazienti e dati glicemici
     private final Map<String, Map<LocalDate, Map<String, Double>>> patientsData = new LinkedHashMap<>();
 
     private final XYChart.Series<String, Number> morningSeries = new XYChart.Series<>();
@@ -98,12 +109,25 @@ public class HomeDoctorController implements ViewManaged {
 
         bloodSugarChart.getData().addAll(morningSeries, afternoonSeries);
 
-        // Popola una checklist (fittizia)
+        // Popola checklist fittizia
         checklistContainer.getChildren().clear();
         for (String task : CHECKLIST_ITEMS) {
             CheckBox checkBox = new CheckBox(task);
-            checkBox.setDisable(true); // solo lettura
+            checkBox.setDisable(true);
             checklistContainer.getChildren().add(checkBox);
+        }
+
+        // ✅ Controllo stato terapia reale
+        List<Therapy> therapies = therapyService.getPatientTherapies(patientName);
+        boolean completed = !therapies.isEmpty() &&
+                            therapies.stream()
+                                     .allMatch(t -> t.getMedications()
+                                                     .stream()
+                                                     .allMatch(Medication::isTaken));
+        if (completed) {
+            statusLabel.setText("Terapia completata");
+        } else {
+            statusLabel.setText("Terapia in corso");
         }
     }
 
@@ -116,7 +140,6 @@ public class HomeDoctorController implements ViewManaged {
             showAlert(ALERT_LOGOUT_ERROR);
         }
     }
-
 
     private void showAlert(String message) {
         AlertUtils.warning(ALERT_TITLE_WARNING, null, message);

@@ -1,0 +1,17 @@
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.controller.TherapyAdminController"
+      spacing="10" alignment="CENTER" prefWidth="400">
+
+    <!-- ✅ Selezione paziente -->
+    <HBox spacing="10">
+        <Label text="Paziente:"/>
+        <ComboBox fx:id="patientSelector" prefWidth="200"/>
+    </HBox>
+
+    <TextField fx:id="therapyNameField" promptText="Nome terapia"/>
+    <TextField fx:id="medNameField" promptText="Nome farmaco"/>
+    <TextField fx:id="doseField" promptText="Dose"/>
+    <Button text="Aggiungi farmaco" onAction="#onAddMedication"/>
+    <ListView fx:id="medList"/>
+    <Button text="Prescrivi" onAction="#onPrescribe"/>
+</VBox>

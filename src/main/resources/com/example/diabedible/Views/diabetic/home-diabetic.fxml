@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.diabedible.controller.HomeDiabeticController">
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.diabedible.controller.HomeDiabeticController">
 
     <fx:define>
         <Font fx:id="welcomeFont" name="System Bold" size="18.0" />
@@ -14,32 +16,43 @@
         <Font fx:id="statsTitleFont" name="System Bold" size="16.0" />
     </fx:define>
 
+    <!-- Barra superiore -->
     <top>
         <HBox spacing="20" style="-fx-padding: 15; -fx-background-color: #f0f0f0;">
             <Text fx:id="welcomeText" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
             <Region HBox.hgrow="ALWAYS" />
-             <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Logout">
-            <HBox.margin>
-               <Insets />
-            </HBox.margin>
-         </Button>
+            <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Logout">
+                <HBox.margin>
+                    <Insets />
+                </HBox.margin>
+            </Button>
         </HBox>
     </top>
 
+    <!-- Menu laterale sinistro -->
     <left>
-        <VBox fx:id="navigation" prefWidth="200.0" style="-fx-background-color: #34495e; -fx-background-radius: 10;">
+        <VBox fx:id="navigation" prefWidth="200.0"
+              style="-fx-background-color: #34495e; -fx-background-radius: 10;">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
             <children>
                 <Separator />
-                <Button fx:id="dashboardBtn" prefHeight="25.0" prefWidth="83.0" styleClass="nav-button" text="Dashboard" />
+                <Button fx:id="dashboardBtn" prefHeight="25.0" prefWidth="83.0"
+                        styleClass="nav-button" text="Dashboard" />
                 <Separator />
                 <Button fx:id="profilebtn" styleClass="nav-button" text="Il tuo profilo" />
+                <!-- Nuovo pulsante per registrare un sintomo -->
+                <Separator />
+                <Button text="Registra Sintomo"
+                        onAction="#onAddSymptomClicked"
+                        styleClass="nav-button" />
             </children>
         </VBox>
     </left>
 
+    <!-- Contenuto centrale -->
     <center>
         <TabPane fx:id="mainContent">
             <tabs>
@@ -55,7 +68,10 @@
                                     <CategoryAxis label="Giorni" />
                                 </xAxis>
                                 <yAxis>
-                                    <NumberAxis label="Livello Glicemico (mg/dL)" lowerBound="50.0" tickUnit="25.0" upperBound="300.0" />
+                                    <NumberAxis label="Livello Glicemico (mg/dL)"
+                                                lowerBound="50.0"
+                                                tickUnit="25.0"
+                                                upperBound="300.0" />
                                 </yAxis>
                             </LineChart>
                             <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -71,8 +87,10 @@
         </TabPane>
     </center>
 
+    <!-- Colonna destra -->
     <right>
-        <VBox fx:id="Assunzioni" prefWidth="250.0" spacing="15.0" style="-fx-background-color: #ecf0f1; -fx-background-radius: 10;">
+        <VBox fx:id="Assunzioni" prefWidth="250.0" spacing="15.0"
+              style="-fx-background-color: #ecf0f1; -fx-background-radius: 10;">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>

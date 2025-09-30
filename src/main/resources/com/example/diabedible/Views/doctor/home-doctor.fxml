@@ -6,7 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.diabedible.controller.HomeDoctorController">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.diabedible.controller.HomeDoctorController">
 
     <!-- Barra superiore -->
     <top>
@@ -27,6 +28,10 @@
                 <ComboBox fx:id="patientSelector" prefWidth="200"/>
             </HBox>
 
+            <!-- ✅ Nuova label per lo stato della terapia -->
+            <Label fx:id="statusLabel" text="Stato terapia"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
             <!-- Grafico glicemia -->
             <LineChart fx:id="bloodSugarChart" title="Andamento Glicemia"
                        prefHeight="300" prefWidth="600">
@@ -41,7 +46,8 @@
             <!-- Checklist del paziente -->
             <VBox spacing="10">
                 <Label text="Checklist giornaliera del paziente:" style="-fx-font-weight: bold;" />
-                <VBox fx:id="checklistContainer" spacing="5" style="-fx-background-color: #e9e9e9; -fx-padding: 10; -fx-background-radius: 5;" />
+                <VBox fx:id="checklistContainer" spacing="5"
+                      style="-fx-background-color: #e9e9e9; -fx-padding: 10; -fx-background-radius: 5;" />
             </VBox>
 
         </VBox>
