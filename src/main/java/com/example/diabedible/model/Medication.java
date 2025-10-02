@@ -13,9 +13,27 @@ public class Medication {
         this.taken = false;
     }
 
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public String getDose() { return dose; }
-    public boolean isTaken() { return taken; }
-    public void setTaken(boolean taken) { this.taken = taken; }
+    public String getId() { 
+        return id; 
+    }
+
+    public String getName() { 
+        return name; 
+    }
+
+    public String getDose() {
+         return dose; 
+        }
+
+    public boolean isTaken() { 
+        return taken; 
+    }
+
+    public void setTaken(boolean taken) { 
+        this.taken = taken; 
+    }
+
+    public String toString() {
+        return name + " - " + dose + (taken ? " ✅" : " ❌");
+    }
 }

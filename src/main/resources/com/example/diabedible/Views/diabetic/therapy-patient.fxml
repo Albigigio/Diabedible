@@ -1,6 +1,12 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.diabedible.controller.TherapyPatientController"
       spacing="10" prefWidth="400">
+
     <Label text="La tua terapia"/>
+
+    <!-- Contenitore originale -->
     <VBox fx:id="medicationContainer" spacing="8"/>
+
+    <!-- ✅ Nuova lista di farmaci -->
+    <ListView fx:id="medicationList" prefHeight="200"/>
 </VBox>

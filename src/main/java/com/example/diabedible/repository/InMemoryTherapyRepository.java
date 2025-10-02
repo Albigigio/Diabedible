@@ -1,6 +1,7 @@
 package com.example.diabedible.repository;
 
 import com.example.diabedible.model.Therapy;
+import com.example.diabedible.repository.TherapyRepository;
 import java.util.*;
 
 public class InMemoryTherapyRepository implements TherapyRepository {
@@ -22,4 +23,8 @@ public class InMemoryTherapyRepository implements TherapyRepository {
     public Therapy findByTherapyId(String therapyId) {
         return data.get(therapyId);
     }
+
+    public Therapy findById(String therapyId) {
+    return data.get(therapyId);
+}
 }
