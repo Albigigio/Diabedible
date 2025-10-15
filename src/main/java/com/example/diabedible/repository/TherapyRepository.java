@@ -6,10 +6,6 @@ import java.util.List;
 public interface TherapyRepository {
     void save(Therapy therapy);
     List<Therapy> findByPatient(String patientId);
-    Therapy findByTherapyId(String therapyId);
 
     Therapy findById(String therapyId);
-
-    
-
 }

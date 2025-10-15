@@ -1,12 +1,26 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.diabedible.controller.TherapyPatientController"
-      spacing="10" prefWidth="400">
+      spacing="10" alignment="CENTER"
+      prefWidth="400" prefHeight="350"
+      style="-fx-padding: 20; -fx-background-color: #f8f8f8;">
 
-    <Label text="La tua terapia"/>
+    <Label text="La tua terapia"
+           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
 
-    <!-- Contenitore originale -->
-    <VBox fx:id="medicationContainer" spacing="8"/>
+    <!-- 🔹 Contenitore originale (per uso alternativo o compatibilità) -->
+    <VBox fx:id="medicationContainer"
+          spacing="8"
+          alignment="CENTER_LEFT"
+          prefWidth="350"
+          style="-fx-background-color: #ffffff; -fx-border-color: #dddddd; -fx-padding: 10; -fx-background-radius: 8; -fx-border-radius: 8;">
+        <Label text="Elenco farmaci (vecchia vista)"
+               style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #666666;"/>
+    </VBox>
 
-    <!-- ✅ Nuova lista di farmaci -->
-    <ListView fx:id="medicationList" prefHeight="200"/>
+    <!-- ✅ Nuova lista moderna con pulsanti “Assunto” -->
+    <ListView fx:id="medicationList"
+              prefHeight="220"
+              prefWidth="350"
+              style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #cccccc;"/>
+
 </VBox>

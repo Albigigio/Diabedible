@@ -4,69 +4,60 @@ import com.example.diabedible.di.AppInjector;
 import com.example.diabedible.model.Medication;
 import com.example.diabedible.model.Therapy;
 import com.example.diabedible.service.TherapyService;
-import com.example.diabedible.utils.AppSession;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.CheckBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.util.Callback;
 
 public class TherapyPatientController {
 
-    @FXML private VBox medicationContainer; // 👈 ancora presente se vuoi usare i CheckBox
-    @FXML private ListView<Medication> medicationList; // 👈 nuova lista
+    @FXML private ListView<Medication> medicationList;
 
     private final TherapyService therapyService = AppInjector.getTherapyService();
+    private String patientId = "currentUserId"; // ⚠️ sostituisci con ID reale (es. da AppSession)
 
     @FXML
-    private void initialize() {
-        // Recupera il paziente loggato
-        String patientId = AppSession.getCurrentUser().getId();
+    public void initialize() {
         Therapy therapy = therapyService.getCurrentTherapy(patientId);
-
-        if (therapy != null) {
-            // ✅ Popola la nuova ListView
-            medicationList.getItems().setAll(therapy.getMedications());
-
-            // Cella personalizzata con pulsante "Assunto"
-            medicationList.setCellFactory(list -> new ListCell<>() {
-                private final Button takenBtn = new Button("Assunto");
-                {
-                    takenBtn.setOnAction(e -> {
-                        Medication med = getItem();
-                        if (med != null) {
-                            therapyService.markMedicationAsTaken(therapy.getId(), med.getId());
-                            med.setTaken(true);
-                            medicationList.refresh();
-                        }
-                    });
-                }
-                @Override
-                protected void updateItem(Medication med, boolean empty) {
-                    super.updateItem(med, empty);
-                    if (empty || med == null) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        setText(med.getName() + " - " + med.getDose() +
-                                (med.isTaken() ? " ✅" : " ❌"));
-                        setGraphic(takenBtn);
-                    }
-                }
-            });
-
-            // 👇 Mantieni anche la vecchia logica coi CheckBox se vuoi
-            medicationContainer.getChildren().clear();
-            for (Medication m : therapy.getMedications()) {
-                CheckBox box = new CheckBox(m.getName() + " (" + m.getDose() + ")");
-                box.setSelected(m.isTaken());
-                box.selectedProperty().addListener((obs, oldV, newV) -> {
-                    m.setTaken(newV);
-                    therapyService.prescribeTherapy(therapy); // ri-salva stato aggiornato
-                });
-                medicationContainer.getChildren().add(box);
-            }
+        if (therapy == null) {
+            medicationList.getItems().clear();
+            medicationList.setPlaceholder(new Label("Nessuna terapia assegnata."));
+            return;
         }
+
+        medicationList.getItems().setAll(therapy.getMedications());
+
+        // ✅ Crea una cella personalizzata con pulsante "Assunto"
+        medicationList.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<Medication> call(ListView<Medication> listView) {
+                return new ListCell<>() {
+                    private final Button takenBtn = new Button("Assunto");
+
+                    {
+                        takenBtn.setOnAction(e -> {
+                            Medication med = getItem();
+                            if (med != null && !med.isTaken()) {
+                                therapyService.markMedicationAsTaken(therapy.getId(), med.getId());
+                                med.setTaken(true);
+                                medicationList.refresh();
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(Medication med, boolean empty) {
+                        super.updateItem(med, empty);
+                        if (empty || med == null) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            String status = med.isTaken() ? "✅" : "❌";
+                            setText(med.getName() + " - " + med.getDose() + " " + status);
+                            setGraphic(med.isTaken() ? null : takenBtn);
+                        }
+                    }
+                };
+            }
+        });
     }
 }
