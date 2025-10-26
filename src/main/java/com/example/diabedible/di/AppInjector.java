@@ -6,13 +6,9 @@ import com.example.diabedible.repository.InMemoryUserRepository;
 import com.example.diabedible.repository.SymptomRepository;
 import com.example.diabedible.repository.UserRepository;
 import com.example.diabedible.service.*;
-import com.example.diabedible.service.AuthService;
-import com.example.diabedible.service.LoginService;
-import com.example.diabedible.service.SymptomService;
 import com.example.diabedible.utils.ViewManager;
 import com.example.diabedible.repository.TherapyRepository;
 import com.example.diabedible.repository.InMemoryTherapyRepository;
-import com.example.diabedible.service.TherapyService;
 
 /**
  * A very small hand-rolled dependency injector for the application.
@@ -33,8 +29,8 @@ public class AppInjector {
     }
 
    private static final SymptomRepository symptomRepository = new InMemorySymptomRepository();
-   private static final SymptomService symptomService = new SymptomService(symptomRepository);
-
+   private static final SymptomService symptomService = new SymptomService();
+ 
     private static final TherapyRepository therapyRepository = new InMemoryTherapyRepository();
     
     private static final TherapyService therapyService = new TherapyService(therapyRepository);

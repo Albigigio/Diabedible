@@ -15,7 +15,11 @@ public class Symptom {
         this.dateTime = dateTime;
     }
 
-    // ✅ Aggiungi questo getter
+    public Symptom(String id, String patientId, String description) {
+        this(id, patientId, description, LocalDateTime.now());
+    }
+
+    
     public String getPatientId() {
         return patientId;
     }
@@ -27,6 +31,10 @@ public class Symptom {
 
     public String getDescription() { 
     return description; 
+    }
+    
+    public String getId(){
+        return id;
     }
 
 }

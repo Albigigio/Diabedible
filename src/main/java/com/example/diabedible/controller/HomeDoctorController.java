@@ -42,9 +42,7 @@ public class HomeDoctorController implements ViewManaged {
     @FXML private LineChart<String, Number> bloodSugarChart;
     @FXML private Button logoutBtn;
     @FXML private Label statusLabel;
-
-    // ✅ Nuova lista sintomi
-    @FXML private ListView<String> symptomList;
+    @FXML private ListView<String> symptomList; // ✅ Lista sintomi
 
     private ViewManager viewManager;
 
@@ -63,19 +61,26 @@ public class HomeDoctorController implements ViewManaged {
         this.viewManager = viewManager;
     }
 
+    // 🔄 Inizializzazione e listener automatico
     @FXML
     public void initialize() {
         welcomeText.setText(WELCOME_TEXT);
-
-        // Dummy patient data
         loadDummyData();
 
-        // Popola ComboBox con i pazienti
+        // Popola ComboBox con pazienti
         patientSelector.getItems().addAll(patientsData.keySet());
-        // 👉 Quando cambio paziente, aggiorno anche i sintomi
         patientSelector.setOnAction(e -> loadPatientData(patientSelector.getValue()));
+
+        // ✅ Ascolta modifiche dal TherapyService
+        AppInjector.getTherapyService().lastUpdatedTherapyProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && patientSelector.getValue() != null &&
+                newVal.getPatientId().equals(patientSelector.getValue())) {
+                refreshTherapyStatus(newVal);
+            }
+        });
     }
 
+    // 🩸 Dati fittizi del grafico
     private void loadDummyData() {
         Map<LocalDate, Map<String, Double>> data = new LinkedHashMap<>();
         LocalDate today = LocalDate.now().minusDays(4);
@@ -89,6 +94,7 @@ public class HomeDoctorController implements ViewManaged {
         patientsData.put("Luisa Bianchi", data); // stesso dummy
     }
 
+    // 🧠 Caricamento dati paziente
     private void loadPatientData(String patientName) {
         // ✅ Grafico glicemia
         bloodSugarChart.getData().clear();
@@ -124,23 +130,30 @@ public class HomeDoctorController implements ViewManaged {
         // ✅ Stato terapia
         List<Therapy> therapies = therapyService.getPatientTherapies(patientName);
         boolean completed = !therapies.isEmpty() &&
-                            therapies.stream()
-                                     .allMatch(t -> t.getMedications()
-                                                     .stream()
-                                                     .allMatch(Medication::isTaken));
-        if (completed) {
-            statusLabel.setText("Terapia completata");
-        } else {
-            statusLabel.setText("Terapia in corso");
-        }
+                therapies.stream()
+                        .allMatch(t -> t.getMedications()
+                                .stream()
+                                .allMatch(Medication::isTaken));
+        statusLabel.setText(completed ? "Terapia completata ✅" : "Terapia in corso ❌");
 
         // ✅ Sintomi del paziente
         symptomList.getItems().clear();
         symptomService.listPatientSymptoms(patientName).forEach(symptom -> {
             symptomList.getItems().add(
-                symptom.getDateTime() + " - " + symptom.getDescription()
+                    symptom.getDateTime() + " - " + symptom.getDescription()
             );
         });
+    }
+
+    // 🔁 Metodo richiamato automaticamente quando cambia lo stato terapia
+    private void refreshTherapyStatus(Therapy therapy) {
+        boolean completed = therapy.getMedications().stream().allMatch(Medication::isTaken);
+        statusLabel.setText(completed ? "Terapia completata ✅" : "Terapia in corso ❌");
+
+        // (opzionale) notifica visiva
+        if (completed) {
+            AlertUtils.info("Aggiornamento", null, "Il paziente ha completato la terapia ✅");
+        }
     }
 
     @FXML
