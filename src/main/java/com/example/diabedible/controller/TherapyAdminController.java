@@ -15,8 +15,6 @@ public class TherapyAdminController {
 
     @FXML private TextField therapyNameField, medNameField, doseField;
     @FXML private ListView<String> medList;
-
-    // ✅ nuova ComboBox per scegliere il paziente
     @FXML private ComboBox<String> patientSelector;
 
     private final List<Medication> meds = new ArrayList<>();
@@ -24,9 +22,16 @@ public class TherapyAdminController {
 
     @FXML
     private void initialize() {
-        // Popola la combo dei pazienti. Per ora è un esempio statico.
-        // Sostituisci con dati reali se hai un repository utenti.
-        patientSelector.getItems().addAll("Mario Rossi", "Luisa Bianchi");
+        var dir = AppInjector.getPatientDirectoryServiceStatic();
+        var current = com.example.diabedible.utils.AppSession.getCurrentUser();
+
+        if (current != null) {
+            // mostra solo i pazienti assegnati al medico
+            patientSelector.getItems().setAll(dir.listPatientsForDoctor(current.getUsername()));
+        } else {
+            // fallback: se non c'è sessione (o login non attivo), mostra tutti i diabetici
+            patientSelector.getItems().setAll(dir.listAllDiabeticUsernames());
+        }
     }
 
     @FXML
@@ -34,6 +39,7 @@ public class TherapyAdminController {
         String name = medNameField.getText();
         String dose = doseField.getText();
         if (name.isBlank()) return;
+
         meds.add(new Medication(UUID.randomUUID().toString(), name, dose));
         medList.getItems().add(name + " - " + dose);
         medNameField.clear();
@@ -61,21 +67,20 @@ public class TherapyAdminController {
         therapyService.prescribeTherapy(t);
 
         showAlert("Terapia assegnata con successo a " + patientId);
+
         // Pulisci la schermata
         therapyNameField.clear();
         medList.getItems().clear();
         meds.clear();
     }
-
-    /** ✅ Ritorna l'ID del paziente selezionato (qui il nome funge da ID) */
+    
     private String getSelectedPatientId() {
         return patientSelector.getValue();
     }
 
-    /** ✅ Ritorna l'ID del medico loggato (demo, da sostituire) */
     private String getCurrentDoctorId() {
-        // Se hai un sistema di login, recupera l'ID del medico corrente
-        return "doctor-demo";
+        var current = com.example.diabedible.utils.AppSession.getCurrentUser();
+        return current != null ? current.getUsername() : "doctor-unknown";
     }
 
     private void showAlert(String message) {

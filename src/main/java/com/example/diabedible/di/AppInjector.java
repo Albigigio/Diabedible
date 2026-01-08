@@ -2,39 +2,53 @@ package com.example.diabedible.di;
 
 import com.example.diabedible.controller.LoginController;
 import com.example.diabedible.repository.InMemorySymptomRepository;
+import com.example.diabedible.repository.InMemoryTherapyRepository;
 import com.example.diabedible.repository.InMemoryUserRepository;
 import com.example.diabedible.repository.SymptomRepository;
+import com.example.diabedible.repository.TherapyRepository;
 import com.example.diabedible.repository.UserRepository;
 import com.example.diabedible.service.*;
 import com.example.diabedible.utils.ViewManager;
-import com.example.diabedible.repository.TherapyRepository;
-import com.example.diabedible.repository.InMemoryTherapyRepository;
 
-/**
- * A very small hand-rolled dependency injector for the application.
- * It provides singleton services and simple factory methods for controllers.
- */
+
 public class AppInjector {
 
-    // Singleton repositories
+    
+    private static AppInjector INSTANCE;
+
+    public static AppInjector get() {
+        if (INSTANCE == null) throw new IllegalStateException("AppInjector non inizializzato");
+        return INSTANCE;
+    }
+
+ 
     private final UserRepository userRepository = new InMemoryUserRepository();
 
-    // Singleton services
+   
+    private final PatientDirectoryService patientDirectoryService = new PatientDirectoryService(userRepository);
+
+    
     private final AuthService authService = new LoginService(userRepository);
     private final LogoutService logoutService = new DefaultLogoutService(this);
 
-    public AppInjector() {
-        // Optionally seed demo data
-        com.example.diabedible.utils.DemoDataProvider.seedUsers(userRepository);
-    }
+    private static final SymptomRepository symptomRepository = new InMemorySymptomRepository();
+    private static final SymptomService symptomService = new SymptomService();
 
-   private static final SymptomRepository symptomRepository = new InMemorySymptomRepository();
-   private static final SymptomService symptomService = new SymptomService();
- 
     private static final TherapyRepository therapyRepository = new InMemoryTherapyRepository();
-    
     private static final TherapyService therapyService = new TherapyService(therapyRepository);
 
+    public AppInjector() {
+        INSTANCE = this;
+
+        com.example.diabedible.utils.DemoDataProvider.seedUsers(userRepository);
+
+        seedDemoPatientAssignments();
+    }
+
+    private void seedDemoPatientAssignments() {
+        patientDirectoryService.ensureRecordExists("IDMario");
+        patientDirectoryService.assignReferenceDoctor("IDMario", "DRGiulia");
+    }
 
     public UserRepository getUserRepository() {
         return userRepository;
@@ -48,17 +62,23 @@ public class AppInjector {
         return logoutService;
     }
 
-    // Controller factories
+    public PatientDirectoryService getPatientDirectoryService() {
+        return patientDirectoryService;
+    }
+
+    public static PatientDirectoryService getPatientDirectoryServiceStatic() {
+        return AppInjector.get().getPatientDirectoryService();
+    }
+
     public LoginController createLoginController(ViewManager viewManager) {
         return new LoginController(getAuthService(), viewManager);
     }
 
     public static SymptomService getSymptomService() {
-    return symptomService;
-}
+        return symptomService;
+    }
 
     public static TherapyService getTherapyService() {
-    return therapyService;
-}
-
+        return therapyService;
+    }
 }
