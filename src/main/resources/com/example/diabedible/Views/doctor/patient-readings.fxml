@@ -1,0 +1,6 @@
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.controller.PatientReadingsController">
+
+    <Label text="Glicemie dei miei pazienti"/>
+    <ListView fx:id="listView"/>
+</VBox>

@@ -6,10 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Collection of DailyReadings keyed by date, preserving insertion order.
- */
-public final class ReadingsCollection {
+
+public final class ReadingCollection {
 
     private final Map<LocalDate, DailyReadings> byDate = new LinkedHashMap<>();
 
@@ -23,10 +21,11 @@ public final class ReadingsCollection {
     }
 
     public void addReading(BloodSugarReading reading) {
-        Objects.requireNonNull(reading, "reading");
-        DailyReadings day = getOrCreate(reading.getDate());
-        day.put(reading.getSlot(), reading.getValue());
-    }
+    Objects.requireNonNull(reading, "reading");
+    DailyReadings day = getOrCreate(reading.getDate());  
+    day.put(reading.getSlot(), reading.getValue());
+}
+
 
     public void addReading(LocalDate date, String slot, double value) {
         getOrCreate(date).put(slot, value);

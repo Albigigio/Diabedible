@@ -1,7 +1,7 @@
 package com.example.diabedible.viewmodel;
 
 import com.example.diabedible.model.reading.DailyReadings;
-import com.example.diabedible.model.reading.ReadingsCollection;
+import com.example.diabedible.model.reading.ReadingCollection;
 import com.example.diabedible.model.reading.TimeSlot;
 
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ public class HomeDiabeticViewModel {
     private static final double MIN_THRESHOLD = 70.0;
     private static final double MAX_THRESHOLD = 180.0;
 
-    private final ReadingsCollection readings = new ReadingsCollection();
+    private final ReadingCollection readings = new ReadingCollection();
     // Tracks how many times a slot has been modified for a given day
     private final Map<LocalDate, Map<String, Integer>> modificationCountPerSlot = new HashMap<>();
 

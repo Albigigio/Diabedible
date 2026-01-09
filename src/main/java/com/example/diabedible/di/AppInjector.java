@@ -36,6 +36,8 @@ public class AppInjector {
 
     private static final TherapyRepository therapyRepository = new InMemoryTherapyRepository();
     private static final TherapyService therapyService = new TherapyService(therapyRepository);
+    private final ReadingService readingService =new ReadingService(patientDirectoryService);
+
 
     public AppInjector() {
         INSTANCE = this;
@@ -81,4 +83,14 @@ public class AppInjector {
     public static TherapyService getTherapyService() {
         return therapyService;
     }
+
+    public ReadingService getReadingService() {
+    return readingService;
+    }
+
+    public static ReadingService getReadingServiceStatic() {
+    return AppInjector.get().getReadingService();
+    }
+
+   
 }

@@ -1,0 +1,11 @@
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.controller.ReadingEntryController">
+
+    <Label text="Inserisci glicemia"/>
+
+    <TextField fx:id="valueField" promptText="Valore glicemia"/>
+
+    <ComboBox fx:id="contextBox"/>
+
+    <Button text="Salva" onAction="#onSave"/>
+</VBox>
