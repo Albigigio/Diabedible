@@ -1,9 +1,10 @@
 module com.example.diabedible {
+
     // JavaFX
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-    // (facoltativo, ma spesso già transitivo) // requires javafx.base;
+    requires javafx.swing;   
 
     // UI extra
     requires org.controlsfx.controls;
@@ -26,8 +27,9 @@ module com.example.diabedible {
     opens com.example.diabedible.controller to javafx.fxml;
     opens com.example.diabedible.utils to javafx.fxml;
 
-    //  Consenti a Jackson (e JavaFX) di riflettere sui model
-    opens com.example.diabedible.model to com.fasterxml.jackson.databind, javafx.base;
+    // Consenti a Jackson (e JavaFX) di riflettere sui model
+    opens com.example.diabedible.model 
+        to com.fasterxml.jackson.databind, javafx.base;
 
     // Export dei package pubblici
     exports com.example.diabedible;
