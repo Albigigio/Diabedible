@@ -18,7 +18,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Global uncaught exception handler: log and show a friendly dialog
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             LOGGER.error("Uncaught exception on thread {}", t.getName(), e);
             AlertUtils.exception(
@@ -33,7 +32,6 @@ public class Main extends Application {
         ViewManager viewManager = new ViewManager(primaryStage, injector);
 
         try {
-            // Delegate initial scene creation and CSS loading to ViewManager
             LoginController loginController = injector.createLoginController(viewManager);
             viewManager.switchSceneWithController(
                     FXMLPaths.LOGIN,

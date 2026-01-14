@@ -1,0 +1,8 @@
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.controller.PatientAlertsController">
+
+    <Label text="Segnalazioni glicemia (fuori soglia)"/>
+    <ListView fx:id="alertsList"/>
+
+    <Button text="Aggiorna" onAction="#onRefresh"/>
+</VBox>

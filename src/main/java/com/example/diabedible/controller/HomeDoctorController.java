@@ -9,6 +9,7 @@ import com.example.diabedible.model.Therapy;
 import com.example.diabedible.service.TherapyService;
 import com.example.diabedible.service.SymptomService;
 import javafx.fxml.FXML;
+import com.example.diabedible.utils.FXMLPaths;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -56,13 +57,13 @@ public class HomeDoctorController implements ViewManaged {
     private final XYChart.Series<String, Number> morningSeries = new XYChart.Series<>();
     private final XYChart.Series<String, Number> afternoonSeries = new XYChart.Series<>();
 
-    @Override
+    
     public void setViewManager(ViewManager viewManager) {
         this.viewManager = viewManager;
     }
 
-    // 🔄 Inizializzazione e listener automatico
-    @FXML
+    //Inizializzazione e listener automatico
+    
     public void initialize() {
         welcomeText.setText(WELCOME_TEXT);
         loadDummyData();
@@ -71,7 +72,7 @@ public class HomeDoctorController implements ViewManaged {
         patientSelector.getItems().addAll(patientsData.keySet());
         patientSelector.setOnAction(e -> loadPatientData(patientSelector.getValue()));
 
-        // ✅ Ascolta modifiche dal TherapyService
+        //  Ascolta modifiche dal TherapyService
         AppInjector.getTherapyService().lastUpdatedTherapyProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && patientSelector.getValue() != null &&
                 newVal.getPatientId().equals(patientSelector.getValue())) {
@@ -80,7 +81,7 @@ public class HomeDoctorController implements ViewManaged {
         });
     }
 
-    // 🩸 Dati fittizi del grafico
+    //  Dati fittizi del grafico
     private void loadDummyData() {
         Map<LocalDate, Map<String, Double>> data = new LinkedHashMap<>();
         LocalDate today = LocalDate.now().minusDays(4);
@@ -94,7 +95,7 @@ public class HomeDoctorController implements ViewManaged {
         patientsData.put("Luisa Bianchi", data); // stesso dummy
     }
 
-    // 🧠 Caricamento dati paziente
+    // Caricamento dati paziente
     private void loadPatientData(String patientName) {
         // ✅ Grafico glicemia
         bloodSugarChart.getData().clear();
@@ -119,7 +120,7 @@ public class HomeDoctorController implements ViewManaged {
         }
         bloodSugarChart.getData().addAll(morningSeries, afternoonSeries);
 
-        // ✅ Checklist fittizia
+        // Checklist fittizia
         checklistContainer.getChildren().clear();
         for (String task : CHECKLIST_ITEMS) {
             CheckBox checkBox = new CheckBox(task);
@@ -127,7 +128,7 @@ public class HomeDoctorController implements ViewManaged {
             checklistContainer.getChildren().add(checkBox);
         }
 
-        // ✅ Stato terapia
+        // Stato terapia
         List<Therapy> therapies = therapyService.getPatientTherapies(patientName);
         boolean completed = !therapies.isEmpty() &&
                 therapies.stream()
@@ -136,7 +137,7 @@ public class HomeDoctorController implements ViewManaged {
                                 .allMatch(Medication::isTaken));
         statusLabel.setText(completed ? "Terapia completata ✅" : "Terapia in corso ❌");
 
-        // ✅ Sintomi del paziente
+        // Sintomi del paziente
         symptomList.getItems().clear();
         symptomService.listPatientSymptoms(patientName).forEach(symptom -> {
             symptomList.getItems().add(
@@ -145,14 +146,17 @@ public class HomeDoctorController implements ViewManaged {
         });
     }
 
-    // 🔁 Metodo richiamato automaticamente quando cambia lo stato terapia
+    //  Metodo richiamato automaticamente quando cambia lo stato terapia
     private void refreshTherapyStatus(Therapy therapy) {
         boolean completed = therapy.getMedications().stream().allMatch(Medication::isTaken);
         statusLabel.setText(completed ? "Terapia completata ✅" : "Terapia in corso ❌");
 
         // (opzionale) notifica visiva
         if (completed) {
-            AlertUtils.info("Aggiornamento", null, "Il paziente ha completato la terapia ✅");
+            AlertUtils.info("Aggiornamento", 
+                            null, 
+                            "Il paziente ha completato la terapia ✅"
+                        );
         }
     }
 
@@ -161,7 +165,9 @@ public class HomeDoctorController implements ViewManaged {
         if (viewManager != null) {
             viewManager.getLogoutService().logout(viewManager);
         } else {
-            LOGGER.warn("ViewManager non impostato durante il logout");
+            LOGGER.warn(
+                "ViewManager non impostato durante il logout"
+            );
             showAlert(ALERT_LOGOUT_ERROR);
         }
     }
@@ -169,4 +175,21 @@ public class HomeDoctorController implements ViewManaged {
     private void showAlert(String message) {
         AlertUtils.warning(ALERT_TITLE_WARNING, null, message);
     }
+
+    @FXML
+private void onAlerts() {
+    if (viewManager != null) {
+        viewManager.switchScene(
+                FXMLPaths.PATIENT_ALERTS,
+                "Segnalazioni glicemia",
+                1200,
+                800,
+                true
+        );
+    } else {
+        LOGGER.warn("ViewManager non impostato durante la navigazione alle segnalazioni");
+        AlertUtils.warning("Errore", null, "Impossibile aprire le segnalazioni");
+    }
+}
+
 }

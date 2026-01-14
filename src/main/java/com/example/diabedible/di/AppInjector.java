@@ -13,32 +13,38 @@ import com.example.diabedible.utils.ViewManager;
 
 public class AppInjector {
 
-    
     private static AppInjector INSTANCE;
 
     public static AppInjector get() {
-        if (INSTANCE == null) throw new IllegalStateException("AppInjector non inizializzato");
+        if (INSTANCE == null) {
+            throw new IllegalStateException("AppInjector non inizializzato");
+        }
         return INSTANCE;
     }
 
- 
     private final UserRepository userRepository = new InMemoryUserRepository();
 
-   
-    private final PatientDirectoryService patientDirectoryService = new PatientDirectoryService(userRepository);
-
-    
-    private final AuthService authService = new LoginService(userRepository);
-    private final LogoutService logoutService = new DefaultLogoutService(this);
-
     private static final SymptomRepository symptomRepository = new InMemorySymptomRepository();
-    private static final SymptomService symptomService = new SymptomService();
 
     private static final TherapyRepository therapyRepository = new InMemoryTherapyRepository();
+
+
+    private final AuthService authService = new LoginService(userRepository);
+
+    private final LogoutService logoutService = new DefaultLogoutService(this);
+
+    private static final SymptomService symptomService = new SymptomService();
+
     private static final TherapyService therapyService = new TherapyService(therapyRepository);
-    private final ReadingService readingService =new ReadingService(patientDirectoryService);
 
+ 
+    private final PatientDirectoryService patientDirectoryService = new PatientDirectoryService(userRepository);
 
+    private final ReadingService readingService = new ReadingService(patientDirectoryService);
+
+    private final ReadingAlertService readingAlertService = new ReadingAlertService(readingService);
+
+   
     public AppInjector() {
         INSTANCE = this;
 
@@ -48,9 +54,11 @@ public class AppInjector {
     }
 
     private void seedDemoPatientAssignments() {
+        
         patientDirectoryService.ensureRecordExists("IDMario");
         patientDirectoryService.assignReferenceDoctor("IDMario", "DRGiulia");
     }
+
 
     public UserRepository getUserRepository() {
         return userRepository;
@@ -68,12 +76,16 @@ public class AppInjector {
         return patientDirectoryService;
     }
 
-    public static PatientDirectoryService getPatientDirectoryServiceStatic() {
-        return AppInjector.get().getPatientDirectoryService();
+    public ReadingService getReadingService() {
+        return readingService;
     }
 
-    public LoginController createLoginController(ViewManager viewManager) {
-        return new LoginController(getAuthService(), viewManager);
+    public ReadingAlertService getReadingAlertService() {
+        return readingAlertService;
+    }
+
+    public static PatientDirectoryService getPatientDirectoryServiceStatic() {
+        return AppInjector.get().getPatientDirectoryService();
     }
 
     public static SymptomService getSymptomService() {
@@ -84,13 +96,15 @@ public class AppInjector {
         return therapyService;
     }
 
-    public ReadingService getReadingService() {
-    return readingService;
-    }
-
     public static ReadingService getReadingServiceStatic() {
-    return AppInjector.get().getReadingService();
+        return AppInjector.get().getReadingService();
     }
 
-   
+    public static ReadingAlertService getReadingAlertServiceStatic() {
+        return AppInjector.get().getReadingAlertService();
+    }
+
+    public LoginController createLoginController(ViewManager viewManager) {
+        return new LoginController(getAuthService(), viewManager);
+    }
 }

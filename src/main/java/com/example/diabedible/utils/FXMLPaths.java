@@ -8,8 +8,10 @@ public class FXMLPaths {
     public static final String HOME_DIABETIC = BASE_PATH + "diabetic/home-diabetic.fxml";
     public static final String HOME_DOCTOR = BASE_PATH + "doctor/home-doctor.fxml";
     public static final String HOME_ADMIN = BASE_PATH + "Admin/home-admin.fxml";
+    public static final String PATIENT_ALERTS = "/com/example/diabedible/Views/patient-alerts.fxml";
+
 
     private FXMLPaths() {
-        //costruttore privato per impedire istanziazione
+        
     }
 }
