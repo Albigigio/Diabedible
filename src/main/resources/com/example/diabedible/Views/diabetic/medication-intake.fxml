@@ -1,0 +1,10 @@
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.diabedible.controller.MedicationIntakeController">
+
+    <Label text="Registra assunzione farmaco"/>
+
+    <TextField fx:id="medNameField" promptText="Nome farmaco"/>
+    <TextField fx:id="doseField" promptText="Dose"/>
+
+    <Button text="Registra" onAction="#onRegister"/>
+</VBox>

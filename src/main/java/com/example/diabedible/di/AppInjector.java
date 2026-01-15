@@ -44,6 +44,9 @@ public class AppInjector {
 
     private final ReadingAlertService readingAlertService = new ReadingAlertService(readingService);
 
+    private final IntakeService intakeService =  new IntakeService(therapyService);
+
+
    
     public AppInjector() {
         INSTANCE = this;
@@ -107,4 +110,13 @@ public class AppInjector {
     public LoginController createLoginController(ViewManager viewManager) {
         return new LoginController(getAuthService(), viewManager);
     }
+
+    public IntakeService getIntakeService() {
+        return intakeService;
+    }
+
+    public static IntakeService getIntakeServiceStatic() {
+        return AppInjector.get().getIntakeService();
+    }
+
 }

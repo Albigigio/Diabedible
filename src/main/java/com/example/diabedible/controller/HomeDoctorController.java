@@ -144,6 +144,19 @@ public class HomeDoctorController implements ViewManaged {
                     symptom.getDateTime() + " - " + symptom.getDescription()
             );
         });
+
+        boolean adherenceToday =
+            AppInjector.getIntakeServiceStatic().isDailyAdherenceComplete(
+                    patientSelector.getValue(),
+                    LocalDate.now()
+                );
+
+        statusLabel.setText(
+            adherenceToday
+                ? "Aderenza terapia oggi ✅"
+                : "Aderenza terapia oggi ❌"
+            );
+        
     }
 
     //  Metodo richiamato automaticamente quando cambia lo stato terapia
@@ -191,5 +204,6 @@ private void onAlerts() {
         AlertUtils.warning("Errore", null, "Impossibile aprire le segnalazioni");
     }
 }
+
 
 }
