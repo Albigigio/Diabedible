@@ -28,17 +28,37 @@ public class PatientProfile {
         this.clinicalNotes = clinicalNotes;
     }
 
-    public RiskFactors getRiskFactors() { return riskFactors; }
-    public void setRiskFactors(RiskFactors riskFactors) { this.riskFactors = riskFactors; }
+    public RiskFactors getRiskFactors() { 
+        return riskFactors; 
+    }
 
-    public Comorbidities getComorbidities() { return comorbidities; }
-    public void setComorbidities(Comorbidities comorbidities) { this.comorbidities = comorbidities; }
+    public void setRiskFactors(RiskFactors riskFactors) { 
+        this.riskFactors = riskFactors; 
+    }
 
-    public List<String> getPastPathologies() { return pastPathologies; }
-    public void setPastPathologies(List<String> pastPathologies) { this.pastPathologies = pastPathologies; }
+    public Comorbidities getComorbidities() { 
+        return comorbidities; 
+    }
 
-    public String getClinicalNotes() { return clinicalNotes; }
-    public void setClinicalNotes(String clinicalNotes) { this.clinicalNotes = clinicalNotes; }
+    public void setComorbidities(Comorbidities comorbidities) { 
+        this.comorbidities = comorbidities;
+    }
+
+    public List<String> getPastPathologies() { 
+        return pastPathologies; 
+    }
+
+    public void setPastPathologies(List<String> pastPathologies) { 
+        this.pastPathologies = pastPathologies; 
+    }
+
+    public String getClinicalNotes() { 
+        return clinicalNotes; 
+    }
+
+    public void setClinicalNotes(String clinicalNotes) { 
+        this.clinicalNotes = clinicalNotes; 
+    }
 }
 
 

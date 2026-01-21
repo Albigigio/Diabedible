@@ -35,9 +35,23 @@ public class MedicationIntake {
         this.timestamp = Objects.requireNonNull(timestamp);
     }
 
-    public String getId() { return id; }
-    public String getPatientUsername() { return patientUsername; }
-    public String getMedicationName() { return medicationName; }
-    public String getDose() { return dose; }
-    public LocalDateTime getTimestamp() { return timestamp; }
+    public String getId() { 
+        return id; 
+    }
+
+    public String getPatientUsername() { 
+        return patientUsername; 
+    }
+
+    public String getMedicationName() { 
+        return medicationName; 
+    }
+
+    public String getDose() { 
+        return dose; 
+    }
+
+    public LocalDateTime getTimestamp() { 
+        return timestamp; 
+    }
 }
