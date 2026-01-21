@@ -1,6 +1,7 @@
 package com.example.diabedible.controller;
 
 import com.example.diabedible.ViewManaged;
+import com.example.diabedible.di.AppInjector;
 import com.example.diabedible.utils.AlertUtils;
 import com.example.diabedible.utils.DateTimeUtil;
 import com.example.diabedible.utils.ViewManager;
@@ -88,11 +89,10 @@ public class HomeDiabeticController implements ViewManaged {
 
     @FXML
     public void initialize() {
-        // Initialize components that do not depend on ViewManager
         initializeSampleData();
         setupCharts();
 
-        // Welcome text
+        
         welcomeText.setText(WELCOME_TEXT);
 
         // Default to today
@@ -110,7 +110,31 @@ public class HomeDiabeticController implements ViewManaged {
         initializeChecklist();
         // Update available time slots
         updateAvailableTimeSlots();
+
+         var user = com.example.diabedible.utils.AppSession.getCurrentUser();
+    if (user != null) {
+        var intakeService = AppInjector.getIntakeServiceStatic();
+        var adherenceService = AppInjector.getAdherenceAlertServiceStatic();
+
+        String username = user.getUsername();
+        LocalDate today = LocalDate.now();
+
+        if (adherenceService.shouldAlertPatientToday(username)) {
+
+             boolean hasAnyIntake = intakeService.hasAnyIntakeOnDate(username, today);
+             String message = hasAnyIntake
+            ? "Oggi hai registrato solo parte delle assunzioni prescritte."
+            : "Oggi non risulta registrata alcuna assunzione dei farmaci prescritti.";
+
+            AlertUtils.warning(
+            "Promemoria terapia",
+            null,
+            message + "\nRicordati di registrare correttamente le assunzioni."
+            );
+        }
+
     }
+}
 
     private void updateAvailableTimeSlots() {
         timeSlotComboBox.getItems().clear();

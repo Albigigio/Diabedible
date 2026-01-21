@@ -63,4 +63,20 @@ public class IntakeService {
     private void save() {
         DataStore.saveListToFile(intakes, FILE_PATH);
     }
+
+    public boolean hasAnyIntakeOnDate(String patientUsername, LocalDate date) {
+    return intakes.stream()
+            .anyMatch(i ->
+                    i.getPatientUsername().equals(patientUsername) &&
+                    i.getTimestamp().toLocalDate().equals(date)
+            );
+    }
+
+    public boolean hasAnyIntakeInDateRange(String patientUsername, LocalDate from, LocalDate to) {
+    return intakes.stream()
+            .filter(i -> i.getPatientUsername().equals(patientUsername))
+            .map(i -> i.getTimestamp().toLocalDate())
+            .anyMatch(d -> (!d.isBefore(from) && !d.isAfter(to)));
+    }
+    
 }
