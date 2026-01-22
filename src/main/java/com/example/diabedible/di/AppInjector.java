@@ -48,6 +48,8 @@ public class AppInjector {
 
     private final AdherenceAlertService adherenceAlertService = new AdherenceAlertService(intakeService, therapyService, patientDirectoryService);
 
+    private final ReadingStatsService readingStatsService = new ReadingStatsService(readingService);
+
 
 
    
@@ -129,5 +131,14 @@ public class AppInjector {
     public static AdherenceAlertService getAdherenceAlertServiceStatic() {
     return AppInjector.get().getAdherenceAlertService();
 }
+
+public ReadingStatsService getReadingStatsService() { 
+    return readingStatsService; 
+}
+
+public static ReadingStatsService getReadingStatsServiceStatic() {
+    return AppInjector.get().getReadingStatsService();
+}
+
 
 }

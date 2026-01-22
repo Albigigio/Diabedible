@@ -9,6 +9,7 @@ public class FXMLPaths {
     public static final String HOME_DOCTOR = BASE_PATH + "doctor/home-doctor.fxml";
     public static final String HOME_ADMIN = BASE_PATH + "Admin/home-admin.fxml";
     public static final String PATIENT_ALERTS = "/com/example/diabedible/Views/patient-alerts.fxml";
+    public static final String PATIENT_TRENDS = "/com/example/diabedible/Views/patient-trends.fxml";
 
 
     private FXMLPaths() {

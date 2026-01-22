@@ -79,6 +79,38 @@ public class HomeDoctorController implements ViewManaged {
                 refreshTherapyStatus(newVal);
             }
         });
+
+        var doctor = com.example.diabedible.utils.AppSession.getCurrentUser();
+        if (doctor != null) {
+            var alerts = AppInjector.getAdherenceAlertServiceStatic().detailedPatientsWithConsecutiveNonAdherence(doctor.getUsername(), 3, 14);
+
+            if (!alerts.isEmpty()) {
+
+                StringBuilder noLogs = new StringBuilder();
+                StringBuilder incomplete = new StringBuilder();
+
+                for (var a : alerts) {
+                    if (a.getType() == com.example.diabedible.model.NonAdherenceType.NO_LOGS) {
+                        noLogs.append("- ").append(a.toString()).append("\n");
+                    } else {
+                        incomplete.append("- ").append(a.toString()).append("\n");
+                    }
+                }
+                StringBuilder msg = new StringBuilder("Attenzione: non aderenza ≥ 3 giorni consecutivi.\n\n");
+
+                if (!noLogs.isEmpty()) {
+                    msg.append("Nessuna registrazione:\n").append(noLogs).append("\n");
+                }
+        
+                if (!incomplete.isEmpty()) {
+                    msg.append("Registrazioni incomplete:\n").append(incomplete);
+                }
+
+                AlertUtils.warning("Pazienti non aderenti", null, msg.toString());
+            }
+        }
+
+       
     }
 
     //  Dati fittizi del grafico
@@ -190,20 +222,35 @@ public class HomeDoctorController implements ViewManaged {
     }
 
     @FXML
-private void onAlerts() {
-    if (viewManager != null) {
-        viewManager.switchScene(
+    private void onAlerts() {
+        if (viewManager != null) {
+            viewManager.switchScene(
                 FXMLPaths.PATIENT_ALERTS,
                 "Segnalazioni glicemia",
                 1200,
                 800,
                 true
-        );
-    } else {
-        LOGGER.warn("ViewManager non impostato durante la navigazione alle segnalazioni");
-        AlertUtils.warning("Errore", null, "Impossibile aprire le segnalazioni");
-    }
+            );
+        } else {
+            LOGGER.warn("ViewManager non impostato durante la navigazione alle segnalazioni");
+            AlertUtils.warning("Errore", null, "Impossibile aprire le segnalazioni");
+        }
 }
 
-
+    @FXML
+    private void onTrends() {
+        if (viewManager != null) {
+            viewManager.switchScene(
+                FXMLPaths.PATIENT_TRENDS,
+                "Trend glicemia",
+                1200,
+                800,
+                true
+            );
+        } else {
+            LOGGER.warn("ViewManager non impostato durante la navigazione ai trend");
+            AlertUtils.warning("Errore", null, "Impossibile aprire i trend");
+        }
+    }
+    
 }
