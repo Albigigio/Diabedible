@@ -48,6 +48,9 @@
                 </yAxis>
             </LineChart>
 
+            <!-- bottone per visualizzare il trend -->
+            <Button text="Trend glicemia" onAction="#onTrends"/>
+
             <!-- Checklist del paziente -->
             <VBox spacing="10">
                 <Label text="Checklist giornaliera del paziente:" style="-fx-font-weight: bold;" />
