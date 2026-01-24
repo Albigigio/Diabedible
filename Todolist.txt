@@ -20,7 +20,7 @@ Goal di Base:
             [X] Alert verso il paziente
             [X] Alert verso il medico
         [X] Segnalazione al medico del superamento della soglia glicemica
-            [] Diverse modalità di segnalazione in base alla gravità
+            [X] Diverse modalità di segnalazione in base alla gravità
         [X] Sistema di registro delle modifiche
             [X] Registro chi modifica cosa
             [X] Registro operazioni
