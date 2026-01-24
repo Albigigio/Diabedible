@@ -50,6 +50,13 @@ public class AppInjector {
 
     private final ReadingStatsService readingStatsService = new ReadingStatsService(readingService);
 
+    private final AuditService auditService = new AuditService();
+
+    private final MessageService messageService = new MessageService();
+
+
+
+
 
 
    
@@ -140,5 +147,20 @@ public static ReadingStatsService getReadingStatsServiceStatic() {
     return AppInjector.get().getReadingStatsService();
 }
 
+public AuditService getAuditService() {
+    return auditService;
+}
 
+public static AuditService getAuditServiceStatic() {
+    return AppInjector.get().getAuditService();
+}
+
+
+public MessageService getMessageService() {
+    return messageService;
+}
+
+public static MessageService getMessageServiceStatic() {
+    return AppInjector.get().getMessageService();
+}
 }

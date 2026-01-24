@@ -1,0 +1,33 @@
+
+Goal di Base:
+    Paziente:
+        [X] Interazione tra diabetologo e paziente
+        [X] Sistema di autenticazione
+        [X] Memorizzazione delle rilevazioni giornaliere *
+        [X] Soglia normale (con limiti tra 80 e 130 mg/dL e dopo i pasti 180 mg/dL) *
+        [X] Aggiunta sintomi/patologie o terapia (con periodo associato) *
+    Diabetologo:
+        [X] Specificare le terapie che i pazienti deono seguire
+        [X] Inserimento farmaco + assunzioni + quantità + indicazioni
+        [X] Visualizzazione sintetica dati dei pazienti e andamento *
+        [X] Aggiunta o modifica della terapia
+        [X] Accesso a informazioni sul paziente (patologie, altre terapie)
+        [X] Aggiornamento e modifica dati dei pazienti
+    Sistema:
+        [X] Verifica coerenza delle assunzioni
+        [X] Spronare il paziente a completare gli inserimenti relativi
+        [X] Sistema di notifiche
+            [] Alert verso il paziente
+            [] Alert verso il medico
+        [X] Segnalazione al medico del superamento della soglia glicemica
+            [] Diverse modalità di segnalazione in base alla gravità
+        [X] Sistema di registro delle modifiche
+            [] Registro chi modifica cosa
+            [] Registro operazioni
+    Admin/responsabili:
+        [X] Inserimento dati nuovi pazienti e medici
+        [X] Assegnamento medico/paziente
+        [X] Informazioni di contatto
+Goal Extra (nostri):
+    [X] Sistema di messaggistica
+    

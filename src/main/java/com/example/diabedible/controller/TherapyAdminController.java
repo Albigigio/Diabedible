@@ -68,10 +68,24 @@ public class TherapyAdminController {
 
         showAlert("Terapia assegnata con successo a " + patientId);
 
+        var doctor = com.example.diabedible.utils.AppSession.getCurrentUser();
+
+        AppInjector.getAuditServiceStatic().log(new com.example.diabedible.model.AuditEvent(
+            null,
+            null,
+            doctor.getUsername(),
+            patientId,
+            "Prescritta nuova terapia: " + therapyName
+        ));
+
+
+
         // Pulisci la schermata
         therapyNameField.clear();
         medList.getItems().clear();
         meds.clear();
+
+
     }
     
     private String getSelectedPatientId() {

@@ -1,5 +1,7 @@
 package com.example.diabedible.service;
 
+import com.example.diabedible.di.AppInjector;
+import com.example.diabedible.model.Message;
 import com.example.diabedible.model.NonAdherenceType;
 import com.example.diabedible.model.PatientAdherenceAlert;
 import com.example.diabedible.model.Therapy;
@@ -71,7 +73,7 @@ public class AdherenceAlertService {
         String doctorUsername,
         int thresholdDays,
         int lookbackDays
-) {
+        ) {
     List<String> patients = patientDirectoryService.listPatientsForDoctor(doctorUsername);
     List<PatientAdherenceAlert> alerts = new ArrayList<>();
 
@@ -111,6 +113,20 @@ public class AdherenceAlertService {
                 streakTo = null;
             }
         }
+
+        // invio messaggio al paziente
+        AppInjector.getMessageServiceStatic().send( new Message(
+            null,
+            null,
+            "system",
+            p, // username paziente
+        "Promemoria terapia",
+        "Risulta una mancata aderenza alla terapia negli ultimi giorni. " +
+        "Contatta il tuo medico o verifica la terapia prescritta.",
+        false
+        )
+    );
+
     }
 
     // Ordina: prima NO_LOGS, poi INCOMPLETE_LOGS, e a parità più giorni prima
@@ -121,5 +137,9 @@ public class AdherenceAlertService {
     );
 
     return alerts;
+
+    
+
+
 }
 }
