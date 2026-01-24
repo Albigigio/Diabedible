@@ -17,13 +17,13 @@ Goal di Base:
         [X] Verifica coerenza delle assunzioni
         [X] Spronare il paziente a completare gli inserimenti relativi
         [X] Sistema di notifiche
-            [] Alert verso il paziente
-            [] Alert verso il medico
+            [X] Alert verso il paziente
+            [X] Alert verso il medico
         [X] Segnalazione al medico del superamento della soglia glicemica
             [] Diverse modalità di segnalazione in base alla gravità
         [X] Sistema di registro delle modifiche
-            [] Registro chi modifica cosa
-            [] Registro operazioni
+            [X] Registro chi modifica cosa
+            [X] Registro operazioni
     Admin/responsabili:
         [X] Inserimento dati nuovi pazienti e medici
         [X] Assegnamento medico/paziente
