@@ -1,10 +1,11 @@
 package com.example.diabedible.controller;
-package com.example.diabedible.controller;
 
-import javafx.event.ActionEvent;
+import com.example.diabedible.model.MedicationIntake;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class MedicationIntakeController {
 
@@ -14,65 +15,43 @@ public class MedicationIntakeController {
     @FXML
     private TextField doseField;
 
-    @FXML
-    private void onRegister(ActionEvent event) {
-        String name = medNameField != null ? medNameField.getText() : "";
-        String dose = doseField != null ? doseField.getText() : "";
+    private String currentPatientUsername; // Dovrà essere impostato durante l'inizializzazione
 
-        if (name.isBlank() || dose.isBlank()) {
-            Alert warn = new Alert(Alert.AlertType.WARNING);
-            warn.setTitle("Dati mancanti");
-            warn.setHeaderText(null);
-            warn.setContentText("Inserisci nome del farmaco e dose.");
-            warn.showAndWait();
-            return;
-        }
-
-        Alert info = new Alert(Alert.AlertType.INFORMATION);
-        info.setTitle("Assunzione registrata");
-        info.setHeaderText(null);
-        info.setContentText("Registrata assunzione di " + name + " (" + dose + ").");
-        info.showAndWait();
-
-        medNameField.clear();
-        doseField.clear();
+    public void initialize() {
+        // Inizializzazione del controller
     }
-}
-import com.example.diabedible.di.AppInjector;
-import com.example.diabedible.model.MedicationIntake;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
-
-import java.time.LocalDateTime;
-
-public class MedicationIntakeController {
-
-    @FXML private TextField medNameField;
-    @FXML private TextField doseField;
 
     @FXML
     private void onRegister() {
-        var user = com.example.diabedible.utils.AppSession.getCurrentUser();
-        if (user == null) return;
+        String medicationName = medNameField.getText().trim();
+        String dose = doseField.getText().trim();
 
+        if (medicationName.isEmpty() || dose.isEmpty()) {
+            // TODO: Mostrare un messaggio di errore
+            return;
+        }
+
+        // Crea una nuova registrazione di assunzione farmaco
         MedicationIntake intake = new MedicationIntake(
-                null,
-                user.getUsername(),
-                medNameField.getText(),
-                doseField.getText(),
-                LocalDateTime.now()
+            UUID.randomUUID().toString(),
+            currentPatientUsername,
+            medicationName,
+            dose,
+            LocalDateTime.now()
         );
 
-        AppInjector.getIntakeServiceStatic().registerIntake(intake);
+        // TODO: Salvare l'assunzione usando un service appropriato
 
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setHeaderText(null);
-        a.setContentText("Assunzione registrata ✅");
-        a.showAndWait();
+        // Pulisce i campi dopo la registrazione
+        clearFields();
+    }
 
+    private void clearFields() {
         medNameField.clear();
         doseField.clear();
     }
-}
 
+    public void setPatientUsername(String username) {
+        this.currentPatientUsername = username;
+    }
+}

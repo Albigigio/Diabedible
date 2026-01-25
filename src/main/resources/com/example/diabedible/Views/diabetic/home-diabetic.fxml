@@ -14,6 +14,7 @@
         <Font fx:id="welcomeFont" name="System Bold" size="18.0" />
         <Font fx:id="titleFont" name="System Bold" size="20.0" />
         <Font fx:id="statsTitleFont" name="System Bold" size="16.0" />
+        <ToggleGroup fx:id="navGroup"/>
     </fx:define>
 
     <!-- Barra superiore -->
@@ -39,11 +40,24 @@
             </padding>
             <children>
                 <Separator />
-                <Button fx:id="dashboardBtn" prefHeight="25.0" prefWidth="83.0"
-                        styleClass="nav-button" text="Dashboard" />
+                <ToggleButton fx:id="btnDashboard" toggleGroup="$navGroup"
+                              prefHeight="25.0" prefWidth="180.0"
+                              selected="true"
+                              styleClass="nav-button" text="Dashboard" />
+                <Separator />
+                <ToggleButton fx:id="btnReadingEntry" toggleGroup="$navGroup"
+                              styleClass="nav-button" text="Inserisci Glicemia" />
+                <Separator />
+                <ToggleButton fx:id="btnReadingList" toggleGroup="$navGroup"
+                              styleClass="nav-button" text="Storico Glicemie" />
+                <Separator />
+                <ToggleButton fx:id="btnTherapy" toggleGroup="$navGroup"
+                              styleClass="nav-button" text="La tua terapia" />
+                <Separator />
+                <ToggleButton fx:id="btnMedicationIntake" toggleGroup="$navGroup"
+                              styleClass="nav-button" text="Assunzione farmaci" />
                 <Separator />
                 <Button fx:id="profilebtn" styleClass="nav-button" text="Il tuo profilo" />
-                <!-- Nuovo pulsante per registrare un sintomo -->
                 <Separator />
                 <Button text="Registra Sintomo"
                         onAction="#onAddSymptomClicked"
@@ -54,37 +68,57 @@
 
     <!-- Contenuto centrale -->
     <center>
-        <TabPane fx:id="mainContent">
-            <tabs>
-                <Tab fx:id="bloodSugarTab" closable="false" text="Livello Glicemico">
-                    <content>
-                        <VBox spacing="20.0">
-                            <padding>
-                                <Insets topRightBottomLeft="20.0" />
-                            </padding>
-                            <Text text="Monitoraggio Livello Glicemico" />
-                            <LineChart fx:id="bloodSugarChart">
-                                <xAxis>
-                                    <CategoryAxis label="Giorni" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis label="Livello Glicemico (mg/dL)"
-                                                lowerBound="50.0"
-                                                tickUnit="25.0"
-                                                upperBound="300.0" />
-                                </yAxis>
-                            </LineChart>
-                            <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                <TextField fx:id="readingField" promptText="Inserisci valore glicemia" />
-                                <DatePicker fx:id="datePicker" />
-                                <ComboBox fx:id="timeSlotComboBox" promptText="Seleziona fascia oraria" />
-                                <Button onAction="#handleAddReading" text="Aggiungi" />
-                            </HBox>
-                        </VBox>
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
+        <StackPane fx:id="mainStack">
+            <children>
+                <!-- Dashboard originale -->
+                <VBox fx:id="dashboardPane"
+                      spacing="20.0"
+                      visible="${btnDashboard.selected}"
+                      managed="${btnDashboard.selected}">
+                    <padding>
+                        <Insets topRightBottomLeft="20.0" />
+                    </padding>
+                    <Text text="Monitoraggio Livello Glicemico" />
+                    <LineChart fx:id="bloodSugarChart">
+                        <xAxis>
+                            <CategoryAxis label="Giorni" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Livello Glicemico (mg/dL)"
+                                        lowerBound="50.0"
+                                        tickUnit="25.0"
+                                        upperBound="300.0" />
+                        </yAxis>
+                    </LineChart>
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <TextField fx:id="readingField" promptText="Inserisci valore glicemia" />
+                        <DatePicker fx:id="datePicker" />
+                        <ComboBox fx:id="timeSlotComboBox" promptText="Seleziona fascia oraria" />
+                        <Button onAction="#handleAddReading" text="Aggiungi" />
+                    </HBox>
+                </VBox>
+
+                <!-- Inserimento glicemia -->
+                <VBox visible="${btnReadingEntry.selected}" managed="${btnReadingEntry.selected}">
+                    <fx:include source="reading-entry.fxml"/>
+                </VBox>
+
+                <!-- Storico glicemie -->
+                <VBox visible="${btnReadingList.selected}" managed="${btnReadingList.selected}">
+                    <fx:include source="reading-list.fxml"/>
+                </VBox>
+
+                <!-- La tua terapia -->
+                <VBox visible="${btnTherapy.selected}" managed="${btnTherapy.selected}">
+                    <fx:include source="therapy-patient.fxml"/>
+                </VBox>
+
+                <!-- Assunzione farmaci -->
+                <VBox visible="${btnMedicationIntake.selected}" managed="${btnMedicationIntake.selected}">
+                    <fx:include source="medication-intake.fxml"/>
+                </VBox>
+            </children>
+        </StackPane>
     </center>
 
     <!-- Colonna destra -->
