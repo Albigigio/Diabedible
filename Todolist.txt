@@ -25,7 +25,7 @@ Goal di Base:
             [] Alert verso il medico
         [-] Segnalazione al medico del superamento della soglia glicemica                       (non implementata)
             [] Diverse modalità di segnalazione in base alla gravità
-        [] Sistema di registro delle modifiche
+        [-] Sistema di registro delle modifiche
             [] Registro chi modifica cosa
             [] Registro operazioni
     Admin/responsabili:
