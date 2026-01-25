@@ -11,7 +11,7 @@ Goal di Base:
         [-] Soglia normale (con limiti tra 80 e 130 mg/dL e dopo i pasti 180 mg/dL) *           (da sistemare graficamente e differenza prima/dopo pasti?)
         [X] Aggiunta sintomi/patologie o terapia (con periodo associato) *                      (da collegare con view del dottore)
     Diabetologo:
-        [] Specificare le terapie che i pazienti deono seguire
+        [] Specificare le terapie che i pazienti devono seguire
         [] Inserimento farmaco + assunzioni + quantità + indicazioni
         [-] Visualizzazione sintetica dati dei pazienti e andamento *                           (da rifinire)
         [] Aggiunta o modifica della terapia
