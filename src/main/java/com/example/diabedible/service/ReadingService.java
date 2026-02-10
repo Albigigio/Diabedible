@@ -23,6 +23,7 @@ public class ReadingService {
     }
 
     public void addReading(BloodSugarReading reading) {
+        System.out.println("✅ addReading() chiamato: " + reading);
         readings.add(reading);
         save();
     }
@@ -45,5 +46,6 @@ public class ReadingService {
 
     private void save() {
         DataStore.saveListToFile(readings, FILE_PATH);
+        System.out.println("💾 Sto salvando readings.json (" + readings.size() + " elementi)");
     }
 }

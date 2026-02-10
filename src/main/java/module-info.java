@@ -21,6 +21,7 @@ module com.example.diabedible {
     requires com.fasterxml.jackson.databind;    // ObjectMapper
     requires com.fasterxml.jackson.core;        // TypeReference, parser
     requires com.fasterxml.jackson.annotation;  // annotations
+    requires com.fasterxml.jackson.datatype.jsr310;
 
     // FXML
     opens com.example.diabedible to javafx.fxml;
@@ -31,7 +32,10 @@ module com.example.diabedible {
     opens com.example.diabedible.model 
         to com.fasterxml.jackson.databind, javafx.base;
 
-    // Export dei package pubblici
+    opens com.example.diabedible.model.reading
+    to com.fasterxml.jackson.databind, javafx.base;
+   
+     // Export dei package pubblici
     exports com.example.diabedible;
     exports com.example.diabedible.controller;
     exports com.example.diabedible.utils;

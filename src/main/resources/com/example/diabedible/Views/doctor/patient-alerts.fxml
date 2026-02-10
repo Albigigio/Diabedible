@@ -1,8 +1,18 @@
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" style="-fx-padding: 20;"
+      xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.diabedible.controller.PatientAlertsController">
+
+    <HBox spacing="10">
+        <Button text="← Indietro" onAction="#onBack"/>
+        <Button text="Aggiorna" onAction="#onRefresh"/>
+    </HBox>
 
     <Label text="Segnalazioni glicemia (fuori soglia)"/>
     <ListView fx:id="alertsList"/>
 
-    <Button text="Aggiorna" onAction="#onRefresh"/>
 </VBox>

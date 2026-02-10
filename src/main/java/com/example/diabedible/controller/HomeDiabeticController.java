@@ -73,7 +73,7 @@ public class HomeDiabeticController implements ViewManaged {
     private ViewManager viewManager;
 
     // FXML requires a no-arg constructor
-    public HomeDiabeticController() { }
+    public HomeDiabeticController() {}
 
     @Override
     public void setViewManager(ViewManager viewManager) {
@@ -189,7 +189,7 @@ public class HomeDiabeticController implements ViewManaged {
     }
 
     @FXML
-    private void initializeChecklist() { // da lavorare
+    private void initializeChecklist() { 
         for (String item : CHECKLIST_ITEMS) {
             CheckBox checkBox = new CheckBox(item);
             checklistContainer.getChildren().add(checkBox);

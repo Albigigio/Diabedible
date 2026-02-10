@@ -2,9 +2,14 @@ package com.example.diabedible.model.reading;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class BloodSugarReading {
 
@@ -40,10 +45,21 @@ public class BloodSugarReading {
         return id; 
     }
 
-    public String getPatientUsername() { return patientUsername; }
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public double getValue() { return value; }
-    public Context getContext() { return context; }
+    public String getPatientUsername() { 
+        return patientUsername; 
+    }
+
+    public LocalDateTime getTimestamp() { 
+        return timestamp; 
+    }
+
+    public double getValue() { 
+        return value; 
+    }
+
+    public Context getContext() { 
+        return context; 
+    }
     
     public LocalDate getDate() {
         return timestamp.toLocalDate();
@@ -51,9 +67,9 @@ public class BloodSugarReading {
 
     public String getSlot() {
         int hour = timestamp.getHour();
-        if (hour < 12) {
+        if (hour >= 0 && hour < 12) {
             return "morning";
-        } else if (hour < 18) {
+        } else if (hour >= 12 && hour < 18) {
             return "afternoon";
         } else {
             return "evening";        

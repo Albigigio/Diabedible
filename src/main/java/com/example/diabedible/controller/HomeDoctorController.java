@@ -43,13 +43,14 @@ public class HomeDoctorController implements ViewManaged {
     @FXML private LineChart<String, Number> bloodSugarChart;
     @FXML private Button logoutBtn;
     @FXML private Label statusLabel;
-    @FXML private ListView<String> symptomList; // ✅ Lista sintomi
+    @FXML private ListView<String> symptomList; // Lista sintomi
 
     private ViewManager viewManager;
 
     // Services
     private final TherapyService therapyService = AppInjector.getTherapyService();
     private final SymptomService symptomService = AppInjector.getSymptomService();
+    private final com.example.diabedible.service.ReadingService readingService = AppInjector.getReadingServiceStatic();
 
     // Simulazione di pazienti e dati glicemici
     private final Map<String, Map<LocalDate, Map<String, Double>>> patientsData = new LinkedHashMap<>();
@@ -66,10 +67,14 @@ public class HomeDoctorController implements ViewManaged {
     
     public void initialize() {
         welcomeText.setText(WELCOME_TEXT);
-        loadDummyData();
 
-        // Popola ComboBox con pazienti
-        patientSelector.getItems().addAll(patientsData.keySet());
+        var doctor = com.example.diabedible.utils.AppSession.getCurrentUser();
+            if (doctor != null) {
+                var patients = AppInjector.getPatientDirectoryServiceStatic().listPatientsForDoctor(doctor.getUsername());
+
+            patientSelector.getItems().setAll(patients);
+        }
+
         patientSelector.setOnAction(e -> loadPatientData(patientSelector.getValue()));
 
         //  Ascolta modifiche dal TherapyService
@@ -80,7 +85,7 @@ public class HomeDoctorController implements ViewManaged {
             }
         });
 
-        var doctor = com.example.diabedible.utils.AppSession.getCurrentUser();
+        
         if (doctor != null) {
             var alerts = AppInjector.getAdherenceAlertServiceStatic().detailedPatientsWithConsecutiveNonAdherence(doctor.getUsername(), 3, 14);
 
@@ -113,23 +118,10 @@ public class HomeDoctorController implements ViewManaged {
        
     }
 
-    //  Dati fittizi del grafico
-    private void loadDummyData() {
-        Map<LocalDate, Map<String, Double>> data = new LinkedHashMap<>();
-        LocalDate today = LocalDate.now().minusDays(4);
-        for (int i = 0; i < 4; i++) {
-            Map<String, Double> readings = new LinkedHashMap<>();
-            readings.put(TIME_SLOT_MORNING, 95.0 + i * 4);
-            readings.put(TIME_SLOT_AFTERNOON, 105.0 + i * 3);
-            data.put(today.plusDays(i), readings);
-        }
-        patientsData.put("Mario Rossi", data);
-        patientsData.put("Luisa Bianchi", data); // stesso dummy
-    }
-
+    
     // Caricamento dati paziente
     private void loadPatientData(String patientName) {
-        // ✅ Grafico glicemia
+        //  Grafico glicemia 
         bloodSugarChart.getData().clear();
         morningSeries.getData().clear();
         afternoonSeries.getData().clear();
@@ -137,19 +129,37 @@ public class HomeDoctorController implements ViewManaged {
         morningSeries.setName(TIME_SLOT_MORNING);
         afternoonSeries.setName(TIME_SLOT_AFTERNOON);
 
-        Map<LocalDate, Map<String, Double>> data = patientsData.get(patientName);
-        if (data != null) {
-            for (Map.Entry<LocalDate, Map<String, Double>> entry : data.entrySet()) {
-                String date = entry.getKey().toString();
-                Map<String, Double> values = entry.getValue();
-                if (values.containsKey(TIME_SLOT_MORNING)) {
-                    morningSeries.getData().add(new XYChart.Data<>(date, values.get(TIME_SLOT_MORNING)));
-                }
-                if (values.containsKey(TIME_SLOT_AFTERNOON)) {
-                    afternoonSeries.getData().add(new XYChart.Data<>(date, values.get(TIME_SLOT_AFTERNOON)));
-                }
+        var readings = readingService.getReadingsForPatient(patientName);
+
+        Map<LocalDate, Map<String, Double>> data = new LinkedHashMap<>();
+
+        for (var r : readings) {
+            LocalDate d = r.getTimestamp().toLocalDate();
+            String slot = r.getSlot(); 
+            double value = r.getValue();
+
+            data.putIfAbsent(d, new LinkedHashMap<>());
+            
+            if ("morning".equalsIgnoreCase(slot)) {
+                data.get(d).put(TIME_SLOT_MORNING, value);
+            } else if ("afternoon".equalsIgnoreCase(slot)) {
+                data.get(d).put(TIME_SLOT_AFTERNOON, value);
             }
         }
+
+        // 3) Disegno serie ordinate per data
+        for (var entry : data.entrySet()) {
+            String date = entry.getKey().toString();
+            Map<String, Double> values = entry.getValue();
+
+            if (values.containsKey(TIME_SLOT_MORNING)) {
+                morningSeries.getData().add(new XYChart.Data<>(date, values.get(TIME_SLOT_MORNING)));
+            }
+            if (values.containsKey(TIME_SLOT_AFTERNOON)) {
+                afternoonSeries.getData().add(new XYChart.Data<>(date, values.get(TIME_SLOT_AFTERNOON)));
+            }
+        }
+
         bloodSugarChart.getData().addAll(morningSeries, afternoonSeries);
 
         // Checklist fittizia
@@ -194,13 +204,13 @@ public class HomeDoctorController implements ViewManaged {
     //  Metodo richiamato automaticamente quando cambia lo stato terapia
     private void refreshTherapyStatus(Therapy therapy) {
         boolean completed = therapy.getMedications().stream().allMatch(Medication::isTaken);
-        statusLabel.setText(completed ? "Terapia completata ✅" : "Terapia in corso ❌");
+        statusLabel.setText(completed ? "Terapia completata " : "Terapia in corso ");
 
         // (opzionale) notifica visiva
         if (completed) {
             AlertUtils.info("Aggiornamento", 
                             null, 
-                            "Il paziente ha completato la terapia ✅"
+                            "Il paziente ha completato la terapia "
                         );
         }
     }

@@ -11,12 +11,14 @@ import java.util.UUID;
 public class ReadingEntryController {
 
     @FXML private TextField valueField;
+    
     @FXML private ComboBox<BloodSugarReading.Context> contextBox;
 
     @FXML
     private void initialize() {
         contextBox.getItems().setAll(BloodSugarReading.Context.values());
         contextBox.getSelectionModel().selectFirst();
+        System.out.println(" ReadingEntryController caricato");
     }
 
     @FXML

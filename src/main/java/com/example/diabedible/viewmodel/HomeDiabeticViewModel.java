@@ -24,6 +24,8 @@ public class HomeDiabeticViewModel {
     // Tracks how many times a slot has been modified for a given day
     private final Map<LocalDate, Map<String, Integer>> modificationCountPerSlot = new HashMap<>();
 
+    private boolean persistEnabled = true;
+
     public enum AddResult {
         ADDED,
         MODIFIED,
@@ -45,16 +47,44 @@ public class HomeDiabeticViewModel {
      * Fills the model with 5 days of simple sample data before today.
      */
     public void initSampleData() {
+
+        persistEnabled = false;
+
         LocalDate start = LocalDate.now().minusDays(6);
         for (int i = 0; i < 5; i++) {
             LocalDate day = start.plusDays(i);
             addOrReplace(day, TIME_SLOT_MORNING, 100.0 + i * 5);
             addOrReplace(day, TIME_SLOT_AFTERNOON, 110.0 + i * 5);
         }
+
+        persistEnabled = true;
     }
 
     private void addOrReplace(LocalDate date, String slot, double value) {
-        readings.addReading(date, slot, value);
+    readings.addReading(date, slot, value);
+    
+    if (!persistEnabled) return;
+    
+    var user = com.example.diabedible.utils.AppSession.getCurrentUser();
+        if (user != null) {
+
+        // mappa slot -> Context (semplice)
+            var ctx = slot.equals(TIME_SLOT_AFTERNOON)
+                    ? com.example.diabedible.model.reading.BloodSugarReading.Context.AFTER_MEAL
+                    : com.example.diabedible.model.reading.BloodSugarReading.Context.BEFORE_MEAL;
+
+            var ts = date.atStartOfDay();
+
+            var r = new com.example.diabedible.model.reading.BloodSugarReading(
+                    java.util.UUID.randomUUID().toString(),
+                    user.getUsername(),
+                    ts,
+                    value,
+                    ctx
+            );
+
+        com.example.diabedible.di.AppInjector.getReadingServiceStatic().addReading(r);
+    }
     }
 
     /**

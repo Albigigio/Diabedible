@@ -1,12 +1,22 @@
 package com.example.diabedible.controller;
 
+import com.example.diabedible.utils.FXMLPaths;
+import com.example.diabedible.utils.ViewManager;
 import com.example.diabedible.di.AppInjector;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
-public class PatientAlertsController {
+public class PatientAlertsController implements com.example.diabedible.ViewManaged{
 
     @FXML private ListView<String> alertsList;
+
+       private ViewManager viewManager;
+
+    @Override
+    public void setViewManager(ViewManager viewManager) {
+        this.viewManager = viewManager;
+    }
+
 
     @FXML
     private void initialize() {
@@ -17,6 +27,21 @@ public class PatientAlertsController {
     private void onRefresh() {
         refresh();
     }
+
+    @FXML
+    private void onBack() {
+        if (viewManager != null) {
+            viewManager.switchScene(
+                    FXMLPaths.HOME_DOCTOR,
+                    "Home doctore",
+                    1200,
+                    800,
+                    true
+            );
+        }
+    }
+
+   
 
     private void refresh() {
         alertsList.getItems().clear();

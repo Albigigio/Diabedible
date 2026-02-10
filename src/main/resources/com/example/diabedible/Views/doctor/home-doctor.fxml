@@ -39,7 +39,7 @@
 
             <!-- Grafico glicemia -->
             <LineChart fx:id="bloodSugarChart" title="Andamento Glicemia"
-                       prefHeight="300" prefWidth="600">
+                       prefHeight="500" prefWidth="900">
                 <xAxis>
                     <CategoryAxis label="Data"/>
                 </xAxis>
