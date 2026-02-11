@@ -12,6 +12,9 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
+    <Button text="⬅ Indietro"
+        onAction="#onBack"/>
+
     <HBox spacing="10">
         <Label text="Paziente:"/>
         <ComboBox fx:id="patientSelector" prefWidth="200"/>

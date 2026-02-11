@@ -3,6 +3,7 @@ package com.example.diabedible.controller;
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.di.AppInjector;
 import com.example.diabedible.utils.AlertUtils;
+import com.example.diabedible.utils.AppSession;
 import com.example.diabedible.utils.DateTimeUtil;
 import com.example.diabedible.utils.ViewManager;
 import com.example.diabedible.viewmodel.HomeDiabeticViewModel;
@@ -42,8 +43,7 @@ public class HomeDiabeticController implements ViewManaged {
 
     private static final String[] CHECKLIST_ITEMS = {
             "Controlla glicemia",
-            "Assumi farmaco",
-            "Fai attività fisica"
+            "Assumi farmaco"
     };
 
     // Threshold values
@@ -68,6 +68,8 @@ public class HomeDiabeticController implements ViewManaged {
     @FXML private ComboBox<String> timeSlotComboBox;
     @FXML private Button logoutBtn;
     @FXML private VBox checklistContainer;
+    @FXML private CheckBox physicalActivityCheckBox;
+    @FXML private ListView<String> therapyList;
 
     // ViewManager reference
     private ViewManager viewManager;
@@ -134,6 +136,9 @@ public class HomeDiabeticController implements ViewManaged {
         }
 
     }
+
+    loadTodayTherapy();
+
 }
 
     private void updateAvailableTimeSlots() {
@@ -232,7 +237,7 @@ public class HomeDiabeticController implements ViewManaged {
 
 
     @FXML
-private void onAddSymptomClicked() throws IOException {
+    private void onAddSymptomClicked() throws IOException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource(
         "/com/example/diabedible/Views/diabetic/symptom-entry.fxml"));
     Parent root = loader.load();
@@ -240,6 +245,34 @@ private void onAddSymptomClicked() throws IOException {
     stage.setScene(new Scene(root));
     stage.setTitle("Nuovo Sintomo");
     stage.show();
+}
+
+    @FXML
+    private void onPhysicalActivityChecked() {
+        AppInjector.getPhysicalActivityServiceStatic().registerActivity(
+                AppSession.getCurrentUser().getUsername(),
+                LocalDate.now()
+            );
+    }
+
+    private void loadTodayTherapy() {
+    var user = AppSession.getCurrentUser();
+    if (user == null) return;
+
+    var therapies = AppInjector.getTherapyService().getPatientTherapies(user.getUsername());
+
+    therapyList.getItems().clear();
+
+    if (therapies.isEmpty()) {
+        therapyList.getItems().add("Nessuna terapia assegnata");
+        return;
+    }
+
+    for (var t : therapies) {
+        for (var m : t.getMedications()) {
+            therapyList.getItems().add(m.getName() + " - " + m.getDose());
+        }
+    }
 }
 
 }

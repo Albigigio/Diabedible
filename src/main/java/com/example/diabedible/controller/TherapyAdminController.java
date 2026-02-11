@@ -10,8 +10,12 @@ import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import com.example.diabedible.utils.ViewManager;
+import com.example.diabedible.utils.FXMLPaths;
 
-public class TherapyAdminController {
+
+
+public class TherapyAdminController implements com.example.diabedible.ViewManaged{
 
     @FXML private TextField therapyNameField, medNameField, doseField;
     @FXML private ListView<String> medList;
@@ -19,6 +23,8 @@ public class TherapyAdminController {
 
     private final List<Medication> meds = new ArrayList<>();
     private final TherapyService therapyService = AppInjector.getTherapyService();
+
+    private ViewManager viewManager;
 
     @FXML
     private void initialize() {
@@ -103,4 +109,20 @@ public class TherapyAdminController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public void setViewManager(ViewManager viewManager) {
+    this.viewManager = viewManager;
+    }
+
+    @FXML
+    private void onBack() {
+        viewManager.switchScene(
+            FXMLPaths.HOME_DOCTOR,
+            "Home Diabetologo",
+            1400,
+            900,
+            true
+    );
+}
+
 }

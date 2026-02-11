@@ -28,12 +28,12 @@
                 <ComboBox fx:id="patientSelector" prefWidth="200"/>
             </HBox>
 
-            <!-- ✅ Bottone segnalazioni glicemia -->
+            <!-- Bottone segnalazioni glicemia -->
             <Button text="Segnalazioni glicemia"
                 onAction="#onAlerts"
                 style="-fx-font-weight: bold; -fx-background-color: #ffdddd;"/>
 
-            <!-- ✅ Nuova label per lo stato della terapia -->
+            <!--  Nuova label per lo stato della terapia -->
             <Label fx:id="statusLabel" text="Stato terapia"
                    style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
 
@@ -50,6 +50,10 @@
 
             <!-- bottone per visualizzare il trend -->
             <Button text="Trend glicemia" onAction="#onTrends"/>
+           
+           <!-- Bottone per la terapia -->
+            <Button text="Gestisci terapia"
+            onAction="#onDoctorTherapy"/>
 
             <!-- Checklist del paziente -->
             <VBox spacing="10">

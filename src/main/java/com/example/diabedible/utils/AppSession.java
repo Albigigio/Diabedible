@@ -5,12 +5,11 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Application session holding the current authenticated user and shared state.
- */
 public final class AppSession {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppSession.class);
     private static volatile User currentUser;
+
+    private static boolean doctorNonAdherenceAlertShown = false;
 
     private AppSession() { }
 
@@ -28,8 +27,19 @@ public final class AppSession {
         return currentUser;
     }
 
+    public static boolean isDoctorNonAdherenceAlertShown() {
+        return doctorNonAdherenceAlertShown;
+    }
+
+    public static void setDoctorNonAdherenceAlertShown(boolean value) {
+        doctorNonAdherenceAlertShown = value;
+    }
+
     public static void clear() {
         currentUser = null;
+
+        doctorNonAdherenceAlertShown = false;
+
         LOGGER.info("Sessione utente pulita");
     }
 }

@@ -6,6 +6,7 @@ import com.example.diabedible.utils.ViewManager;
 import com.example.diabedible.di.AppInjector;
 import com.example.diabedible.model.Medication;
 import com.example.diabedible.model.Therapy;
+import com.example.diabedible.model.reading.BloodSugarReading;
 import com.example.diabedible.service.TherapyService;
 import com.example.diabedible.service.SymptomService;
 import javafx.fxml.FXML;
@@ -28,13 +29,18 @@ public class HomeDoctorController implements ViewManaged {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeDoctorController.class);
 
-    // Constants
+    private static boolean NON_ADHERENCE_ALERT_SHOWN = false;
+
+    // Constanti 
     private static final String WELCOME_TEXT = "Benvenuto, Dottore";
     private static final String TIME_SLOT_MORNING = "Mattina";
     private static final String TIME_SLOT_AFTERNOON = "Pomeriggio";
     private static final String ALERT_TITLE_WARNING = "Attenzione";
     private static final String ALERT_LOGOUT_ERROR = "Errore: impossibile effettuare il logout.";
-    private static final String[] CHECKLIST_ITEMS = {"Controlla glicemia", "Assumi farmaco", "Fai attività fisica"};
+    private static final String[] CHECKLIST_ITEMS = {
+        "Controlla glicemia", 
+        "Assumi farmaco", 
+    };
 
     @FXML private HBox topBar;
     @FXML private Text welcomeText;
@@ -73,7 +79,7 @@ public class HomeDoctorController implements ViewManaged {
                 var patients = AppInjector.getPatientDirectoryServiceStatic().listPatientsForDoctor(doctor.getUsername());
 
             patientSelector.getItems().setAll(patients);
-        }
+            }
 
         patientSelector.setOnAction(e -> loadPatientData(patientSelector.getValue()));
 
@@ -86,10 +92,13 @@ public class HomeDoctorController implements ViewManaged {
         });
 
         
-        if (doctor != null) {
+        if (doctor != null && !NON_ADHERENCE_ALERT_SHOWN) {
             var alerts = AppInjector.getAdherenceAlertServiceStatic().detailedPatientsWithConsecutiveNonAdherence(doctor.getUsername(), 3, 14);
 
-            if (!alerts.isEmpty()) {
+           if (!alerts.isEmpty() && !com.example.diabedible.utils.AppSession.isDoctorNonAdherenceAlertShown()) {
+
+
+                com.example.diabedible.utils.AppSession.setDoctorNonAdherenceAlertShown(true);
 
                 StringBuilder noLogs = new StringBuilder();
                 StringBuilder incomplete = new StringBuilder();
@@ -101,15 +110,11 @@ public class HomeDoctorController implements ViewManaged {
                         incomplete.append("- ").append(a.toString()).append("\n");
                     }
                 }
+
                 StringBuilder msg = new StringBuilder("Attenzione: non aderenza ≥ 3 giorni consecutivi.\n\n");
 
-                if (!noLogs.isEmpty()) {
-                    msg.append("Nessuna registrazione:\n").append(noLogs).append("\n");
-                }
-        
-                if (!incomplete.isEmpty()) {
-                    msg.append("Registrazioni incomplete:\n").append(incomplete);
-                }
+                if (!noLogs.isEmpty()) msg.append("Nessuna registrazione:\n").append(noLogs).append("\n");
+                if (!incomplete.isEmpty()) msg.append("Registrazioni incomplete:\n").append(incomplete);
 
                 AlertUtils.warning("Pazienti non aderenti", null, msg.toString());
             }
@@ -135,15 +140,16 @@ public class HomeDoctorController implements ViewManaged {
 
         for (var r : readings) {
             LocalDate d = r.getTimestamp().toLocalDate();
-            String slot = r.getSlot(); 
             double value = r.getValue();
 
             data.putIfAbsent(d, new LinkedHashMap<>());
             
-            if ("morning".equalsIgnoreCase(slot)) {
-                data.get(d).put(TIME_SLOT_MORNING, value);
-            } else if ("afternoon".equalsIgnoreCase(slot)) {
-                data.get(d).put(TIME_SLOT_AFTERNOON, value);
+            if (r.getContext() == BloodSugarReading.Context.BEFORE_MEAL) {
+            data.get(d).put(TIME_SLOT_MORNING, value);
+            } 
+            
+            else if (r.getContext() == BloodSugarReading.Context.AFTER_MEAL) {
+            data.get(d).put(TIME_SLOT_AFTERNOON, value);
             }
         }
 
@@ -162,13 +168,46 @@ public class HomeDoctorController implements ViewManaged {
 
         bloodSugarChart.getData().addAll(morningSeries, afternoonSeries);
 
-        // Checklist fittizia
+       /* // Checklist fittizia
         checklistContainer.getChildren().clear();
         for (String task : CHECKLIST_ITEMS) {
             CheckBox checkBox = new CheckBox(task);
             checkBox.setDisable(true);
             checklistContainer.getChildren().add(checkBox);
         }
+            */
+
+       checklistContainer.getChildren().clear();
+
+        String patientId = patientSelector.getValue();
+        LocalDate today = LocalDate.now();
+
+        // 1) Glicemia
+        boolean didCheckGlycemia = AppInjector.getReadingServiceStatic()
+                .getReadingsForPatient(patientId).stream()
+                .anyMatch(r -> r.getTimestamp().toLocalDate().equals(today));
+
+        // 2) Farmaci
+        boolean tookMeds = AppInjector.getIntakeServiceStatic()
+                .isDailyAdherenceComplete(patientId, today);
+
+        // 3) Attività fisica
+        boolean didExercise = AppInjector.getPhysicalActivityServiceStatic()
+                .didActivityOnDate(patientId, today);
+
+        CheckBox cb1 = new CheckBox("Controlla glicemia");
+        cb1.setSelected(didCheckGlycemia);
+        cb1.setDisable(true);
+
+        CheckBox cb2 = new CheckBox("Assumi farmaco");
+        cb2.setSelected(tookMeds);
+        cb2.setDisable(true);
+
+        CheckBox cb3 = new CheckBox("Attività fisica");
+        cb3.setSelected(didExercise);
+        cb3.setDisable(true);
+
+        checklistContainer.getChildren().addAll(cb1, cb2, cb3);
 
         // Stato terapia
         List<Therapy> therapies = therapyService.getPatientTherapies(patientName);
@@ -262,5 +301,16 @@ public class HomeDoctorController implements ViewManaged {
             AlertUtils.warning("Errore", null, "Impossibile aprire i trend");
         }
     }
+
+    @FXML
+    private void onDoctorTherapy() {
+    viewManager.switchScene(
+        FXMLPaths.DOCTOR_THERAPY,
+        "Gestione terapia",
+        1200,
+        800,
+        true
+    );
+}
     
 }

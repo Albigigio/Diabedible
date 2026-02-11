@@ -45,7 +45,7 @@ public class IntakeService {
     public boolean isDailyAdherenceComplete(String patientUsername, LocalDate date) {
 
         List<Therapy> therapies = therapyService.getPatientTherapies(patientUsername);
-        if (therapies.isEmpty()) return true; // nulla prescritto
+        if (therapies.isEmpty()) return false; // nulla prescritto
 
         Set<String> prescribedMeds = therapies.stream()
                 .flatMap(t -> t.getMedications().stream())

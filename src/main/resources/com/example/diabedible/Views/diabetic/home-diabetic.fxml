@@ -97,7 +97,14 @@
             <children>
                 <Text text="Task giornaliere" />
                 <Separator />
-                <VBox fx:id="checklistContainer" spacing="10" />
+                <VBox fx:id="checklistContainer" spacing="10">
+                <CheckBox text="Attività fisica"
+                fx:id="physicalActivityCheckBox"
+                onAction="#onPhysicalActivityChecked"/>
+                </VBox>
+                    <Separator />
+                    <Text text="Farmaci prescritti" />
+                    <ListView fx:id="therapyList" prefHeight="140"/>
             </children>
         </VBox>
     </right>

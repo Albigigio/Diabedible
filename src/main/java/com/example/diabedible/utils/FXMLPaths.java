@@ -17,6 +17,7 @@ public class FXMLPaths {
     public static final String READING_ENTRY = BASE_PATH + "diabetic/reading-entry.fxml";
     public static final String SYMPTOM_ENTRY = BASE_PATH + "diabetic/symptom-entry.fxml";
     public static final String THERAPY_PATIENT = BASE_PATH + "diabetic/therapy-patient.fxml";
+    public static final String DOCTOR_THERAPY = "/com/example/diabedible/Views/doctor/therapy-doctor.fxml";
 
     private FXMLPaths() {
         

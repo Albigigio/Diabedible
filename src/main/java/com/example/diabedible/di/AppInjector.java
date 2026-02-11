@@ -54,6 +54,9 @@ public class AppInjector {
 
     private final MessageService messageService = new MessageService();
 
+    private static PhysicalActivityService physicalActivityService;
+
+
 
 
 
@@ -163,4 +166,12 @@ public MessageService getMessageService() {
 public static MessageService getMessageServiceStatic() {
     return AppInjector.get().getMessageService();
 }
+
+public static PhysicalActivityService getPhysicalActivityServiceStatic() {
+    if (physicalActivityService == null) {
+        physicalActivityService = new PhysicalActivityService();
+    }
+    return physicalActivityService;
+}
+
 }
