@@ -12,9 +12,12 @@
         <VBox spacing="10" layoutX="20" layoutY="20" prefWidth="360">
             <!-- Campo di testo per la descrizione del sintomo -->
             <TextArea fx:id="descriptionField" promptText="Descrivi il sintomo..." />
+            <Button text="⬅ Indietro" onAction="#onBack"/>
 
             <!-- Pulsante per salvare -->
             <Button text="Salva" onAction="#onSaveClicked" />
+
+            
 
             <!-- Etichetta e lista per mostrare i sintomi registrati -->
             <Label text="Sintomi registrati:" />

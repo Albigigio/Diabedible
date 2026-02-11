@@ -241,6 +241,8 @@ public class HomeDiabeticController implements ViewManaged {
     FXMLLoader loader = new FXMLLoader(getClass().getResource(
         "/com/example/diabedible/Views/diabetic/symptom-entry.fxml"));
     Parent root = loader.load();
+    SymptomController controller = loader.getController();
+    controller.setViewManager(viewManager);
     Stage stage = new Stage();
     stage.setScene(new Scene(root));
     stage.setTitle("Nuovo Sintomo");

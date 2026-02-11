@@ -8,16 +8,24 @@ import com.example.diabedible.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import com.example.diabedible.utils.ViewManager;
+import com.example.diabedible.utils.FXMLPaths;
 
 import java.util.List;
 
-public class SymptomController {
+public class SymptomController implements com.example.diabedible.ViewManaged{
 
     @FXML private TextArea descriptionField;
     @FXML private ListView<String> symptomList;
 
-    private final SymptomService symptomService =
-            AppInjector.getSymptomService();
+    private final SymptomService symptomService = AppInjector.getSymptomService();
+
+    private ViewManager viewManager;
+
+    @Override
+    public void setViewManager(ViewManager viewManager) {
+        this.viewManager = viewManager;
+    }
 
     @FXML
     private void initialize() {
@@ -50,4 +58,20 @@ public class SymptomController {
                    .toList()
         );
     }
+
+    @FXML
+    private void onBack() {
+        viewManager.switchScene(
+            FXMLPaths.HOME_DIABETIC,
+            "Home Diabetico",
+            1400,
+            900,
+            true
+    );
+
+    ((javafx.stage.Stage) descriptionField.getScene().getWindow()).close();
+    
+}
+
+
 }
