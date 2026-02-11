@@ -101,6 +101,10 @@
                 <CheckBox text="Attività fisica"
                 fx:id="physicalActivityCheckBox"
                 onAction="#onPhysicalActivityChecked"/>
+
+                <CheckBox text="Assumi farmaco"
+                fx:id="medicationCheckBox"
+                onAction="#onAssumiFarmacoChecked"/>
                 </VBox>
                     <Separator />
                     <Text text="Farmaci prescritti" />

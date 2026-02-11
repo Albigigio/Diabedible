@@ -18,7 +18,9 @@ public class MedicationIntake {
     private String dose;
     private LocalDateTime timestamp;
 
-    public MedicationIntake() {} // Jackson
+    public MedicationIntake() {
+        
+    } 
 
     @JsonCreator
     public MedicationIntake(

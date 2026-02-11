@@ -2,6 +2,7 @@ package com.example.diabedible.controller;
 
 import com.example.diabedible.ViewManaged;
 import com.example.diabedible.di.AppInjector;
+import com.example.diabedible.model.MedicationIntake;
 import com.example.diabedible.utils.AlertUtils;
 import com.example.diabedible.utils.AppSession;
 import com.example.diabedible.utils.DateTimeUtil;
@@ -19,11 +20,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import java.time.LocalDateTime;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class HomeDiabeticController implements ViewManaged {
 
@@ -43,7 +46,6 @@ public class HomeDiabeticController implements ViewManaged {
 
     private static final String[] CHECKLIST_ITEMS = {
             "Controlla glicemia",
-            "Assumi farmaco"
     };
 
     // Threshold values
@@ -70,6 +72,7 @@ public class HomeDiabeticController implements ViewManaged {
     @FXML private VBox checklistContainer;
     @FXML private CheckBox physicalActivityCheckBox;
     @FXML private ListView<String> therapyList;
+    @FXML private CheckBox medicationCheckBox;
 
     // ViewManager reference
     private ViewManager viewManager;
@@ -275,6 +278,30 @@ public class HomeDiabeticController implements ViewManaged {
             therapyList.getItems().add(m.getName() + " - " + m.getDose());
         }
     }
-}
+    
+    }
+
+    @FXML
+    private void onAssumiFarmacoChecked() {
+        String patientId = AppSession.getCurrentUser().getUsername();
+        LocalDateTime now = LocalDateTime.now();
+
+        var therapies = AppInjector.getTherapyService().getPatientTherapies(patientId);
+
+        for (var t : therapies) {
+            for (var m : t.getMedications()) {
+                AppInjector.getIntakeServiceStatic().registerIntake(
+                    new MedicationIntake(
+                        UUID.randomUUID().toString(),
+                        patientId,
+                        m.getName(),
+                        m.getDose(),
+                        now
+                    )
+                );
+            }
+        }
+
+    }
 
 }
