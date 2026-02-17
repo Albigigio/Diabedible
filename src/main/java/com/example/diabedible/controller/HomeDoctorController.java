@@ -168,14 +168,7 @@ public class HomeDoctorController implements ViewManaged {
 
         bloodSugarChart.getData().addAll(morningSeries, afternoonSeries);
 
-       /* // Checklist fittizia
-        checklistContainer.getChildren().clear();
-        for (String task : CHECKLIST_ITEMS) {
-            CheckBox checkBox = new CheckBox(task);
-            checkBox.setDisable(true);
-            checklistContainer.getChildren().add(checkBox);
-        }
-            */
+       
 
        checklistContainer.getChildren().clear();
 
